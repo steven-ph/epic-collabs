@@ -1,0 +1,47 @@
+service: epic-collabs-service
+frameworkVersion: '>=1.21.0 <2.0.0'
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: us-east-1
+
+plugins:
+  - serverless-offline
+  - serverless-plugin-typescript
+
+package:
+  exclude:
+    - .serverless/**
+    - .build/**
+    - .buildkite/**
+    - bin/**
+    - coverage/**
+    - src/**/*.test.js
+    - .editorconfig
+    - .env-*
+    - .tslint*
+    - .envrc
+    - .gitignore
+    - .node-version
+    - .yarnrc
+    - '*.sh'
+    - package.json
+    - yarn.lock
+    - README.md
+    - webpack.config.js
+    - tsconfig.json
+    - schema.graphql
+    - __mocks__
+    - __test__
+
+functions:
+  graphql:
+    handler: src/graphql/index.handler
+    timeout: 30
+    events:
+      - http:
+          path: graphql
+          method: post
+          cors: true
+    tags:
+      FunctionType: graphql_api

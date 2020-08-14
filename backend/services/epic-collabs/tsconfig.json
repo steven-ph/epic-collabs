@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "outDir": ".dist",
+    "sourceMap": false,
+    "noImplicitAny": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "esModuleInterop": true,
+    "target": "es2019",
+    "module": "commonjs",
+    "lib": ["dom", "esnext"]
+  },
+  "exclude": ["node_modules", ".dist", "webpack"]
+}
