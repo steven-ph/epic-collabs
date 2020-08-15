@@ -5,11 +5,11 @@ import { makeSchema } from './make-schema';
 let apolloServer = null;
 
 const makeApolloServer = async (): Promise<ApolloServer> => {
-  const schema = await makeSchema();
-
   if (apolloServer) {
     return apolloServer;
   }
+
+  const schema = await makeSchema();
 
   apolloServer = new ApolloServer({
     schema,

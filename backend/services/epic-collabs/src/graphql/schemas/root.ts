@@ -17,13 +17,4 @@ const typeDefs = gql`
   }
 `;
 
-const resolvers = {
-  Query: {
-    healthCheck: () => true
-  },
-  Mutation: {
-    echoTest: (_, { input: { echo } }) => ({ echo })
-  }
-};
-
-export { typeDefs, resolvers };
+export { typeDefs };
