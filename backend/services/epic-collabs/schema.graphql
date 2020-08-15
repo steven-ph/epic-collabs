@@ -1,15 +1,15 @@
 type Query {
-  healthCheck: Boolean!
+  allCategories: Boolean!
 }
 
 type Mutation {
-  echoTest(input: EchoTestInput!): EchoTestResponse
+  addCategory(input: AddCategoryInput!): AddCategoryResponse
 }
 
-input EchoTestInput {
-  echo: String
+input AddCategoryInput {
+  name: String
 }
 
-type EchoTestResponse {
-  echo: String
+type AddCategoryResponse {
+  name: String
 }

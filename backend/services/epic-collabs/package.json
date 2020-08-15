@@ -8,20 +8,18 @@
   "private": true,
   "scripts": {
     "gen-gql": "ts-node ./src/utils/generate-schema.ts",
-    "gen-prisma": "prisma generate prisma/schema.prisma",
     "dev": "serverless offline start",
     "build": "tsc",
     "deploy": "./bin/deploy",
-    "lint": "tslint -c tslint.json 'src/**/*.ts'",
+    "lint": "tslint -c tslint.json 'src/**/*.ts' && yarn prettier:check",
     "lint:fix": "yarn run prettier:write && tslint -c tslint.json 'src/**/*.ts' --fix",
     "prettier:check": "prettier -l 'src/**/*.ts' --config .prettierrc",
     "prettier:write": "prettier -l --write 'src/**/*.ts' --config .prettierrc",
     "test": "jest --coverage",
     "test:ci": "jest --coverage --silent",
-    "test:watch": "jest --coverage --watch"
+    "test:watch": "jest --coverage --verbose --watch"
   },
   "dependencies": {
-    "@prisma/client": "^2.4.1",
     "apollo-server-lambda": "^2.16.1",
     "dataloader": "^2.0.0",
     "graphql": "^15.3.0",
@@ -29,11 +27,9 @@
     "lodash": "^4.17.20"
   },
   "devDependencies": {
-    "@prisma/cli": "^2.4.1",
     "@types/jest": "^26.0.9",
     "@types/lodash": "^4.14.159",
     "@types/node": "^14.0.27",
-    "@types/webpack": "^4.41.21",
     "jest": "^26.4.0",
     "prettier": "^2.0.5",
     "serverless-offline": "^6.5.0",

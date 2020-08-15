@@ -1,5 +1,5 @@
-import { resolvers as rootResolvers } from './root';
+import { resolvers as categoryResolvers } from './category';
 
-const allResolvers = [rootResolvers];
+const allResolvers = [categoryResolvers];
 
 export { allResolvers };

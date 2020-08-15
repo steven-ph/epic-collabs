@@ -1,5 +1,5 @@
-import { typeDefs as rootTypeDefs } from './root';
+import { typeDefs as categoryTypeDefs } from './category';
 
-const allTypeDefs = [rootTypeDefs];
+const allTypeDefs = [categoryTypeDefs];
 
 export { allTypeDefs };

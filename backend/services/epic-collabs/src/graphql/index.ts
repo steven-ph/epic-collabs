@@ -2,6 +2,10 @@ import { promisify } from 'util';
 import { makeApolloServer } from './make-server';
 
 const handler = async (event, context) => {
+  if (!event) {
+    throw new Error('No lambda event detected');
+  }
+
   const server = await makeApolloServer();
 
   const apolloHandler = promisify(

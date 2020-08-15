@@ -15,18 +15,11 @@ const makePrismaClient = () => {
   return prisma;
 };
 
-const makeContext = ({ event }) => {
-  if (!event) {
-    return Promise.reject(new Error('No lambda event detected'));
-  }
-
+const makeContext = ({ event }): Context => {
   const prismaClient = makePrismaClient();
 
   return {
-    prisma: prismaClient,
-    viewer: {
-      id: 'my-user-id'
-    }
+    prisma: prismaClient
   };
 };
 
