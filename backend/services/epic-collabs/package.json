@@ -5,7 +5,6 @@
   "engines": {
     "node": ">=12.x"
   },
-  "private": true,
   "scripts": {
     "gen-gql": "ts-node ./src/utils/generate-schema.ts",
     "dev": "serverless offline start",
