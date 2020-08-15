@@ -2,7 +2,7 @@ import { gql } from 'apollo-server-lambda';
 
 const typeDefs = gql`
   type Query {
-    allCategories: Boolean!
+    allCategories: Boolean
   }
 
   type Mutation {

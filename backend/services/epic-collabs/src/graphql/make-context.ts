@@ -1,26 +1,9 @@
-import { PrismaClient } from '@prisma/client';
+import { omit } from 'lodash';
 
-export interface Context {
-  prisma: PrismaClient;
-}
+export interface Context {}
 
-let prisma = null;
-const makePrismaClient = () => {
-  if (prisma) {
-    return prisma;
-  }
-
-  prisma = new PrismaClient();
-
-  return prisma;
-};
-
-const makeContext = ({ event }): Context => {
-  const prismaClient = makePrismaClient();
-
-  return {
-    prisma: prismaClient
-  };
+const makeContext = ({ context, dbConnection }): Context => {
+  return { ...context, db: omit(dbConnection, ['host', 'port', 'user', 'pass', 'name', 'db']) };
 };
 
 export { makeContext };

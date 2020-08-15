@@ -1,10 +1,12 @@
 import { ApolloServer } from 'apollo-server-lambda';
 import { makeContext } from './make-context';
 import { makeSchema } from './make-schema';
+import { makeMongoDbConnection } from './make-mongodb-connection';
 
 let apolloServer = null;
-
 const makeApolloServer = async (): Promise<ApolloServer> => {
+  const dbConnection = await makeMongoDbConnection();
+
   if (apolloServer) {
     return apolloServer;
   }
@@ -13,7 +15,7 @@ const makeApolloServer = async (): Promise<ApolloServer> => {
 
   apolloServer = new ApolloServer({
     schema,
-    context: makeContext
+    context: context => makeContext({ context, dbConnection })
   });
 
   return apolloServer;
