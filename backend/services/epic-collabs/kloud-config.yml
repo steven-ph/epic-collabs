@@ -1,0 +1,14 @@
+service: epic-collabs-service
+provider:
+  name: ddb
+  tableName: kloud-config-epic-collabs-service-${stage}
+
+config:
+  path: /${stage}/epic-collabs/config
+  defaults:
+    LOG_RETENTION_IN_DAYS: 30
+
+secret:
+  path: /${stage}/epic-collabs/secret
+  required:
+    MONGO_DB_URL: 'Mongo DB URL'

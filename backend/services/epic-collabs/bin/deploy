@@ -1,0 +1,67 @@
+#!/bin/bash
+
+set -euo pipefail
+
+CURRENT_AWS_ROLE="$(aws sts get-caller-identity)"
+AWS_ACCOUNT_ID=$(echo "$CURRENT_AWS_ROLE" | jq -r '.Account')
+
+STAGE=""
+CONFIGURE=false
+
+usage="USAGE: $(basename "$0") [-s|--stage] <stage>
+
+where:
+    -s | --stage        stage for deployment (required)
+    -h | --help         show this help text
+    -c | --configure    push configs to ssm (flag)"
+
+while [ $# -gt 0 ]; do
+    if [[ $1 =~ "--"* ]]; then
+        case $1 in
+            -c|--configure) CONFIGURE=true;;
+            --help|-h) echo "$usage"; exit; ;;
+            --stage|-s) STAGE=$2;;
+        esac
+    fi
+    shift
+done
+
+if [ -z "$STAGE" ]; then
+  echo "$usage"; exit 1;
+fi
+
+export AWS_ACCOUNT_ID
+export STAGE
+
+if [ -z "$AWS_ACCOUNT_ID" ]; then
+  echo "--> Could not read determine AWS account ID.";
+  exit 1;
+fi
+
+CURRENT_DIR=$(pwd)
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
+
+echo "--> Moving to $DIR"
+
+cd "$DIR"
+
+echo "--> Deploying configuration..."
+$CONFIGURE && ./node_modules/.bin/kloud-config run --stage ${STAGE}
+
+echo "--> Initiating deploy with: ${CURRENT_AWS_ROLE}"
+echo "--> AWS Account ID: $AWS_ACCOUNT_ID"
+
+echo "--> Deploying resources..."
+./node_modules/.bin/kloud-stack run --stage "$STAGE"
+
+echo "--> Deploying serverless..."
+sls deploy --stage "$STAGE" --region "$AWS_REGION" --verbose
+
+echo "--> Generating graphql schema..."
+ts-node ./src/utils/generate-schema.ts
+
+cd $CURRENT_DIR
+unset AWS_ACCOUNT_ID
+unset STAGE
+
+echo "--> Done!!!"

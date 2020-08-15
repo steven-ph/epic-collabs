@@ -20,12 +20,17 @@
     "test:watch": "jest --coverage --verbose --watch"
   },
   "dependencies": {
+    "@sp-tools/kloud-config": "^0.0.3",
+    "@sp-tools/kloud-parameter": "^0.0.3",
+    "@sp-tools/kloud-stack": "^0.0.3",
     "apollo-server-lambda": "^2.16.1",
     "dataloader": "^2.0.0",
     "graphql": "^15.3.0",
     "graphql-tools": "^6.0.18",
     "lodash": "^4.17.20",
-    "mongoose": "^5.10.0"
+    "mongoose": "^5.10.0",
+    "serverless-dynamodb-parameters": "^1.0.1",
+    "serverless-logless-plugin": "^0.0.2"
   },
   "devDependencies": {
     "@types/jest": "^26.0.9",

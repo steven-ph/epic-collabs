@@ -1,0 +1,43 @@
+---
+Description: Stateful resources for epic-collabs service
+Parameters:
+  Stage:
+    Description: Stage Name
+    Type: String
+  MongoDbURL:
+    Description: Mongo DB URL
+    Type: String
+
+Resources:
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /
+      RoleName: !Sub epic-collabs-role-${Stage}
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: 'assumeContentRolePolicy'
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+      Policies:
+        - PolicyName: epic-collabs-lambda-policy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:Query
+                Resource:
+                  - !Sub arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/kloud-config-epic-collabs-service-${Stage}*
+
+Outputs:
+  LambdaExecutionRole:
+    Description: Lambda Execution Role Arn
+    Value:
+      'Fn::GetAtt': [LambdaExecutionRole, Arn]

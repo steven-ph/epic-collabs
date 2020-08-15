@@ -1,0 +1,15 @@
+steps:
+  - label: 'Triggering merge pipelines'
+    agents:
+      queue: dafault
+    env:
+      DEBUG: true
+    plugins:
+      chronotc/monorepo-diff#v1.1.1:
+        diff: 'git diff --name-only HEAD~1'
+        watch:
+          - path: 'backend/services/epic-collabs/'
+            config:
+              trigger: 'epic-collabs-merge'
+
+        wait: false

@@ -1,0 +1,7 @@
+version: '3'
+services:
+  epic-collabs:
+    build:
+      context: ./backend/services/epic-collabs
+      args:
+        - NPM_TOKEN

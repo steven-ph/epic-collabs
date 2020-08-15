@@ -4,10 +4,22 @@ provider:
   name: aws
   runtime: nodejs12.x
   region: us-east-1
+  role: ${cf:epic-collabs-service-stateful-${opt:stage}.LambdaExecutionRole}
+  environment:
+    STAGE: ${opt:stage}
 
 plugins:
   - serverless-offline
   - serverless-plugin-typescript
+  - serverless-logless-plugin
+  - serverless-dynamodb-parameters
+
+custom:
+  logless:
+    logRetention: ${ddb:/${opt:stage}/epic-collabs/config/LOG_RETENTION_IN_DAYS}
+
+  serverless-dynamodb-parameters:
+    tableName: kloud-config-epic-collabs-service-${opt:stage}
 
 package:
   exclude:
