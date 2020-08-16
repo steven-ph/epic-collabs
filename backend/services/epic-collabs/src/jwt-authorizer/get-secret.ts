@@ -1,10 +1,10 @@
 import { get } from 'lodash';
-import { kloudStore } from '../utils/get-parameters';
+import { getParameters } from '../utils/get-parameters';
 
 const getSecret = async ({ audience }) => {
   try {
-    const { AUTH0_SECRET: base64SecretsMap } = await kloudStore.getSecrets(['AUTH0_SECRET']);
-    const secrets = JSON.parse(Buffer.from(base64SecretsMap, 'base64').toString());
+    const { AUTH0_SECRET } = await getParameters();
+    const secrets = JSON.parse(Buffer.from(AUTH0_SECRET, 'base64').toString());
 
     const secret = get(secrets, audience);
 

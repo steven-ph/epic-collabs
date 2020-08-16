@@ -1,14 +1,13 @@
-import { getSecret } from './get-secret';
-import { kloudStore } from '../utils/get-parameters';
+const mockGetParameters = jest.fn();
 jest.mock('../utils/get-parameters', () => ({
-  kloudStore: {
-    getSecrets: jest.fn()
-  }
+  getParameters: mockGetParameters
 }));
+
+import { getSecret } from './get-secret';
 
 describe('getSecret', () => {
   it('should get the secret for the specified audience', () => {
-    kloudStore.getSecrets.mockResolvedValueOnce({
+    mockGetParameters.mockResolvedValueOnce({
       AUTH0_SECRET: 'eyJkZXNrdG9wQ2xpZW50IjoiZGVza3RvcFNlY3JldCIsIm1vYmlsZUNsaWVudCI6Im1vYmlsZVNlY3JldCJ9'
     });
 
@@ -16,7 +15,7 @@ describe('getSecret', () => {
   });
 
   it('should throw an error is a secret is not found for an audience', () => {
-    kloudStore.getSecrets.mockResolvedValueOnce({
+    mockGetParameters.mockResolvedValueOnce({
       AUTH0_SECRET: 'invalidMap'
     });
 
@@ -24,7 +23,7 @@ describe('getSecret', () => {
   });
 
   it('should throw an error when the secrets map cannot be decoded', () => {
-    kloudStore.getSecrets.mockResolvedValueOnce({
+    mockGetParameters.mockResolvedValueOnce({
       AUTH0_SECRET: 'invalidMap'
     });
 

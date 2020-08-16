@@ -1,5 +1,5 @@
 type Query {
-  allCategories: Boolean!
+  allCategories: Boolean
 }
 
 type Mutation {
@@ -11,5 +11,6 @@ input AddCategoryInput {
 }
 
 type AddCategoryResponse {
+  id: String
   name: String
 }

@@ -1,7 +1,7 @@
-import { omit } from 'lodash';
+import { pick } from 'lodash';
 
 const makeContext = ({ context, dbConnection }) => {
-  return { ...context, db: omit(dbConnection, ['host', 'port', 'user', 'pass', 'name', 'db']) };
+  return { ...context, db: pick(dbConnection, ['models']) };
 };
 
 export { makeContext };

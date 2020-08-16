@@ -1,9 +1,9 @@
 import { memoize } from 'lodash';
 import jwksClient from 'jwks-rsa';
-import { kloudStore } from '../utils/get-parameters';
+import { getParameters } from '../utils/get-parameters';
 
 const getClient = async () => {
-  const { AUTH0_JWKS_ENDPOINT } = await kloudStore.getConfigs(['AUTH0_JWKS_ENDPOINT']);
+  const { AUTH0_JWKS_ENDPOINT } = await getParameters();
 
   if (!AUTH0_JWKS_ENDPOINT) {
     throw new Error('Jwks Uri is required');

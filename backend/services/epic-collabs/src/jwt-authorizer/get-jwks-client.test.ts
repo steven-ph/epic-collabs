@@ -1,11 +1,9 @@
 import { get } from 'lodash';
 
-const mockGetConfigs = jest.fn();
+const mockGetParameters = jest.fn();
 
 jest.mock('../utils/get-parameters', () => ({
-  kloudStore: {
-    getConfigs: mockGetConfigs
-  }
+  getParameters: mockGetParameters
 }));
 
 import { getJwksClient } from './get-jwks-client';
@@ -14,7 +12,7 @@ describe('getJwksClient', () => {
   beforeEach(() => getJwksClient.cache.clear());
 
   it('should throw if a jwks uri is not provided', () => {
-    mockGetConfigs.mockResolvedValue({
+    mockGetParameters.mockResolvedValue({
       AUTH0_JWKS_ENDPOINT: null
     });
 
@@ -22,7 +20,7 @@ describe('getJwksClient', () => {
   });
 
   it('should always get a cached copy of the jwksClient', async () => {
-    mockGetConfigs.mockResolvedValue({
+    mockGetParameters.mockResolvedValue({
       AUTH0_JWKS_ENDPOINT: 'https://auth0.com/.well-known/jwks.json'
     });
 

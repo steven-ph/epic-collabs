@@ -6,10 +6,12 @@ const configPath = `/${STAGE}/epic-collabs/config`;
 const secretPath = `/${STAGE}/epic-collabs/secret`;
 
 export interface Parameters {
+  AUTH0_SECRET: string;
+  AUTH0_JWKS_ENDPOINT: string;
   MONGO_DB_URL: string;
 }
 
-const kloudStore = makeKloudStore({
+const { getConfigs, getSecrets } = makeKloudStore({
   configPath,
   secretPath,
   provider: {
@@ -19,8 +21,8 @@ const kloudStore = makeKloudStore({
 
 const getParameters = memoize(
   (): Promise<Parameters> => {
-    return Promise.all([kloudStore.getConfigs([]), kloudStore.getSecrets(['MONGO_DB_URL'])]).then(([configs, secrets]) => Object.assign(configs, secrets));
+    return Promise.all([getConfigs(['AUTH0_JWKS_ENDPOINT']), getSecrets(['AUTH0_SECRET', 'MONGO_DB_URL'])]).then(([configs, secrets]) => Object.assign(configs, secrets));
   }
 );
 
-export { kloudStore, getParameters };
+export { getParameters };

@@ -16,16 +16,10 @@ const policyDocument = {
   ]
 };
 
-jest.mock('uuid', () => ({
-  v4: jest.fn().mockReturnValue('mock-uuid')
-}));
-
 jest.mock('../utils/get-parameters', () => ({
-  kloudStore: {
-    getSecrets: jest.fn().mockResolvedValue({
-      AUTH0_SECRET: 'eyJkZXNrdG9wQ2xpZW50IjoiZGVza3RvcFNlY3JldCIsIm1vYmlsZUNsaWVudCI6Im1vYmlsZVNlY3JldCJ9'
-    })
-  }
+  getParameters: jest.fn().mockResolvedValue({
+    AUTH0_SECRET: 'eyJkZXNrdG9wQ2xpZW50IjoiZGVza3RvcFNlY3JldCIsIm1vYmlsZUNsaWVudCI6Im1vYmlsZVNlY3JldCJ9'
+  })
 }));
 
 describe('jwtAuthorizer', () => {
@@ -66,7 +60,7 @@ describe('jwtAuthorizer', () => {
     expect(res).toEqual({
       context: {},
       policyDocument,
-      principalId: 'Guest|mock-uuid'
+      principalId: null
     });
   });
 
@@ -83,7 +77,7 @@ describe('jwtAuthorizer', () => {
     expect(res).toEqual({
       context: {},
       policyDocument,
-      principalId: 'Guest|mock-uuid'
+      principalId: null
     });
   });
 

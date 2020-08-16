@@ -1,14 +1,7 @@
 import { get } from 'lodash';
-import { v4 as uuidv4 } from 'uuid';
 import { makeValidateToken } from './make-validate-token';
 import { getPublicKey } from './get-public-key';
 import { getSecret } from './get-secret';
-
-const getGuestPrincipalIdFromEvent = event => {
-  const principalId = get(event, 'requestContext,requestId') || uuidv4();
-
-  return `Guest|${principalId}`;
-};
 
 const validateToken = makeValidateToken({
   getPublicKey,
@@ -24,7 +17,6 @@ const handler = async event => {
 
   if (!jwtToken) {
     return generateResponse({
-      event,
       principalId: null,
       Resource: get(event, 'methodArn')
     });
@@ -44,14 +36,13 @@ const handleResponse = async ({ token, event }) => {
 
   return generateResponse({
     principalId,
-    event,
     Resource: get(event, 'methodArn'),
     context: {}
   });
 };
 
-const generateResponse = ({ principalId, event = {}, context = {}, Resource }) => ({
-  principalId: principalId ? principalId : getGuestPrincipalIdFromEvent(event),
+const generateResponse = ({ principalId, context = {}, Resource }) => ({
+  principalId,
   policyDocument: {
     Version: '2012-10-17',
     Statement: [
