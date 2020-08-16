@@ -1,0 +1,30 @@
+name: PR
+on:
+  pull_request:
+    paths:
+    - backend/**
+
+jobs:
+  epic-collab-pr:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use node ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: yarn install
+        working-directory: ./backend/services/epic-collabs
+        run: yarn install --frozen-lockfile
+        
+      - name: yarn test
+        working-directory: ./backend/services/epic-collabs
+        run: yarn test
+        
+      - name: yarn lint
+        working-directory: ./backend/services/epic-collabs
+        run: yarn lint
