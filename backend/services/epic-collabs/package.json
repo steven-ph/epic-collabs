@@ -1,6 +1,7 @@
 {
   "name": "epic-collabs",
   "description": "Epic Collabs API",
+  "license": "MIT",
   "version": "0.0.1",
   "engines": {
     "node": ">=12.x"
