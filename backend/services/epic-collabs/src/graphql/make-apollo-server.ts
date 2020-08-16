@@ -7,7 +7,7 @@ import { getParameters } from '../utils/get-parameters';
 let apolloServer = null;
 const makeApolloServer = async (): Promise<ApolloServer> => {
   const { MONGODB_URL } = await getParameters();
-  console.log(MONGODB_URL);
+
   const dbConnection = await makeMongoDbConnection(MONGODB_URL);
 
   if (apolloServer) {
