@@ -3,8 +3,7 @@ provider:
   tableName: kloud-config-epic-collabs-service-${opt:stage}
 
 stacks:
-  - templateFile: './stacks/content-search.yml'
+  - templateFile: './stacks/epic-collabs.yml'
     stackName: epic-collabs-service-stateful-${opt:stage}
     parameters:
       Stage: ${opt:stage}
-      MongoDbURL: ${ddb:/${opt:stage}/epic-collabs/config/MONGO_DB_URL}

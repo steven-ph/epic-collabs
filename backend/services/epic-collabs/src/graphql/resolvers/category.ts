@@ -1,8 +1,6 @@
-import { Context } from '../make-context';
-
 export const resolvers = {
   Query: {
-    allCategories: (_, __, ctx: Context) => true
+    allCategories: _ => true
   },
   Mutation: {
     addCategory: (_, { input }) => input

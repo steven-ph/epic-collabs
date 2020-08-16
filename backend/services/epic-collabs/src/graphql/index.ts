@@ -14,6 +14,8 @@ const handler = async (event, context) => {
     server.createHandler({
       cors: {
         origin: '*',
+        methods: 'OPTIONS,POST',
+        allowedHeaders: 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent',
         credentials: true
       }
     })

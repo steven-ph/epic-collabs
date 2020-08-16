@@ -1,24 +1,26 @@
-import { makeKloudStore } from '@sp-tools/kloud-parameter';
 import { memoize } from 'lodash';
+import { makeKloudStore } from '@sp-tools/kloud-parameter';
 
-const { stage } = process.env;
-const configPath = `/${stage}/epic-collabs/config`;
-const secretPath = `/${stage}/epic-collabs/secret`;
+const { STAGE } = process.env;
+const configPath = `/${STAGE}/epic-collabs/config`;
+const secretPath = `/${STAGE}/epic-collabs/secret`;
 
 export interface Parameters {
-  MONGODB_URL: string;
+  MONGO_DB_URL: string;
 }
 
 const kloudStore = makeKloudStore({
   configPath,
   secretPath,
   provider: {
-    tableName: `kloud-config-epic-collabs-service-${stage}`
+    tableName: `kloud-config-epic-collabs-service-${STAGE}`
   }
 });
 
-export const getParameters = memoize(
+const getParameters = memoize(
   (): Promise<Parameters> => {
-    return Promise.all([kloudStore.getConfigs([]), kloudStore.getSecrets(['MONGODB_URL'])]).then(([configs, secrets]) => Object.assign(configs, secrets));
+    return Promise.all([kloudStore.getConfigs([]), kloudStore.getSecrets(['MONGO_DB_URL'])]).then(([configs, secrets]) => Object.assign(configs, secrets));
   }
 );
+
+export { kloudStore, getParameters };

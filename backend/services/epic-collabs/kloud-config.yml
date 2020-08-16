@@ -7,8 +7,10 @@ config:
   path: /${stage}/epic-collabs/config
   defaults:
     LOG_RETENTION_IN_DAYS: 30
+    AUTH0_JWKS_ENDPOINT: https://stevenp.au.auth0.com/.well-known/jwks.json
 
 secret:
   path: /${stage}/epic-collabs/secret
   required:
     MONGO_DB_URL: 'Mongo DB URL'
+    AUTH0_SECRET: 'base64(JSON.stringify(Map)). Where the Map is a Key:Value pair of [AUTH0_CLIENTID]:[AUTH0_CLIENT_SECRET]'
