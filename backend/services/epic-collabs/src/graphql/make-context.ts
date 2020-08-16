@@ -1,8 +1,6 @@
 import { omit } from 'lodash';
 
-export interface Context {}
-
-const makeContext = ({ context, dbConnection }): Context => {
+const makeContext = ({ context, dbConnection }) => {
   return { ...context, db: omit(dbConnection, ['host', 'port', 'user', 'pass', 'name', 'db']) };
 };
 

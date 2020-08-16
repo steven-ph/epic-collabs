@@ -1388,10 +1388,10 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@sp-tools/kloud-config@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@sp-tools/kloud-config/-/kloud-config-0.0.3.tgz#51c4e301ed22e747ce216bec82a7018404065cf2"
-  integrity sha512-lRu63gGAb4N6VD5+KKcRyI8WbeqiEC4JKrbHZ9GaJZADvsCrfQd18RI1T9y5+y9CN+EC60HUSdOcv6vaXN5xww==
+"@sp-tools/kloud-config@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@sp-tools/kloud-config/-/kloud-config-0.0.4.tgz#ea05d69768aa99f70845af8c4f33b1d504916133"
+  integrity sha512-TxsDBV6YPtOYS3/7LzFCgiO5plo4HzFxU14JfILeFBRtUH7L27hjalOIrC9j8fMeCZBJCrRoETkANXWnAfOg7w==
   dependencies:
     aws-sdk "^2.263.1"
     bluebird "^3.5.1"
@@ -1416,21 +1416,22 @@
     prompt "^1.0.0"
     root-path "^0.2.1"
 
-"@sp-tools/kloud-parameter@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@sp-tools/kloud-parameter/-/kloud-parameter-0.0.3.tgz#227225392c882adab1496f2b7439466c9fd72255"
-  integrity sha512-cEsY2ha87pCjSgD1jGWT+qB1Gkx7hLbomQ9dtNFCDn8e/JLPs3QDDPoyx2mPGfDe1z1S1HnFfCmYOVUAQt0Tfg==
+"@sp-tools/kloud-parameter@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@sp-tools/kloud-parameter/-/kloud-parameter-0.0.4.tgz#1a6b0c5a3e6c84f7d9a1fed2153b5a7fb795350f"
+  integrity sha512-NQzdmpom1p+emzQUmHSwG7gjFDqZmTtj6lF9N8p04EiikPcB8Im0ufeo1CtxBp6FZ/bGPw41vXNPwNIISLcu+A==
   dependencies:
     bluebird "^3.5.3"
     dataloader "^1.4.0"
     lodash.chunk "^4.2.0"
     lodash.flatten "^4.4.0"
     lodash.get "^4.4.2"
+    lodash.isplainobject "^4.0.6"
 
-"@sp-tools/kloud-stack@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@sp-tools/kloud-stack/-/kloud-stack-0.0.3.tgz#f43ea7fc431e15bf56171f9ade646b7a34ebb758"
-  integrity sha512-wPKrEBlwyVx+XTJfKC3opX9s2rUM5J+Cieu36N+M1q63YMOqCgsmsfsPYEdbk3cDKTwj+GgIfHWkEPq52U/DLA==
+"@sp-tools/kloud-stack@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@sp-tools/kloud-stack/-/kloud-stack-0.0.4.tgz#dc8eb34d3ca8eb59413b989be4edc5597eb8bd5b"
+  integrity sha512-6Xa+B6jBNbfwUiizj9NT4Xyw9cckYsjJGMpz6c7+MRJGDywBwPB5moX39qfe7kd4cJsZWaXuMNFVP1rSZYSbAQ==
   dependencies:
     aws-sdk "^2.425.0"
     bluebird "^3.5.1"
@@ -1834,9 +1835,9 @@ aggregate-error@3.0.1:
     indent-string "^4.0.0"
 
 ajv@^6.12.3:
-  version "6.12.3"
-  resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.12.3.tgz#18c5af38a111ddeb4f2697bd78d68abc1cabd706"
-  integrity sha512-4K0cK3L1hsqk9xIb2z9vs/XU+PGJZ9PNpJRDS9YLzmNdX6jmVPfamLvTJr0aDAusnHyCHO6MjzlkAsgtqp9teA==
+  version "6.12.4"
+  resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.12.4.tgz#0614facc4522127fa713445c6bfd3ebd376e2234"
+  integrity sha512-eienB2c9qVQs2KWexhkrdMLVDoIQCz5KSeLxwg9Lzk4DOfBtIK9PQwwufcsn1jjGuf9WZmqPMbGxOzfcuphJCQ==
   dependencies:
     fast-deep-equal "^3.1.1"
     fast-json-stable-stringify "^2.0.0"
