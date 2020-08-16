@@ -1658,10 +1658,10 @@
     lodash.get "^4.4.2"
     lodash.isplainobject "^4.0.6"
 
-"@sp-tools/kloud-stack@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@sp-tools/kloud-stack/-/kloud-stack-0.0.4.tgz#dc8eb34d3ca8eb59413b989be4edc5597eb8bd5b"
-  integrity sha512-6Xa+B6jBNbfwUiizj9NT4Xyw9cckYsjJGMpz6c7+MRJGDywBwPB5moX39qfe7kd4cJsZWaXuMNFVP1rSZYSbAQ==
+"@sp-tools/kloud-stack@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@sp-tools/kloud-stack/-/kloud-stack-0.0.5.tgz#32f39c499b8378da779fee097bf31bcdb15bca78"
+  integrity sha512-HL6H3KhDn9kqVRw+TkuiwwrMrTWcLDfND5lQJLLQA5MXUj7wtZVOKSsQEvoqxShi/3kqvsT1/4HupeN1UOL97A==
   dependencies:
     aws-sdk "^2.425.0"
     bluebird "^3.5.1"
