@@ -33,8 +33,7 @@ const handler = async event => {
     const token = await validateToken({ jwtToken });
     return handleResponse({ token, event });
   } catch (error) {
-    console.log({ error });
-    throw new Error('Unauthorized');
+    throw error;
   }
 };
 
