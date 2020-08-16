@@ -2,14 +2,14 @@ name: PR
 on:
   pull_request:
     paths:
-    - backend/**
+      - backend/**
 
 jobs:
   epic-collab-pr:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [10.x, 12.x]
+        node-version: [12.x, 14.x]
     steps:
       - uses: actions/checkout@v2
       - name: Use node ${{ matrix.node-version }}
@@ -20,11 +20,11 @@ jobs:
       - name: yarn install
         working-directory: ./backend/services/epic-collabs
         run: yarn install --frozen-lockfile
-        
+
       - name: yarn test
         working-directory: ./backend/services/epic-collabs
         run: yarn test
-        
+
       - name: yarn lint
         working-directory: ./backend/services/epic-collabs
         run: yarn lint
