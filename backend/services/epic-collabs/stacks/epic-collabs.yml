@@ -4,9 +4,6 @@ Parameters:
   Stage:
     Description: Stage Name
     Type: String
-  MongoDbURL:
-    Description: Mongo DB URL
-    Type: String
 
 Resources:
   LambdaExecutionRole:

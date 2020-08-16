@@ -47,13 +47,39 @@ package:
     - __test__
 
 functions:
+  jwtAuthorizer:
+    handler: src/jwt-authorizer/index.handler
+    memorySize: 1536
+    environment:
+      STAGE: ${opt:stage}
+    tags:
+      FunctionType: authorizer
+
   graphql:
     handler: src/graphql/index.handler
-    timeout: 30
+    memorySize: 1536
+    timeout: 20
+    environment:
+      STAGE: ${opt:stage}
     events:
       - http:
           path: graphql
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+            allowCredentials: false
+            maxAge: 86400
+          authorizer:
+            name: jwtAuthorizer
+            resultTtlInSeconds: 0
+            identitySource: method.request.header.Authorization
+            type: token
     tags:
       FunctionType: graphql_api

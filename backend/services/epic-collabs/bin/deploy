@@ -57,9 +57,6 @@ echo "--> Deploying resources..."
 echo "--> Deploying serverless..."
 sls deploy --stage "$STAGE" --region "$AWS_REGION" --verbose
 
-echo "--> Generating graphql schema..."
-ts-node ./src/utils/generate-schema.ts
-
 cd $CURRENT_DIR
 unset AWS_ACCOUNT_ID
 unset STAGE
