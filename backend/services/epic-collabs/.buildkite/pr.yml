@@ -1,16 +1,8 @@
 steps:
-  - label: Run lint
-    command: yarn run lint
-    agents:
-      queue: default
-    plugins:
-      docker-compose#v3.5.0:
-        run: epic-collabs
-        env:
-          - NPM_TOKEN
-  - wait
-  - label: Run unit tests
-    command: yarn run test:ci
+  - label: Run PR
+    command:
+      - "yarn lint"
+      - "yarn test"
     agents:
       queue: default
     plugins:

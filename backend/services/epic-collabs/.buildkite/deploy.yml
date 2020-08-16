@@ -1,15 +1,15 @@
 steps:
-  - label: 'Deploying to ${STAGE}'
-    command: 'yarn run deploy --stage ${STAGE} -c'
+  - label: "Deploying to ${STAGE}"
+    command: "yarn run deploy --stage ${STAGE} -c"
     agents:
       queue: default
-    skip: '$SKIP'
+    skip: "$SKIP"
     concurrency: 1
-    concurrency_group: 'epic-collabs-deploy-${STAGE}'
+    concurrency_group: "epic-collabs-deploy-${STAGE}"
     plugins:
       - cultureamp/aws-assume-role#v0.1.0:
-          role: '$ROLE_ARN'
-      - docker-compose#v3.1.0:
+          role: "$ROLE_ARN"
+      - docker-compose#v3.5.0:
           run: epic-collabs
           env:
             - AWS_ACCESS_KEY_ID
@@ -18,4 +18,5 @@ steps:
             - AWS_REGION=us-east-1
             - AWS_DEFAULT_REGION=us-east-1
             - STAGE
+            - BUILDKITE_COMMIT
             - NPM_TOKEN
