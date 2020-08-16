@@ -1,10 +1,10 @@
 steps:
-  - label: "Deploy"
-    trigger: "epic-collabs-deploy"
+  - label: 'Deploy'
+    trigger: 'epic-collabs-deploy'
     build:
-      commit: "$BUILDKITE_COMMIT"
-      message: "$BUILDKITE_MESSAGE"
-      branch: "$BUILDKITE_BRANCH"
+      commit: '$BUILDKITE_COMMIT'
+      message: '$BUILDKITE_MESSAGE'
+      branch: '$BUILDKITE_BRANCH'
       env:
-        STAGE: "stevenp"
-        ROLE_ARN: arn:aws:iam::160813253081:role/buildkite
+        STAGE: 'stevenp'
+        ROLE_ARN: arn:aws:iam::160813253081:role/sp-tools-buildkite
