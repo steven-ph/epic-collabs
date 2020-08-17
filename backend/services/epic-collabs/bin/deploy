@@ -48,9 +48,6 @@ cd "$DIR"
 echo "--> Deploying configuration..."
 $CONFIGURE && ./node_modules/.bin/kloud-config run --stage ${STAGE}
 
-echo "--> Initiating deploy with: ${CURRENT_AWS_ROLE}"
-echo "--> AWS Account ID: $AWS_ACCOUNT_ID"
-
 echo "--> Deploying resources..."
 ./node_modules/.bin/kloud-stack run --stage "$STAGE"
 
