@@ -1,18 +1,18 @@
 steps:
-  - label: "Deploying epic-collabs frontend"
-    command: "yarn deploy"
+  - label: 'Deploying epic-collabs frontend'
+    command: 'yarn deploy'
     agents:
       queue: default
     concurrency: 1
-    concurrency_group: "epic-collabs-frontend-deploy-${STAGE}"
+    concurrency_group: 'epic-collabs-frontend-deploy-${STAGE}'
     plugins:
       docker-compose#v3.5.0:
         run: epic-collabs-frontend
         env:
           - STAGE
           - NPM_TOKEN
-          - ORG_ID
-          - PROJECT_ID
-          - VERCEL_TOKEN
+          - NOW_TOKEN
+          - NOW_ORG_ID
+          - NOW_PROJECT_ID
           - BUILDKITE_COMMIT
           - BUILDKITE_BUILD_NUMBER
