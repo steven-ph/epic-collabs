@@ -11,5 +11,8 @@ steps:
           - path: 'backend/services/epic-collabs/'
             config:
               trigger: 'epic-collabs-merge'
+          - path: 'frontend/epic-collabs/'
+            config:
+              trigger: 'epic-collabs-frontend-merge'
 
         wait: false

@@ -1,0 +1,29 @@
+steps:
+  - label: Run PR
+    command:
+      - 'yarn lint:ci'
+      - 'yarn test:ci'
+    artifact_paths: 'artifacts/**/*'
+    agents:
+      queue: default
+    plugins:
+      docker-compose#v3.5.0:
+        run: epic-collabs-frontend
+        env:
+          - NPM_TOKEN
+
+  - wait: ~
+    continue_on_failure: true
+
+  - label: Annotate with test results
+    agents:
+      queue: default
+    plugins:
+      - bugcrowd/test-summary#v1.11.0:
+          inputs:
+            - label: tests
+              artifact_path: artifacts/junit.xml
+              type: junit
+            - label: eslint
+              artifact_path: artifacts/eslint.xml
+              type: checkstyle

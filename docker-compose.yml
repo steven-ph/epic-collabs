@@ -5,3 +5,8 @@ services:
       context: ./backend/services/epic-collabs
       args:
         - NPM_TOKEN
+  epic-collabs-frontend:
+    build:
+      context: ./frontend/epic-collabs
+      args:
+        - NPM_TOKEN

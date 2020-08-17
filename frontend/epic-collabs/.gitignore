@@ -6,14 +6,25 @@
 .pnp.js
 
 # testing
-/coverage
+coverage/
+artifacts/
+
+# production
+build/
+dist/
+
+# development
+.next/
+.now/
+.vercel/
+bundles
+src/.next/
+src/config/dev.config.js
 
 # next.js
 /.next/
 /out/
-
-# production
-/build
+.vercel
 
 # misc
 .DS_Store
@@ -31,4 +42,8 @@ yarn-error.log*
 .env.production.local
 
 # vercel
+.now
 .vercel
+
+# cypress
+cypress.env.json

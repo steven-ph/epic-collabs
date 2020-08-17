@@ -1,15 +1,18 @@
 steps:
-  - label: "Triggering pr pipelines"
+  - label: 'Triggering pr pipelines'
     agents:
       queue: dafault
     env:
       DEBUG: true
     plugins:
       chronotc/monorepo-diff#v1.1.1:
-        diff: ".buildkite/scripts/diff.sh ${BUILDKITE_COMMIT}"
+        diff: '.buildkite/scripts/diff.sh ${BUILDKITE_COMMIT}'
         watch:
-          - path: "backend/services/epic-collabs/"
+          - path: 'backend/services/epic-collabs/'
             config:
-              trigger: "epic-collabs-pr"
+              trigger: 'epic-collabs-pr'
+          - path: 'frontend/epic-collabs/'
+            config:
+              trigger: 'epic-collabs-frontend-pr'
 
         wait: false

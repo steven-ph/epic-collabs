@@ -1,0 +1,11 @@
+steps:
+  - label: 'Deploy epic-collabs frontend'
+    trigger: 'epic-collabs-frontend-deploy'
+    build:
+      commit: '$BUILDKITE_COMMIT'
+      message: '$BUILDKITE_MESSAGE'
+      branch: '$BUILDKITE_BRANCH'
+      env:
+        STAGE: 'production'
+        ORG_ID: 'F4Gh4B1J4W4a5gUjEvfzOaJH'
+        PROJECT_ID: 'QmRFCLXxobAdXFA7NL8eYoHnALxnXU9veeGQEnZ9fzoJ2K'
