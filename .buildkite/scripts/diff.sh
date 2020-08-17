@@ -5,7 +5,7 @@ set -ueo pipefail
 # Usage: ./diff.sh $BUILDKITE_COMMIT
 
 #PRE DIFF
-aws s3 cp s3://sp-tools-buildkite-secrets/private_ssh_key . > /dev/null 2>&1
+aws s3 cp s3://sp-tools-buildkite-secrets/epic-collabs/private_ssh_key . > /dev/null 2>&1
 chmod 600 private_ssh_key
 GIT_SSH_COMMAND='ssh -i ./private_ssh_key' git fetch origin master:master
 rm private_ssh_key

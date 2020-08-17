@@ -1,8 +1,6 @@
 #!/bin/bash
 set -uo pipefail
 
-echo "It works"
-
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 PR="$DIR/../pr.yml"

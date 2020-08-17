@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 services:
   epic-collabs:
     build:
@@ -10,3 +10,5 @@ services:
       context: ./frontend/epic-collabs-frontend
       args:
         - NPM_TOKEN
+    volumes:
+      - ./epic-collabs-frontend-artifacts:/usr/src/app/artifacts

@@ -1,9 +1,9 @@
 steps:
   - label: Run PR
     command:
-      - 'yarn lint:ci'
-      - 'yarn test:ci'
-    artifact_paths: 'artifacts/**/*'
+      - "yarn lint:ci"
+      - "yarn test:ci"
+    artifact_paths: "epic-collabs-frontend-artifacts/**/*"
     agents:
       queue: default
     plugins:
@@ -22,8 +22,8 @@ steps:
       - bugcrowd/test-summary#v1.11.0:
           inputs:
             - label: tests
-              artifact_path: artifacts/junit.xml
+              artifact_path: epic-collabs-frontend-artifacts/junit.xml
               type: junit
             - label: eslint
-              artifact_path: artifacts/eslint.xml
+              artifact_path: epic-collabs-frontend-artifacts/eslint.xml
               type: checkstyle
