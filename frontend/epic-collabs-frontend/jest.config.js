@@ -13,7 +13,7 @@ module.exports = {
   testMatch: ['**/?(*.)+(spec|test).[tj]s?(x)'],
   watchman: true,
   transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': '<rootDir>/node_modules/babel-jest'
+    '^.+\\.[t|j]sx?$': 'babel-jest'
   },
   moduleNameMapper: {
     '^.+\\.(css|less)$': 'identity-obj-proxy'

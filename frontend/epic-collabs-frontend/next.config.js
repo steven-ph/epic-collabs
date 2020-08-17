@@ -1,6 +1,5 @@
 const withPlugins = require('next-compose-plugins');
 const { getConfig } = require('./src/config');
-const { withCss } = require('./src/plugins/withCss');
 const { withAlias } = require('./src/plugins/withAlias');
 const { withPolyfills } = require('./src/plugins/withPolyfills');
 const { withSourceMaps } = require('./src/plugins/withSourceMaps');
@@ -18,10 +17,7 @@ if (!env) {
 
 const config = getConfig(env);
 
-module.exports = withPlugins(
-  [withAlias, withCss, withPolyfills, withSourceMaps],
-  {
-    env: config,
-    target: 'serverless'
-  }
-);
+module.exports = withPlugins([withAlias, withPolyfills, withSourceMaps], {
+  env: config,
+  target: 'serverless'
+});
