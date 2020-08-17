@@ -2,7 +2,6 @@
 // https://jestjs.io/docs/en/configuration.html
 
 module.exports = {
-  // Automatically clear mock calls and instances between every test
   clearMocks: true,
   collectCoverageFrom: [
     'src/**/*.{js,jsx}',
@@ -12,8 +11,15 @@ module.exports = {
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'text-summary'],
   testMatch: ['**/?(*.)+(spec|test).[tj]s?(x)'],
+  watchman: true,
+  transform: {
+    '^.+\\.(js|jsx|ts|tsx)$': '<rootDir>/node_modules/babel-jest'
+  },
+  moduleNameMapper: {
+    '^.+\\.(css|less)$': 'identity-obj-proxy'
+  },
+  transformIgnorePatterns: ['/node_modules/'],
   testPathIgnorePatterns: ['/node_modules/'],
   setupFilesAfterEnv: ['./src/setupTests.js'],
-  watchman: true,
   modulePathIgnorePatterns: ['e2e']
 };

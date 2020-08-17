@@ -3,5 +3,5 @@ module.exports = {
   AUTH0_DOMAIN: '',
   AUTH0_REDIRECT_URL: 'http://localhost:3000',
   AUTH0_AUDIENCE: '',
-  GRAPHQL_ENDPOINT: '',
+  GRAPHQL_ENDPOINT: ''
 };

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import 'core-js';
 import '@testing-library/jest-dom/extend-expect';
 
@@ -10,6 +9,6 @@ jest.mock('config', () => ({
     AUTH0_DOMAIN: 'AUTH0_DOMAIN',
     AUTH0_REDIRECT_URL: 'AUTH0_REDIRECT_URL',
     AUTH0_AUDIENCE: 'AUTH0_AUDIENCE',
-    GRAPHQL_ENDPOINT: 'GRAPHQL_ENDPOINT',
-  }),
+    GRAPHQL_ENDPOINT: 'GRAPHQL_ENDPOINT'
+  })
 }));
