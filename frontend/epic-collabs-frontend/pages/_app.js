@@ -1,5 +1,11 @@
-const CompleteApp = ({ Component, pageProps }) => {
-  return <Component {...pageProps} />;
+// import { Auth0Provider } from 'context/auth';
+
+const EpicApp = ({ Component, pageProps }) => {
+  return (
+    // <Auth0Provider>
+    <Component {...pageProps} />
+    // </Auth0Provider>
+  );
 };
 
-export default CompleteApp;
+export default EpicApp;

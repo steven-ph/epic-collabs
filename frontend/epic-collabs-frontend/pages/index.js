@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import { Navigation } from 'components/navigation';
 
 const Index = () => {
   return (
@@ -7,6 +8,7 @@ const Index = () => {
         <title>Epic Collabs</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Navigation />
       <main>
         <h1>Epic Collabs</h1>
       </main>

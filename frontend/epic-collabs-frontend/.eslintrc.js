@@ -40,6 +40,7 @@ module.exports = {
   rules: {
     quotes: ['warn', 'single', { avoidEscape: true }],
     semi: ['warn', 'always'],
+    'import/no-unresolved': 'off',
     'prettier/prettier': 'error',
     'no-extra-semi': 'error',
     'no-console': 'off',
