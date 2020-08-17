@@ -7,6 +7,6 @@ services:
         - NPM_TOKEN
   epic-collabs-frontend:
     build:
-      context: ./frontend/epic-collabs
+      context: ./frontend/epic-collabs-frontend
       args:
         - NPM_TOKEN
