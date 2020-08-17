@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "alias": ["epic-collabs"],
   "builds": [
     {
       "src": "next.config.js",
