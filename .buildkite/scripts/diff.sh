@@ -1,6 +1,8 @@
 #!/bin/bash
 set -ueo pipefail
 
+echo "Diff works!"
+
 # Get Diff between the given commit and starting commit of the branch
 # Usage: ./diff.sh $BUILDKITE_COMMIT
 
