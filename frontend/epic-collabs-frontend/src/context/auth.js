@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React, { useState, useEffect, useContext } from 'react';
 import { getAuth0Client } from 'libs/auth0';
 
@@ -41,7 +40,7 @@ export const Auth0Provider = ({
     };
 
     initAuth0();
-  }, []);
+  }, [onRedirectCallback]);
 
   const handleRedirectCallback = async () => {
     setLoading(true);
@@ -71,9 +70,4 @@ export const Auth0Provider = ({
       {children}
     </Auth0Context.Provider>
   );
-};
-
-Auth0Provider.propTypes = {
-  children: PropTypes.object,
-  onRedirectCallback: PropTypes.function
 };

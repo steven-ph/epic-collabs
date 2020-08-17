@@ -11,7 +11,7 @@ module.exports = {
     },
     production: {
       presets: ['next/babel'],
-      sourceMaps: true,
+      sourceMaps: false,
       plugins
     },
     test: {

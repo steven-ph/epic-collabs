@@ -1,16 +1,16 @@
 import React from 'react';
-// import { useAuth } from 'context/auth';
+import { useAuth } from 'context/auth';
 
 const Navigation = () => {
-  // const { isAuthenticated, loginWithRedirect, logout, user } = useAuth();
+  const { isAuthenticated, loginWithRedirect, logout, user } = useAuth();
+  console.log({ isAuthenticated, user });
   return (
     <div>
-      Navigation
-      {/* {!isAuthenticated && (
+      {!isAuthenticated && (
         <button onClick={() => loginWithRedirect({})}>Log in</button>
       )}
 
-      {isAuthenticated && <button onClick={() => logout()}>Log out</button>} */}
+      {isAuthenticated && <button onClick={() => logout()}>Log out</button>}
     </div>
   );
 };

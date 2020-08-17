@@ -1,51 +1,99 @@
-import withApollo from 'nextjs-with-apollo';
-import fetch from 'isomorphic-unfetch';
-import { getConfig } from 'config/get-config';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import ApolloClient from 'apollo-client';
-import { HttpLink } from 'apollo-link-http';
-import { ApolloLink } from 'apollo-link';
-import { setContext } from 'apollo-link-context';
-import cookie from 'cookie';
-import get from 'lodash/get';
+import React from 'react';
+import App from 'next/app';
+import Head from 'next/head';
+import { get } from 'lodash';
+import { ApolloProvider } from '@apollo/client';
+import { createApolloClient, getToken } from './create-apollo-client';
 
 const isServer = typeof window === 'undefined';
 
-const { GRAPHQL_ENDPOINT, BUILD_NUMBER, STAGE } = getConfig();
+const getDisplayName = PageComponent => {
+  const displayName =
+    PageComponent.displayName || PageComponent.name || 'Component';
 
-const getToken = headers => {
-  const cookies = get(isServer ? headers : document, 'cookie', '');
+  if (displayName === 'App') {
+    console.warn('This withApollo HOC only works with PageComponents.');
+  }
 
-  return get(cookie.parse(cookies), 'auth0_token', '');
+  return `withApollo(${displayName})`;
 };
 
-const attachAuth = headers => async () => {
-  const token = getToken(headers);
+const withApollo = (PageComponent, { ssr = true } = {}) => {
+  const WithApollo = ({ apolloClient, apolloState, ...pageProps }) => {
+    const client =
+      apolloClient ||
+      createApolloClient({ initialState: apolloState, headers: {} });
 
-  return {
-    headers: {
-      authorization: `Bearer ${token}`,
-      'apollographql-client-name': `station-${STAGE}`,
-      'apollographql-client-version': `${BUILD_NUMBER}`
-    }
+    return (
+      <ApolloProvider client={client}>
+        <PageComponent {...pageProps} />
+      </ApolloProvider>
+    );
   };
+
+  if (process.env.NODE_ENV !== 'production') {
+    WithApollo.displayName = getDisplayName(PageComponent);
+  }
+
+  const getInitialProps = async ctx => {
+    const headers = get(ctx, 'req.headers');
+    const inAppContext = Boolean(ctx.ctx);
+    const token = getToken(headers);
+
+    const apolloClient = createApolloClient({
+      initialState: {},
+      headers
+    });
+
+    ctx.apolloClient = apolloClient;
+
+    let pageProps = {};
+    if (PageComponent.getInitialProps) {
+      pageProps = await PageComponent.getInitialProps(ctx);
+    } else if (inAppContext) {
+      pageProps = await App.getInitialProps(ctx);
+    }
+    if (isServer) {
+      const { AppTree } = ctx;
+
+      if (ctx.res && ctx.res.finished) {
+        return pageProps;
+      }
+
+      if (ssr && AppTree) {
+        try {
+          const { getDataFromTree } = await import('@apollo/client/react/ssr');
+
+          let props;
+
+          if (inAppContext) {
+            props = { ...pageProps, apolloClient };
+          } else {
+            props = { pageProps: { ...pageProps, apolloClient } };
+          }
+
+          await getDataFromTree(<AppTree {...props} />);
+        } catch (error) {
+          console.error('Error while running `getDataFromTree`', error);
+        }
+      }
+
+      Head.rewind();
+    }
+
+    return {
+      ...pageProps,
+      token,
+      apolloState: apolloClient.cache.extract(),
+      apolloClient: ctx.apolloClient
+    };
+  };
+
+  if (ssr || PageComponent.getInitialProps) {
+    WithApollo.getInitialProps = getInitialProps;
+  }
+
+  return WithApollo;
 };
 
-const createApolloClient = ({ initialState = {}, headers = {} }) => {
-  const authLink = () => setContext(attachAuth(headers));
-
-  const httpLink = new HttpLink({
-    credentials: 'same-origin',
-    uri: GRAPHQL_ENDPOINT,
-    fetch
-  });
-
-  return new ApolloClient({
-    ssrMode: isServer,
-    link: ApolloLink.from([authLink(), httpLink]),
-    cache: new InMemoryCache().restore(initialState)
-  });
-};
-
-export { attachAuth };
-export default withApollo(createApolloClient);
+export { withApollo };

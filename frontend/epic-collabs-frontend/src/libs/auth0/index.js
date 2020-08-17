@@ -1,5 +1,5 @@
 import createAuth0Client from '@auth0/auth0-spa-js';
-import { getConfig } from 'config/get-config';
+import { getConfig } from 'config';
 
 const {
   AUTH0_CLIENT_ID,
@@ -9,6 +9,7 @@ const {
 } = getConfig();
 
 let client = null;
+
 const getAuth0Client = () => {
   if (client) {
     return client;
