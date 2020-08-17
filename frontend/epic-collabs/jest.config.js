@@ -15,8 +15,5 @@ module.exports = {
   testPathIgnorePatterns: ['/node_modules/'],
   setupFilesAfterEnv: ['./src/setupTests.js'],
   watchman: true,
-  moduleNameMapper: {
-    '^.+\\.(css|less)$': 'identity-obj-proxy'
-  },
   modulePathIgnorePatterns: ['e2e']
 };
