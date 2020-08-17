@@ -11,6 +11,6 @@ yarn vercel --prod \
 -b PROJECT_ID="$PROJECT_ID" \
 -b COMMIT_HASH="$BUILDKITE_COMMIT" \
 -b BUILD_NUMBER="$BUILDKITE_BUILD_NUMBER" \
---token "$NOW_TOKEN"
+--token "$VERCEL_TOKEN"
 
 echo "Deployment complete"
