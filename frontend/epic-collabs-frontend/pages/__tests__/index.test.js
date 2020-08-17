@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, cleanup } from '@testing-library/react';
-import Index from '../../pages';
+import Index from '..';
 
 describe('Index Page', () => {
   beforeEach(() => cleanup());
