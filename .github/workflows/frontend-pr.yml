@@ -18,5 +18,5 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies and run tests
-        working-directory: ./frontend/epic-collabs
+        working-directory: ./frontend/epic-collabs-frontend
         run: yarn install --frozen-lockfile && yarn lint:ci && yarn test:ci
