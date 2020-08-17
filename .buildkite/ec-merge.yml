@@ -1,7 +1,7 @@
 steps:
   - label: "Triggering merge pipelines"
     agents:
-      queue: dafault
+      queue: default
     env:
       DEBUG: true
     plugins:
