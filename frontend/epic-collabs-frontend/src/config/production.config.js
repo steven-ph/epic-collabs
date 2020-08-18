@@ -1,8 +1,11 @@
 module.exports = {
-  AUTH0_CLIENT_ID: 'cTdye48m1JjEYZPXooMIXSDs4U8Dw77z',
-  AUTH0_DOMAIN: 'stevenp.au.auth0.com',
-  AUTH0_REDIRECT_URL: 'https://epic-collabs.stevenp.vercel.app',
-  AUTH0_AUDIENCE: 'https://stevenp.au.auth0.com/api/v2/',
-  GRAPHQL_ENDPOINT:
-    'https://r599dalwbg.execute-api.us-east-1.amazonaws.com/stevenp/graphql'
+  STAGE: process.env.STAGE,
+  AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
+  AUTH0_SECRET: process.env.AUTH0_SECRET,
+  AUTH0_DOMAIN: process.env.AUTH0_DOMAIN,
+  SESSION_COOKIE_SECRET: process.env.SESSION_COOKIE_SECRET,
+  BASE_URL: process.env.BASE_URL,
+  AUTH0_REDIRECT_URL: process.env.AUTH0_REDIRECT_URL,
+  AUTH0_AUDIENCE: process.env.AUTH0_AUDIENCE,
+  GRAPHQL_ENDPOINT: process.env.GRAPHQL_ENDPOINT
 };

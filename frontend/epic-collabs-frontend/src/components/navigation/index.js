@@ -1,16 +1,20 @@
 import React from 'react';
-import { useAuth } from 'context/auth';
+import { isEmpty } from 'lodash';
+import { useUserContext } from 'context/user';
 
 const Navigation = () => {
-  const { isAuthenticated, loginWithRedirect, logout, user } = useAuth();
-  console.log({ isAuthenticated, user });
+  const { user } = useUserContext();
+
   return (
     <div>
-      {!isAuthenticated && (
-        <button onClick={() => loginWithRedirect({})}>Log in</button>
+      {isEmpty(user) ? (
+        <a href="/api/login">Login</a>
+      ) : (
+        <>
+          <span>Hello {user.name}!</span>
+          <a href="/api/logout">Logout</a>
+        </>
       )}
-
-      {isAuthenticated && <button onClick={() => logout()}>Log out</button>}
     </div>
   );
 };

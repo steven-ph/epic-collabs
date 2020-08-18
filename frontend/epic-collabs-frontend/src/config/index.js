@@ -3,7 +3,6 @@ const getConfigForEnvironment = env => {
 
   try {
     return {
-      ...require('./common.config.js'),
       ...require(`./${environment}.config.js`)
     };
   } catch (err) {
@@ -11,9 +10,6 @@ const getConfigForEnvironment = env => {
   }
 };
 
-const getConfig = () => ({
-  ...getConfigForEnvironment(process.env.STAGE),
-  STAGE: process.env.STAGE
-});
+const getConfig = () => getConfigForEnvironment(process.env.STAGE);
 
 module.exports = { getConfig };

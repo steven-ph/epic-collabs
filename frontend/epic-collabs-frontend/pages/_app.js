@@ -1,10 +1,12 @@
-import { Auth0Provider } from 'context/auth';
+import { useGetUser, UserProvider } from 'context/user';
 
 const EpicApp = ({ Component, pageProps }) => {
+  const { user } = useGetUser();
+
   return (
-    <Auth0Provider>
+    <UserProvider value={{ user }}>
       <Component {...pageProps} />
-    </Auth0Provider>
+    </UserProvider>
   );
 };
 
