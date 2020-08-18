@@ -1,4 +1,4 @@
-import 'styles/styles.less';
+import 'styles/styles.css';
 
 import React from 'react';
 import NProgress from 'nprogress';
