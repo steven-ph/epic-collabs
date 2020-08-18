@@ -24,7 +24,6 @@ const UserProvider = ({ value, children }) => {
 
 const getUser = () => {
   if (userState !== undefined) {
-    console.log({ userState });
     return userState;
   }
 
