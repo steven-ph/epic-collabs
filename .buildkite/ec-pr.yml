@@ -5,7 +5,7 @@ steps:
     env:
       DEBUG: true
     plugins:
-      chronotc/monorepo-diff#v1.1.1:
+      chronotc/monorepo-diff#v1.2.0:
         diff: ".buildkite/scripts/diff.sh ${BUILDKITE_COMMIT}"
         watch:
           - path: "backend/services/epic-collabs/"
