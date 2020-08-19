@@ -1,11 +1,15 @@
+import 'styles/styles.less';
 import { useGetUser, UserProvider } from 'context/user';
+import { Layout } from 'layouts';
 
 const EpicApp = ({ Component, pageProps }) => {
-  const { user } = useGetUser();
+  const { user, loading } = useGetUser();
 
   return (
-    <UserProvider value={{ user }}>
-      <Component {...pageProps} />
+    <UserProvider value={{ user, loading }}>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </UserProvider>
   );
 };
