@@ -1,18 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
+import { breakpoints } from 'styles';
 import { Headline, Title, Subtitle } from 'components/typography';
 
 const LandingPage = () => (
   <Container>
     <Headline>Find collaborators</Headline>
     <Headline>Build projects</Headline>
-    <Img
-      src="/images/meeting.jpg"
-      alt="Epic Collabs"
-      width="500px"
-      height="500px"
-      margin="32px"
-    />
+    <Img src="/images/meeting.jpg" alt="Epic Collabs" />
     <Title>Build a team around your idea</Title>
     <Subtitle>
       Epic Collabs is a community of engineers, designers, project managers, and
@@ -29,9 +24,15 @@ const Container = styled.div`
 
 const Img = styled.img`
   align-self: center;
-  margin: ${({ margin }) => margin};
-  width: ${({ width }) => width};
-  height: ${({ height }) => height};
+  margin: 32px;
+  width: 500px;
+  height: 500px;
+
+  @media screen and (max-width: ${breakpoints.sm}) {
+    margin: 16px;
+    width: 300px;
+    height: 300px;
+  }
 `;
 
 export { LandingPage };

@@ -2,10 +2,11 @@ import React from 'react';
 import { Input } from 'antd';
 import { ReactSVG } from 'react-svg';
 import styled from 'styled-components';
-import { useUserContext } from 'context/user';
+import { breakpoints } from 'styles';
 import { UserNav } from './UserNav';
 import { Link } from 'components/link';
 import { Title } from 'components/typography';
+import { useUserContext } from 'context/user';
 
 const Navigation = () => {
   const { user, loading } = useUserContext();
@@ -23,7 +24,7 @@ const Navigation = () => {
         </Left>
         <Middle>
           <NavContainer>
-            <Input.Search
+            <SearchInput
               placeholder="Search for something..."
               onSearch={value => console.log(value)}
             />
@@ -44,7 +45,13 @@ const Container = styled.div`
   height: 100%;
 
   > * + * {
-    margin-left: 0.75em;
+    margin-left: 32px;
+  }
+
+  @media screen and (max-width: ${breakpoints.sm}) {
+    > * + * {
+      margin-left: 10px;
+    }
   }
 `;
 
@@ -66,8 +73,6 @@ const Left = styled.div`
 const Middle = styled.div`
   display: flex;
   flex-grow: 1;
-  margin-left: 32px;
-  margin-right: 32px;
 `;
 
 const Right = styled.div`
@@ -84,11 +89,32 @@ const LogoContainer = styled.div`
     width: 48px;
     margin-right: 16px;
   }
+
+  @media screen and (max-width: ${breakpoints.sm}) {
+    h1 {
+      display: none;
+    }
+
+    svg {
+      width: 32px;
+      margin-right: 5px;
+    }
+  }
+
+  @media screen and (max-width: ${breakpoints.md}) {
+    h1 {
+      display: none;
+    }
+  }
 `;
 
 const NavContainer = styled.div`
   display: flex;
   align-items: center;
+`;
+
+const SearchInput = styled(Input.Search)`
+  min-width: 150px;
 `;
 
 export { Navigation };
