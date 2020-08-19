@@ -9,6 +9,8 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:jest/recommended',
+    'plugin:jest-dom/recommended',
+    'plugin:testing-library/recommended',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
     'plugin:import/errors',
@@ -31,7 +33,7 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module'
   },
-  plugins: ['react', 'jest'],
+  plugins: ['react', 'jest', 'jest-dom'],
   settings: {
     react: {
       version: 'detect'
