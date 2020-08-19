@@ -16,9 +16,10 @@ const StyledHeader = styled.header`
   top: 0;
   left: 0;
   position: fixed;
-  height: 60px;
+  height: 80px;
   width: 100%;
   padding: 5px 20px;
+  border-radius: 0 0 12px 12px;
   background-color: ${colours.white};
   border-bottom: 1px solid ${colours.navy100};
 `;

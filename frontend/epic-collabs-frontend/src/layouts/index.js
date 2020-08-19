@@ -46,8 +46,15 @@ const PageLayout = styled(_Layout)`
   h4,
   h5,
   h6 {
+    margin-top: 0;
+    margin-bottom: 0;
     font-weight: 700;
     font-family: ${typography.mainFont};
+  }
+
+  p {
+    margin-top: 0;
+    margin-bottom: 0;
   }
 `;
 

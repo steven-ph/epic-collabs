@@ -1,8 +1,11 @@
 import React from 'react';
+import { Input } from 'antd';
+import { ReactSVG } from 'react-svg';
 import styled from 'styled-components';
-import { breakpoints, colours } from 'styles';
 import { useUserContext } from 'context/user';
 import { UserNav } from './UserNav';
+import { Link } from 'components/link';
+import { Title } from 'components/typography';
 
 const Navigation = () => {
   const { user, loading } = useUserContext();
@@ -11,9 +14,21 @@ const Navigation = () => {
     return (
       <Container>
         <Left>
-          <LogoContainer>LOGO_HERE</LogoContainer>
-          <NavContainer>MENU_HERE</NavContainer>
+          <HomeLink href="/">
+            <LogoContainer>
+              <ReactSVG src={'/images/svg/rocket.svg'} />
+              <Title>EpicCollabs</Title>
+            </LogoContainer>
+          </HomeLink>
         </Left>
+        <Middle>
+          <NavContainer>
+            <Input.Search
+              placeholder="Search for something..."
+              onSearch={value => console.log(value)}
+            />
+          </NavContainer>
+        </Middle>
         <Right>
           <UserNav user={user} />
         </Right>
@@ -26,11 +41,21 @@ const Navigation = () => {
 
 const Container = styled.div`
   display: flex;
-  align-items: stretch;
-  justify-content: space-between;
+  height: 100%;
 
   > * + * {
     margin-left: 0.75em;
+  }
+`;
+
+const HomeLink = styled(Link)`
+  align-self: center;
+
+  h1 {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   }
 `;
 
@@ -38,52 +63,32 @@ const Left = styled.div`
   display: flex;
 `;
 
+const Middle = styled.div`
+  display: flex;
+  flex-grow: 1;
+  margin-left: 32px;
+  margin-right: 32px;
+`;
+
 const Right = styled.div`
   display: flex;
   align-items: center;
-
-  > * + * {
-    margin-left: 0.75em;
-  }
 `;
 
 const LogoContainer = styled.div`
-  display: inline-block;
-  max-width: 200px;
-  margin-right: 32px;
-  padding: 0.875em 0;
-  z-index: 1;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 
-  @media (max-width: ${breakpoints.xl}) {
-    max-width: 150px;
-
-    img {
-      width: 100%;
-      height: auto;
-    }
+  svg {
+    width: 48px;
+    margin-right: 16px;
   }
 `;
 
 const NavContainer = styled.div`
   display: flex;
   align-items: center;
-
-  a {
-    display: flex;
-    align-items: center;
-    color: ${colours.white};
-    white-space: nowrap;
-
-    &:hover,
-    &:focus {
-      color: ${colours.white};
-      text-decoration: none;
-    }
-
-    &:last-child {
-      padding-right: 0;
-    }
-  }
 `;
 
 export { Navigation };
