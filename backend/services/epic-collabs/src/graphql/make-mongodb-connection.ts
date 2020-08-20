@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 let connection = null;
 const makeMongoDbConnection = async uri => {
   if (connection) {
-    return;
+    return connection;
   }
 
   connection = mongoose.createConnection(uri, {
