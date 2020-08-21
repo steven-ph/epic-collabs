@@ -2,10 +2,9 @@ import React from 'react';
 import { Input } from 'antd';
 import { ReactSVG } from 'react-svg';
 import styled from 'styled-components';
-import { breakpoints } from 'styles';
+import { breakpoints, colours } from 'styles';
 import { UserNav } from './user-nav';
 import { Link } from 'components/link';
-import { Title } from 'components/common/typography';
 
 const Navigation = () => {
   return (
@@ -20,7 +19,7 @@ const Navigation = () => {
       </Left>
       <Middle>
         <NavContainer>
-          <SearchInput placeholder="Search for something..." onSearch={value => console.log(value)} />
+          <SearchInput placeholder="Search..." onSearch={value => console.log(value)} />
         </NavContainer>
       </Middle>
       <Right>
@@ -43,6 +42,12 @@ const Container = styled.div`
       margin-left: 8px;
     }
   }
+`;
+
+const Title = styled.h1`
+  font-weight: 400 !important;
+  text-align: center;
+  color: ${colours.darkGrey900};
 `;
 
 const HomeLink = styled(Link)`
@@ -104,7 +109,7 @@ const NavContainer = styled.div`
 `;
 
 const SearchInput = styled(Input.Search)`
-  min-width: 150px;
+  min-width: 180px;
 `;
 
 export { Navigation };

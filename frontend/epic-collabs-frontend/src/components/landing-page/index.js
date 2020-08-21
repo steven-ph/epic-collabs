@@ -1,9 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import { breakpoints } from 'styles';
+import { useGetAllCategories } from 'hooks/use-category';
 import { Headline, Title, Subtitle } from 'components/common';
 
 const LandingPage = () => {
+  const { allCategories } = useGetAllCategories();
+  console.log({ allCategories });
+
   return (
     <Container>
       <Headline>Find collaborators</Headline>

@@ -48,11 +48,11 @@ const PageLayout = styled(_Layout)`
   h6 {
     margin-top: 0;
     margin-bottom: 0;
-    font-weight: 700;
     font-family: ${typography.mainFont};
   }
 
-  p {
+  p,
+  small {
     margin-top: 0;
     margin-bottom: 0;
   }

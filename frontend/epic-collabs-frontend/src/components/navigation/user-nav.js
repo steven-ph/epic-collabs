@@ -97,8 +97,8 @@ const ProfileButton = styled.div`
 `;
 
 const StyledAvatar = styled(Avatar)`
-  height: 48px;
-  width: 48px;
+  height: 40px;
+  width: 40px;
 
   @media screen and (max-width: ${breakpoints.sm}) {
     height: 32px;

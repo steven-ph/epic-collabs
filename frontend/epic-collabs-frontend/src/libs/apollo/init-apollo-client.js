@@ -11,6 +11,21 @@ let cachedClient = null;
 const auth0 = getAuth0Client();
 const { GRAPHQL_ENDPOINT } = getConfig();
 
+const fetchToken = async () => {
+  try {
+    const res = await fetch('/api/session');
+
+    if (res.ok) {
+      const json = await res.json();
+      const token = get(json, 'accessToken');
+
+      return token || '';
+    }
+  } catch (error) {
+    return '';
+  }
+};
+
 const getAccessToken = async ctx => {
   const inAppContext = Boolean(ctx.ctx);
 
@@ -33,16 +48,7 @@ const getAccessToken = async ctx => {
     return accessToken;
   }
 
-  try {
-    const res = await fetch('/api/session');
-
-    if (res.ok) {
-      const json = await res.json();
-      accessToken = get(json, 'accessToken', '');
-    }
-  } catch (error) {
-    accessToken = '';
-  }
+  accessToken = await fetchToken();
 
   return accessToken;
 };
@@ -53,7 +59,7 @@ const attachAuth = ctx => async () => {
 
   return {
     headers: {
-      authorization: `Bearer ${accessToken}`
+      authorization: `Bearer ${accessToken ?? ''}`
     }
   };
 };
