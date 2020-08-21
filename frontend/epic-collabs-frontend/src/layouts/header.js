@@ -18,7 +18,7 @@ const StyledHeader = styled.header`
   position: fixed;
   height: 80px;
   width: 100%;
-  padding: 5px 20px;
+  padding: 5px 10px;
   border-radius: 0 0 12px 12px;
   background-color: ${colours.white};
   border-bottom: 1px solid ${colours.navy100};

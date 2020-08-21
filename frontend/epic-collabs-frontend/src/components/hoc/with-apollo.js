@@ -1,31 +1,23 @@
-import { get } from 'lodash';
 import cookie from 'cookie';
+import { get } from 'lodash';
 import fetch from 'cross-fetch';
-import { setContext } from '@apollo/client/link/context';
-import {
-  ApolloClient,
-  ApolloLink,
-  HttpLink,
-  InMemoryCache
-} from '@apollo/client';
 import { getConfig } from 'config';
+import { setContext } from '@apollo/client/link/context';
+import { ApolloClient, ApolloLink, HttpLink, InMemoryCache } from '@apollo/client';
+import { withApollo as _withApollo } from 'libs/apollo';
+
+const isServer = typeof window === 'undefined';
 
 const { GRAPHQL_ENDPOINT } = getConfig();
 
-const isServer = typeof window === 'undefined';
-const isBrowser = typeof window !== 'undefined';
-
 const getToken = headers => {
-  const cookies = get(headers, 'cookie', '');
+  const cookies = get(isServer ? headers : document, 'cookie', '');
 
-  const token = get(cookie.parse(cookies), 'auth0_token', '');
-
-  return Promise.resolve(token);
+  return get(cookie.parse(cookies), 'a0:session', '');
 };
 
-const attachAuth = headers => async () => {
+const attachAuth = headers => () => {
   const token = getToken(headers);
-
   return {
     headers: {
       authorization: `Bearer ${token}`
@@ -44,10 +36,11 @@ const createApolloClient = ({ initialState = {}, headers = {} }) => {
 
   return new ApolloClient({
     ssrMode: isServer,
-    connectToDevTools: isBrowser && process.env.NODE_ENV !== 'production',
     link: ApolloLink.from([authLink(), httpLink]),
     cache: new InMemoryCache().restore(initialState)
   });
 };
 
-export { getToken, createApolloClient };
+const withApollo = _withApollo(createApolloClient);
+
+export { withApollo };

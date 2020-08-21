@@ -1,4 +1,5 @@
 module.exports = {
+  SSR_ENABLED: true,
   STAGE: process.env.STAGE,
   AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
   AUTH0_SECRET: process.env.AUTH0_SECRET,

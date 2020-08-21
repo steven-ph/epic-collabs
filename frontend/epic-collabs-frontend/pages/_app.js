@@ -1,6 +1,10 @@
 import 'styles/styles.less';
-import { useGetUser, UserProvider } from 'context/user';
 import { Layout } from 'layouts';
+import { getConfig } from 'config';
+import { withApollo } from 'components/hoc/with-apollo';
+import { useGetUser, UserProvider } from 'context/user';
+
+const { SSR_ENABLED } = getConfig();
 
 const EpicApp = ({ Component, pageProps }) => {
   const { user, loading } = useGetUser();
@@ -14,4 +18,4 @@ const EpicApp = ({ Component, pageProps }) => {
   );
 };
 
-export default EpicApp;
+export default withApollo(EpicApp, { ssr: SSR_ENABLED });

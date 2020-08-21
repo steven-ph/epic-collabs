@@ -2,12 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { Avatar, Dropdown, Menu } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faSortDown,
-  faSignInAlt,
-  faSignOutAlt
-} from '@fortawesome/free-solid-svg-icons';
-import { colours } from 'styles';
+import { faSortDown, faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { breakpoints, colours } from 'styles';
 
 const getDropdownMenu = ({ name }) => (
   <StyledMenu>
@@ -46,13 +42,9 @@ const UserNav = ({ user }) => {
   const { picture, name } = user;
 
   return (
-    <Dropdown
-      trigger={['click']}
-      overlay={getDropdownMenu(user)}
-      placement="bottomRight"
-    >
+    <Dropdown trigger={['click']} overlay={getDropdownMenu(user)} placement="bottomRight">
       <ProfileButton>
-        <Avatar src={picture} size={48} alt={name} />
+        <StyledAvatar src={picture} alt={name} />
         <FontAwesomeIcon icon={faSortDown} />
       </ProfileButton>
     </Dropdown>
@@ -95,6 +87,16 @@ const ProfileButton = styled.div`
 
   &:hover svg {
     transform: translateY(5px);
+  }
+`;
+
+const StyledAvatar = styled(Avatar)`
+  height: 48px;
+  width: 48px;
+
+  @media screen and (max-width: ${breakpoints.sm}) {
+    height: 32px;
+    width: 32px;
   }
 `;
 

@@ -13,7 +13,7 @@ const Footer = () => (
 
 const StyledFooter = styled.footer`
   width: 100%;
-  padding: 20px;
+  padding: 10px 10px;
   flex-shrink: 0;
   border-radius: 12px 12px 0 0;
   background-color: ${colours.lightGrey200};

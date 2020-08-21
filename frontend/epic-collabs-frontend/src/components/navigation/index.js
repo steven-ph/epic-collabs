@@ -3,7 +3,7 @@ import { Input } from 'antd';
 import { ReactSVG } from 'react-svg';
 import styled from 'styled-components';
 import { breakpoints } from 'styles';
-import { UserNav } from './UserNav';
+import { UserNav } from './user-nav';
 import { Link } from 'components/link';
 import { Title } from 'components/typography';
 import { useUserContext } from 'context/user';
@@ -11,33 +11,30 @@ import { useUserContext } from 'context/user';
 const Navigation = () => {
   const { user, loading } = useUserContext();
 
-  if (!loading) {
-    return (
-      <Container>
-        <Left>
-          <HomeLink href="/">
-            <LogoContainer>
-              <ReactSVG src={'/images/svg/rocket.svg'} />
-              <Title>EpicCollabs</Title>
-            </LogoContainer>
-          </HomeLink>
-        </Left>
-        <Middle>
-          <NavContainer>
-            <SearchInput
-              placeholder="Search for something..."
-              onSearch={value => console.log(value)}
-            />
-          </NavContainer>
-        </Middle>
-        <Right>
-          <UserNav user={user} />
-        </Right>
-      </Container>
-    );
+  if (loading) {
+    return <Container />;
   }
 
-  return <Right />;
+  return (
+    <Container>
+      <Left>
+        <HomeLink href="/">
+          <LogoContainer>
+            <ReactSVG src={'/images/svg/rocket.svg'} />
+            <Title>EpicCollabs</Title>
+          </LogoContainer>
+        </HomeLink>
+      </Left>
+      <Middle>
+        <NavContainer>
+          <SearchInput placeholder="Search for something..." onSearch={value => console.log(value)} />
+        </NavContainer>
+      </Middle>
+      <Right>
+        <UserNav user={user} />
+      </Right>
+    </Container>
+  );
 };
 
 const Container = styled.div`
@@ -45,12 +42,12 @@ const Container = styled.div`
   height: 100%;
 
   > * + * {
-    margin-left: 32px;
+    margin-left: 28px;
   }
 
   @media screen and (max-width: ${breakpoints.sm}) {
     > * + * {
-      margin-left: 10px;
+      margin-left: 8px;
     }
   }
 `;
@@ -96,7 +93,7 @@ const LogoContainer = styled.div`
     }
 
     svg {
-      width: 32px;
+      width: 40px;
       margin-right: 5px;
     }
   }

@@ -1,15 +1,13 @@
 import React from 'react';
-import App from 'next/app';
 import Head from 'next/head';
-import { get } from 'lodash';
 import { ApolloProvider } from '@apollo/client';
-import { createApolloClient, getToken } from './create-apollo-client';
 
 const isServer = typeof window === 'undefined';
 
+let cachedClient;
+
 const getDisplayName = PageComponent => {
-  const displayName =
-    PageComponent.displayName || PageComponent.name || 'Component';
+  const displayName = PageComponent.displayName || PageComponent.name || 'Component';
 
   if (displayName === 'App') {
     console.warn('This withApollo HOC only works with PageComponents.');
@@ -18,11 +16,21 @@ const getDisplayName = PageComponent => {
   return `withApollo(${displayName})`;
 };
 
-const withApollo = (PageComponent, { ssr = true } = {}) => {
+const withApollo = createApolloClientFn => (PageComponent, { ssr = true } = {}) => {
+  const initApolloClient = (...args) => {
+    if (isServer) {
+      return createApolloClientFn(...args);
+    }
+
+    if (!cachedClient) {
+      cachedClient = createApolloClientFn(...args);
+    }
+
+    return cachedClient;
+  };
+
   const WithApollo = ({ apolloClient, apolloState, ...pageProps }) => {
-    const client =
-      apolloClient ||
-      createApolloClient({ initialState: apolloState, headers: {} });
+    const client = apolloClient || initApolloClient({ initialState: apolloState, headers: {} });
 
     return (
       <ApolloProvider client={client}>
@@ -35,44 +43,35 @@ const withApollo = (PageComponent, { ssr = true } = {}) => {
     WithApollo.displayName = getDisplayName(PageComponent);
   }
 
-  const getInitialProps = async ctx => {
-    const headers = get(ctx, 'req.headers');
-    const inAppContext = Boolean(ctx.ctx);
-    const token = getToken(headers);
+  const getInitialProps = async ({ ctx }) => {
+    const { AppTree } = ctx;
 
-    const apolloClient = createApolloClient({
+    const apolloClient = initApolloClient({
       initialState: {},
-      headers
+      headers: ctx.req.headers
     });
 
     ctx.apolloClient = apolloClient;
 
-    let pageProps = {};
-    if (PageComponent.getInitialProps) {
-      pageProps = await PageComponent.getInitialProps(ctx);
-    } else if (inAppContext) {
-      pageProps = await App.getInitialProps(ctx);
-    }
-    if (isServer) {
-      const { AppTree } = ctx;
+    const pageProps = PageComponent.getInitialProps ? await PageComponent.getInitialProps(ctx) : {};
 
+    if (isServer) {
       if (ctx.res && ctx.res.finished) {
-        return pageProps;
+        return {};
       }
 
-      if (ssr && AppTree) {
+      if (ssr) {
         try {
           const { getDataFromTree } = await import('@apollo/client/react/ssr');
 
-          let props;
-
-          if (inAppContext) {
-            props = { ...pageProps, apolloClient };
-          } else {
-            props = { pageProps: { ...pageProps, apolloClient } };
-          }
-
-          await getDataFromTree(<AppTree {...props} />);
+          await getDataFromTree(
+            <AppTree
+              pageProps={{
+                ...pageProps,
+                apolloClient
+              }}
+            />
+          );
         } catch (error) {
           console.error('Error while running `getDataFromTree`', error);
         }
@@ -81,11 +80,11 @@ const withApollo = (PageComponent, { ssr = true } = {}) => {
       Head.rewind();
     }
 
+    const apolloState = apolloClient.cache.extract();
+
     return {
       ...pageProps,
-      token,
-      apolloState: apolloClient.cache.extract(),
-      apolloClient: ctx.apolloClient
+      apolloState
     };
   };
 

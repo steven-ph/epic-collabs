@@ -5,10 +5,7 @@ const withPolyfills = (nextConfig = {}) => ({
     config.entry = async () => {
       const entries = await originalEntry();
 
-      if (
-        entries['main.js'] &&
-        !entries['main.js'].includes('./src/client/polyfills.js')
-      ) {
+      if (entries['main.js'] && !entries['main.js'].includes('./src/client/polyfills.js')) {
         entries['main.js'].unshift('./src/client/polyfills.js');
       }
 

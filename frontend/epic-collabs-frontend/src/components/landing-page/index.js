@@ -3,18 +3,17 @@ import styled from 'styled-components';
 import { breakpoints } from 'styles';
 import { Headline, Title, Subtitle } from 'components/typography';
 
-const LandingPage = () => (
-  <Container>
-    <Headline>Find collaborators</Headline>
-    <Headline>Build projects</Headline>
-    <Img src="/images/meeting.jpg" alt="Epic Collabs" />
-    <Title>Build a team around your idea</Title>
-    <Subtitle>
-      Epic Collabs is a community of engineers, designers, project managers, and
-      creators.
-    </Subtitle>
-  </Container>
-);
+const LandingPage = () => {
+  return (
+    <Container>
+      <Headline>Find collaborators</Headline>
+      <Headline>Build projects</Headline>
+      <Img src="/images/meeting.jpg" alt="Epic Collabs" />
+      <Title>Build a team around your idea</Title>
+      <Subtitle>Epic Collabs is a community of engineers, designers, project managers, and creators.</Subtitle>
+    </Container>
+  );
+};
 
 const Container = styled.div`
   display: flex;
