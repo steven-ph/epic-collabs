@@ -6,15 +6,8 @@ import { breakpoints } from 'styles';
 import { UserNav } from './user-nav';
 import { Link } from 'components/link';
 import { Title } from 'components/typography';
-import { useUserContext } from 'context/user';
 
 const Navigation = () => {
-  const { user, loading } = useUserContext();
-
-  if (loading) {
-    return <Container />;
-  }
-
   return (
     <Container>
       <Left>
@@ -31,7 +24,7 @@ const Navigation = () => {
         </NavContainer>
       </Middle>
       <Right>
-        <UserNav user={user} />
+        <UserNav />
       </Right>
     </Container>
   );

@@ -1,11 +1,12 @@
 import App from 'next/app';
 import Head from 'next/head';
 import { ApolloProvider } from '@apollo/client';
-import { initOnContext, initApolloClient, parseToken } from 'libs/apollo';
+import { initOnContext, initApolloClient } from 'libs/apollo';
 
 const withApollo = (PageComponent, { ssr = false } = {}) => {
-  const WithApollo = ({ apolloClient, apolloState, ...pageProps }) => {
-    const client = apolloClient ? apolloClient : initApolloClient({ initialState: apolloState, ctx: {} });
+  const WithApollo = ctx => {
+    const { apolloClient, apolloState, ...pageProps } = ctx;
+    const client = apolloClient ? apolloClient : initApolloClient({ initialState: apolloState, ctx });
 
     return (
       <ApolloProvider client={client}>
@@ -23,9 +24,6 @@ const withApollo = (PageComponent, { ssr = false } = {}) => {
   if (ssr || PageComponent.getInitialProps) {
     WithApollo.getInitialProps = async ctx => {
       const inAppContext = Boolean(ctx.ctx);
-
-      const token = parseToken(ctx.ctx);
-
       const { apolloClient } = initOnContext(ctx);
 
       let pageProps = {};
@@ -49,9 +47,9 @@ const withApollo = (PageComponent, { ssr = false } = {}) => {
             let props;
 
             if (inAppContext) {
-              props = { ...pageProps, apolloClient, token };
+              props = { ...pageProps, apolloClient };
             } else {
-              props = { pageProps: { ...pageProps, apolloClient, token } };
+              props = { pageProps: { ...pageProps, apolloClient } };
             }
 
             await getDataFromTree(<AppTree {...props} />);
@@ -65,7 +63,6 @@ const withApollo = (PageComponent, { ssr = false } = {}) => {
 
       return {
         ...pageProps,
-        token,
         apolloState: apolloClient.cache.extract(),
         apolloClient: ctx.apolloClient
       };

@@ -4,51 +4,58 @@ import { Avatar, Dropdown, Menu } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSortDown, faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { breakpoints, colours } from 'styles';
+import { useUserContext } from 'context/user';
+import { Link } from 'components/link';
 
 const getDropdownMenu = ({ name }) => (
   <StyledMenu>
     <Menu.Item key="0">
-      <a href="/">
-        <div>
+      <Link href="/">
+        <>
           <DropdownLabelSmall>Signed in as</DropdownLabelSmall>
           <DropdownLabel>{name}</DropdownLabel>
-        </div>
-      </a>
+        </>
+      </Link>
     </Menu.Item>
     <Menu.Divider />
     <Menu.Item key="2">
-      <a href="/api/logout">
+      <Link href="/api/logout">
         <LoginLogout>
           <DropdownLabel>Logout</DropdownLabel>
-          <FontAwesomeIcon icon={faSignOutAlt} />
+          <Icon icon={faSignOutAlt} />
         </LoginLogout>
-      </a>
+      </Link>
     </Menu.Item>
   </StyledMenu>
 );
 
-const UserNav = ({ user }) => {
-  if (!user) {
+const UserNav = () => {
+  const { user, loading } = useUserContext();
+
+  if (!user && !loading) {
     return (
-      <a href="/api/login">
+      <Link href="/api/login">
         <LoginLogout>
           <DropdownLabel>Login</DropdownLabel>
-          <FontAwesomeIcon icon={faSignInAlt} />
+          <Icon icon={faSignInAlt} />
         </LoginLogout>
-      </a>
+      </Link>
     );
   }
 
-  const { picture, name } = user;
+  if (user) {
+    const { picture, name } = user;
+    return (
+      <Dropdown trigger={['click']} overlay={getDropdownMenu({ name })} placement="bottomRight">
+        <ProfileButton>
+          <StyledAvatar src={picture} alt={name} />
+          <Icon icon={faSortDown} />
+        </ProfileButton>
+      </Dropdown>
+    );
+  }
 
-  return (
-    <Dropdown trigger={['click']} overlay={getDropdownMenu(user)} placement="bottomRight">
-      <ProfileButton>
-        <StyledAvatar src={picture} alt={name} />
-        <FontAwesomeIcon icon={faSortDown} />
-      </ProfileButton>
-    </Dropdown>
-  );
+  return null;
 };
 
 const LoginLogout = styled.div`
@@ -79,7 +86,6 @@ const ProfileButton = styled.div`
 
   svg {
     width: 14px;
-    margin-left: 6px;
     margin-top: -3px;
     color: ${colours.navyDark};
     transition: transform 0.2s ease-in-out;
@@ -98,6 +104,10 @@ const StyledAvatar = styled(Avatar)`
     height: 32px;
     width: 32px;
   }
+`;
+
+const Icon = styled(FontAwesomeIcon)`
+  margin-left: 6px;
 `;
 
 const DropdownLabelSmall = styled.small`

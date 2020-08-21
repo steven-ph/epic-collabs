@@ -2,8 +2,17 @@ import React from 'react';
 import styled from 'styled-components';
 import { breakpoints } from 'styles';
 import { Headline, Title, Subtitle } from 'components/typography';
+import { useGetAllCategories } from 'hooks/use-category';
 
 const LandingPage = () => {
+  const { loading, error, allCategories } = useGetAllCategories();
+
+  console.log({
+    loading,
+    error,
+    allCategories
+  });
+
   return (
     <Container>
       <Headline>Find collaborators</Headline>

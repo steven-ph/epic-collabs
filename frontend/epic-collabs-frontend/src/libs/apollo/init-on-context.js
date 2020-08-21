@@ -12,8 +12,7 @@ const initOnContext = ctx => {
     }
   }
 
-  const apolloClient =
-    ctx.apolloClient || initApolloClient({ initialState: ctx.apolloState || {}, ctx: inAppContext ? ctx.ctx : ctx });
+  const apolloClient = ctx.apolloClient || initApolloClient({ initialState: ctx.apolloState || {}, ctx });
 
   apolloClient.toJSON = () => null;
 

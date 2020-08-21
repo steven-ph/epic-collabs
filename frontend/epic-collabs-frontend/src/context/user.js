@@ -1,19 +1,19 @@
-import React from 'react';
-import axios from 'axios';
-import { get } from 'lodash';
+import { isNil } from 'lodash';
+import fetch from 'cross-fetch';
+import { createContext, useContext, useEffect } from 'react';
 
 // Use a global to save the user, so we don't have to fetch it again after page navigations
 let userState;
 
-const UserContext = React.createContext({ user: null, loading: false });
+const UserContext = createContext({ user: null, loading: false });
 
-const useUserContext = () => React.useContext(UserContext);
+const useUserContext = () => useContext(UserContext);
 
 const UserProvider = ({ value, children }) => {
   const { user } = value;
 
   // If the user was fetched in SSR, add it to userState so we don't fetch it again
-  React.useEffect(() => {
+  useEffect(() => {
     if (!userState && user) {
       userState = user;
     }
@@ -22,24 +22,22 @@ const UserProvider = ({ value, children }) => {
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
 
-const getUser = () => {
-  if (userState !== undefined) {
+const getUser = async () => {
+  if (!isNil(userState)) {
     return userState;
   }
 
-  return (
-    axios
-      .get('/api/me')
-      .then(res => {
-        userState = get(res, 'data') || null;
-        return userState;
-      })
-      // eslint-disable-next-line
-      .catch(err => {
-        userState = null;
-        return userState;
-      })
-  );
+  try {
+    const res = await fetch('/api/me');
+
+    if (res.ok) {
+      userState = await res.json();
+    }
+  } catch (error) {
+    userState = null;
+  }
+
+  return userState;
 };
 
 const useGetUser = () => {

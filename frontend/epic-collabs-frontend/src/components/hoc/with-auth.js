@@ -12,6 +12,7 @@ const withAuth = (InnerComponent, { isProtected = false } = {}) => {
     static async getInitialProps(ctx) {
       if (!ctx.req) {
         const user = await getUser();
+
         return { user };
       }
 
