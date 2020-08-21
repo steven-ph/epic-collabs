@@ -1,46 +1,78 @@
-import cookie from 'cookie';
-import { get } from 'lodash';
-import fetch from 'cross-fetch';
-import { getConfig } from 'config';
-import { setContext } from '@apollo/client/link/context';
-import { ApolloClient, ApolloLink, HttpLink, InMemoryCache } from '@apollo/client';
-import { withApollo as _withApollo } from 'libs/apollo';
+import App from 'next/app';
+import Head from 'next/head';
+import { ApolloProvider } from '@apollo/client';
+import { initOnContext, initApolloClient, parseToken } from 'libs/apollo';
 
-const isServer = typeof window === 'undefined';
+const withApollo = (PageComponent, { ssr = false } = {}) => {
+  const WithApollo = ({ apolloClient, apolloState, ...pageProps }) => {
+    const client = apolloClient ? apolloClient : initApolloClient({ initialState: apolloState, ctx: {} });
 
-const { GRAPHQL_ENDPOINT } = getConfig();
-
-const getToken = headers => {
-  const cookies = get(isServer ? headers : document, 'cookie', '');
-
-  return get(cookie.parse(cookies), 'a0:session', '');
-};
-
-const attachAuth = headers => () => {
-  const token = getToken(headers);
-  return {
-    headers: {
-      authorization: `Bearer ${token}`
-    }
+    return (
+      <ApolloProvider client={client}>
+        <PageComponent {...pageProps} />
+      </ApolloProvider>
+    );
   };
+
+  // Set the correct displayName in development
+  if (process.env.NODE_ENV !== 'production') {
+    const displayName = PageComponent.displayName || PageComponent.name || 'Component';
+    WithApollo.displayName = `withApollo(${displayName})`;
+  }
+
+  if (ssr || PageComponent.getInitialProps) {
+    WithApollo.getInitialProps = async ctx => {
+      const inAppContext = Boolean(ctx.ctx);
+
+      const token = parseToken(ctx.ctx);
+
+      const { apolloClient } = initOnContext(ctx);
+
+      let pageProps = {};
+      if (PageComponent.getInitialProps) {
+        pageProps = await PageComponent.getInitialProps(ctx);
+      } else if (inAppContext) {
+        pageProps = await App.getInitialProps(ctx);
+      }
+
+      if (typeof window === 'undefined') {
+        const { AppTree } = ctx;
+
+        if (ctx.res && ctx.res.finished) {
+          return pageProps;
+        }
+
+        if (ssr && AppTree) {
+          try {
+            const { getDataFromTree } = await import('@apollo/client/react/ssr');
+
+            let props;
+
+            if (inAppContext) {
+              props = { ...pageProps, apolloClient, token };
+            } else {
+              props = { pageProps: { ...pageProps, apolloClient, token } };
+            }
+
+            await getDataFromTree(<AppTree {...props} />);
+          } catch (error) {
+            console.error('Error while running `getDataFromTree`', error);
+          }
+
+          Head.rewind();
+        }
+      }
+
+      return {
+        ...pageProps,
+        token,
+        apolloState: apolloClient.cache.extract(),
+        apolloClient: ctx.apolloClient
+      };
+    };
+  }
+
+  return WithApollo;
 };
-
-const createApolloClient = ({ initialState = {}, headers = {} }) => {
-  const authLink = () => setContext(attachAuth(headers));
-
-  const httpLink = new HttpLink({
-    credentials: 'same-origin',
-    uri: GRAPHQL_ENDPOINT,
-    fetch
-  });
-
-  return new ApolloClient({
-    ssrMode: isServer,
-    link: ApolloLink.from([authLink(), httpLink]),
-    cache: new InMemoryCache().restore(initialState)
-  });
-};
-
-const withApollo = _withApollo(createApolloClient);
 
 export { withApollo };

@@ -41,6 +41,7 @@
     "lodash": "^4.17.20",
     "next": "9.5.2",
     "next-compose-plugins": "^2.2.0",
+    "nookies": "^2.4.0",
     "nprogress": "^0.2.0",
     "polished": "^3.6.5",
     "react": "16.13.1",
