@@ -1,5 +1,9 @@
-export * from './colours';
-export * from './breakpoint';
-export * from './easing';
-export * from './grid';
-export * from './typography';
+module.exports = {
+  ...require('./colours'),
+  ...require('./breakpoints'),
+  ...require('./defaultTheme'),
+  ...require('./easing'),
+  ...require('./global'),
+  ...require('./grid'),
+  ...require('./typography')
+};

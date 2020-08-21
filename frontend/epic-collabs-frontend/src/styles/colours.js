@@ -146,4 +146,4 @@ colours.navyDark = colours.navy900;
 colours.greyText = colours.darkGrey900;
 colours.indigo = colours.indigo700;
 
-export { colours };
+module.exports = { colours };

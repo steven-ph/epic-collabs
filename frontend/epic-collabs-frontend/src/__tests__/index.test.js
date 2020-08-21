@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from 'testUtils';
 import Index from '../../pages';
 
 describe('Index Page', () => {

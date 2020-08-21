@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { colours } from 'styles';
-import { SmallText } from 'components/typography';
+import { SmallText } from 'components/common/typography';
 
 const Footer = () => (
   <StyledFooter>

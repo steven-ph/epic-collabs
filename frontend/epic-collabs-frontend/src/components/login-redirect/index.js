@@ -4,7 +4,7 @@ import { createLoginUrl } from 'functions/create-login-url';
 
 class RedirectToLogin extends Component {
   componentDidMount() {
-    window.location.assign(createLoginUrl(Router.pathname));
+    window.location.assign(createLoginUrl({ redirectTo: Router.pathname }));
   }
 
   render() {

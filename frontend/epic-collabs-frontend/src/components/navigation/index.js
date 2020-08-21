@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { breakpoints } from 'styles';
 import { UserNav } from './user-nav';
 import { Link } from 'components/link';
-import { Title } from 'components/typography';
+import { Title } from 'components/common/typography';
 
 const Navigation = () => {
   return (

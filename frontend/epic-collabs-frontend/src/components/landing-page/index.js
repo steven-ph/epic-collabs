@@ -1,18 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 import { breakpoints } from 'styles';
-import { Headline, Title, Subtitle } from 'components/typography';
-import { useGetAllCategories } from 'hooks/use-category';
+import { Headline, Title, Subtitle } from 'components/common';
 
 const LandingPage = () => {
-  const { loading, allCategories } = useGetAllCategories();
-
-  console.log({ loading, allCategories });
-
   return (
     <Container>
       <Headline>Find collaborators</Headline>
       <Headline>Build projects</Headline>
+
       <Img src="/images/meeting.jpg" alt="Epic Collabs" />
       <Title>Build a team around your idea</Title>
       <Subtitle>Epic Collabs is a community of engineers, designers, project managers, and creators.</Subtitle>

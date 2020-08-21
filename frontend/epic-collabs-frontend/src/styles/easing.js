@@ -36,4 +36,4 @@ const easing = {
 
 easing.default = easing.easeInOutCubic;
 
-export { easing };
+module.exports = { easing };

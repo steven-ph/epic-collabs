@@ -1,0 +1,67 @@
+@import '~antd/dist/antd.less';
+@import 'fonts.less';
+@import 'defaults.less';
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#nprogress {
+  pointer-events: none;
+}
+
+#nprogress .bar {
+  background: green;
+  position: fixed;
+  z-index: 1031;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 5px;
+}
+
+#nprogress .peg {
+  display: block;
+  position: absolute;
+  right: 0px;
+  width: 100px;
+  height: 100%;
+  box-shadow: 0 0 10px green, 0 0 5px green;
+  opacity: 1;
+
+  -webkit-transform: rotate(3deg) translate(0px, -4px);
+  -ms-transform: rotate(3deg) translate(0px, -4px);
+  transform: rotate(3deg) translate(0px, -4px);
+}
+
+// Create non-existent form label font weight variable
+// .ant-form-item-label label {
+//   font-weight: @label-font-weight;
+// }
+// // Collapse the weight on <Divided> form items
+// .ant-divider + .ant-form-item {
+//   margin-top: -@form-component-max-height / 3;
+// }
+// Move the trailing ':' colon on forms closer to their label value
+.ant-form-item-label > label::after {
+  margin-left: 0;
+}
+
+.ant-select-dropdown-menu-item {
+  color: #4a5d85;
+}
+
+.ant-select-dropdown-menu-item:hover:not(.ant-select-dropdown-menu-item-disabled) {
+  background-color: #f7f9fc;
+}
+
+.ant-select-dropdown-menu-item-active:not(.ant-select-dropdown-menu-item-disabled) {
+  background-color: #f7f9fc;
+}
+
+.ant-select-dropdown-menu-item-selected {
+  font-weight: 400;
+  background-color: #ffffff;
+}

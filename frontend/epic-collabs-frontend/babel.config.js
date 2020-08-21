@@ -1,6 +1,9 @@
-const { getBabelPlugins } = require('./src/plugins/getBabelPlugins');
+const { getBabelPlugins, getJsxPragmaPlugins } = require('./src/plugins/getBabelPlugins');
 
-const plugins = getBabelPlugins();
+const babelPlugins = getBabelPlugins();
+const pragmaPlugins = getJsxPragmaPlugins();
+
+const plugins = [...babelPlugins, ...pragmaPlugins];
 
 module.exports = {
   env: {

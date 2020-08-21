@@ -1,4 +1,4 @@
-const createLoginUrl = redirectTo => {
+const createLoginUrl = ({ redirectTo }) => {
   if (redirectTo) {
     return `/api/login?redirectTo=${encodeURIComponent(redirectTo)}`;
   }

@@ -19,7 +19,7 @@ const withAuth = (InnerComponent, { isProtected = false } = {}) => {
       const session = await auth0.getSession(ctx.req);
       if ((!session || !session.user) && isProtected) {
         ctx.res.writeHead(302, {
-          Location: createLoginUrl(ctx.req.url)
+          Location: createLoginUrl({ redirectTo: ctx.req.url })
         });
         ctx.res.end();
         return;
@@ -41,7 +41,7 @@ const withAuth = (InnerComponent, { isProtected = false } = {}) => {
         return <RedirectToLogin />;
       }
 
-      return <div>{<InnerComponent {...this.props} user={this.props.user} />}</div>;
+      return <InnerComponent {...this.props} user={this.props.user} />;
     }
   };
 };

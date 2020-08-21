@@ -12,4 +12,4 @@ const typography = {
   headingFont: mainFont
 };
 
-export { typography };
+module.exports = { typography };

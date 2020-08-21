@@ -1,4 +1,11 @@
-const getBabelPlugins = ({ libraryDirectory = 'lib' } = {}) => [
+const getBabelPlugins = () => [
+  [
+    'module-resolver',
+    {
+      root: ['./src']
+    }
+  ],
+  'emotion',
   [
     'styled-components',
     {
@@ -11,7 +18,6 @@ const getBabelPlugins = ({ libraryDirectory = 'lib' } = {}) => [
     'import',
     {
       libraryName: 'antd',
-      libraryDirectory,
       style: false
     },
     'antd'
@@ -20,19 +26,31 @@ const getBabelPlugins = ({ libraryDirectory = 'lib' } = {}) => [
     'import',
     {
       libraryName: '@ant-design/icons',
-      libraryDirectory: `${libraryDirectory}/icons`,
       camel2DashComponentName: false
     },
     '@ant-design/icons'
+  ]
+];
+
+const getJsxPragmaPlugins = () => [
+  [
+    '@emotion/babel-plugin-jsx-pragmatic',
+    {
+      module: 'theme-ui',
+      import: 'jsx',
+      export: 'jsx'
+    }
   ],
   [
-    'module-resolver',
+    '@babel/plugin-transform-react-jsx',
     {
-      root: ['./src']
+      pragma: 'jsx',
+      pragmaFrag: 'React.Fragment'
     }
   ]
 ];
 
 module.exports = {
-  getBabelPlugins
+  getBabelPlugins,
+  getJsxPragmaPlugins
 };

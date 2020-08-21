@@ -4,4 +4,4 @@ const grid = {
   columns: 24
 };
 
-export { grid };
+module.exports = { grid };
