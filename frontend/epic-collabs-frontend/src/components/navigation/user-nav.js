@@ -11,20 +11,20 @@ const getDropdownMenu = ({ name }) => (
   <StyledMenu>
     <Menu.Item key="0">
       <Link href="/">
-        <>
+        <div>
           <DropdownLabelSmall>Signed in as</DropdownLabelSmall>
           <DropdownLabel>{name}</DropdownLabel>
-        </>
+        </div>
       </Link>
     </Menu.Item>
     <Menu.Divider />
     <Menu.Item key="2">
-      <Link href="/api/logout">
+      <a href="/api/logout">
         <LoginLogout>
           <DropdownLabel>Logout</DropdownLabel>
           <Icon icon={faSignOutAlt} />
         </LoginLogout>
-      </Link>
+      </a>
     </Menu.Item>
   </StyledMenu>
 );
@@ -34,12 +34,12 @@ const UserNav = () => {
 
   if (!user && !loading) {
     return (
-      <Link href="/api/login">
+      <a href="/api/login">
         <LoginLogout>
           <DropdownLabel>Login</DropdownLabel>
           <Icon icon={faSignInAlt} />
         </LoginLogout>
-      </Link>
+      </a>
     );
   }
 

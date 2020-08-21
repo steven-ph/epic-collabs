@@ -5,13 +5,9 @@ import { Headline, Title, Subtitle } from 'components/typography';
 import { useGetAllCategories } from 'hooks/use-category';
 
 const LandingPage = () => {
-  const { loading, error, allCategories } = useGetAllCategories();
+  const { loading, allCategories } = useGetAllCategories();
 
-  console.log({
-    loading,
-    error,
-    allCategories
-  });
+  console.log({ loading, allCategories });
 
   return (
     <Container>
