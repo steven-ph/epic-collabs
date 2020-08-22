@@ -18,6 +18,7 @@ const makeMongoDbConnection = async (uri): Promise<Connection> => {
   return mongoose
     .createConnection(uri, {
       useNewUrlParser: true,
+      useFindAndModify: false,
       useUnifiedTopology: true,
       bufferCommands: false,
       bufferMaxEntries: 0

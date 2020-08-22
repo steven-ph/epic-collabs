@@ -1,9 +1,6 @@
 import pino from 'pino';
 
-const serviceLog = pino({
-  useLevelLabels: true,
-  serializers: { error: pino.stdSerializers.err }
-});
+const serviceLog = pino();
 
 /** Supported log levels. */
 const levels = ['trace', 'debug', 'info', 'warn', 'error', 'fatal'];
@@ -32,8 +29,8 @@ const logger = {
   trace: (message, ...params) => logEvent({ level: 'trace', message, params }),
   debug: (message, ...params) => logEvent({ level: 'debug', message, params }),
   info: (message, ...params) => logEvent({ level: 'info', message, params }),
-  warn: (message, error, ...params) => logEvent({ level: 'warn', message, params, error }),
-  error: (message, error, ...params) => logEvent({ level: 'error', message, params, error })
+  warn: (message, error, ...params) => logEvent({ level: 'warn', message, error, params }),
+  error: (message, error, ...params) => logEvent({ level: 'error', message, error, params })
 };
 
-export { logger, logEvent };
+export { logger };

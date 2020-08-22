@@ -6,7 +6,7 @@ import { makeUserContext } from '../../graphql/context/user';
 import { makeMongoDbConnection } from '../../libs/make-mongodb-connection';
 
 const handler = async event => {
-  logger.debug('auth0-login event received', { event });
+  logger.info('auth0-login event received', { event });
 
   try {
     const parsedBody = JSON.parse(event.body);
@@ -14,8 +14,8 @@ const handler = async event => {
 
     const user: IUserInfo = omitBy(
       {
-        email: get(auth0User, 'email'),
         userId: get(auth0User, 'user_id'),
+        email: get(auth0User, 'email'),
         picture: get(auth0User, 'picture'),
         username: get(auth0User, 'email'),
         name: get(auth0User, 'name'),
@@ -26,7 +26,7 @@ const handler = async event => {
     );
 
     if (isEmpty(user)) {
-      logger.warn('Handle auth0 login warning: No user info', { auth0User });
+      logger.warn('Handle auth0 login warning: No user info', null, { auth0User });
 
       return { statusCode: 200 };
     }
@@ -39,8 +39,8 @@ const handler = async event => {
 
     return userService.login(user);
   } catch (error) {
-    logger.error('Handle auth0 login error', { event }, error);
-    throw error;
+    logger.warn('Handle auth0 login error', error, { event });
+    return { statusCode: 200 };
   }
 };
 

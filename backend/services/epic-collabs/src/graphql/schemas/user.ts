@@ -12,7 +12,7 @@ const typeDefs = gql`
   }
 
   type Query {
-    me: User @auth(roles: [VIEWER])
+    me: User @auth(roles: [VIEWER], throwError: true)
   }
 `;
 

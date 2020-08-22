@@ -1,4 +1,5 @@
 import { get } from 'lodash';
+import { logger } from '../../utils/logger';
 import { makeValidateToken } from './make-validate-token';
 import { getPublicKey } from './get-public-key';
 import { getSecret } from './get-secret';
@@ -23,9 +24,15 @@ const handler = async event => {
   }
   try {
     const token = await validateToken({ jwtToken });
+
     return handleResponse({ token, event });
   } catch (error) {
-    throw error;
+    logger.warn('Invalid or expired token', null, { event });
+
+    return generateResponse({
+      principalId: null,
+      Resource: get(event, 'methodArn')
+    });
   }
 };
 

@@ -4,7 +4,7 @@ import { IUserInfo } from '../models/user';
 
 interface IUserRepository {
   login: (input: IUserInfo) => Promise<IUserInfo | null>;
-  createUser: (input: IUserInfo) => Promise<IUserInfo | null>;
+  upsertUser: (input: IUserInfo) => Promise<IUserInfo | null>;
   getUserById: (userId: string) => Promise<IUserInfo | null>;
   getUsersByIds: (userIds: string[]) => Promise<any[]>;
   getUserByEmail: (email: string) => Promise<IUserInfo | null>;
@@ -17,36 +17,39 @@ interface IFindManyByKeyInput {
 }
 
 const makeUserRepository = ({ userDb }): IUserRepository => {
+  const _buildUserDataMap = ({ key, values, users }) => {
+    return reduce(
+      values,
+      (obj, val) => {
+        obj[val] = find(users, { [key]: val });
+        return obj;
+      },
+      {}
+    );
+  };
+
   const _implementFindMany = async ({ key, values }: IFindManyByKeyInput): Promise<any[]> => {
     return userDb.find().where(key).in(values).exec();
   };
 
   const _implementUserByIdLoader = async userIds => {
-    const users = await _implementFindMany({ key: 'userId', values: userIds });
+    const key = 'userId';
+    const values = userIds;
 
-    const usersMap = reduce(
-      userIds,
-      (obj, userId) => {
-        obj[userId] = find(users, { userId });
-        return obj;
-      },
-      {}
-    );
+    const users = await _implementFindMany({ key, values });
+
+    const usersMap = _buildUserDataMap({ key, values, users });
 
     return map(userIds, userId => usersMap[userId] || null);
   };
 
   const _implementUserByEmailLoader = async emails => {
-    const users = await _implementFindMany({ key: 'email', values: emails });
+    const key = 'email';
+    const values = emails;
 
-    const usersMap = reduce(
-      emails,
-      (obj, email) => {
-        obj[email] = find(users, { email });
-        return obj;
-      },
-      {}
-    );
+    const users = await _implementFindMany({ key, values });
+
+    const usersMap = _buildUserDataMap({ key, values, users });
 
     return map(emails, email => usersMap[email] || null);
   };
@@ -55,22 +58,20 @@ const makeUserRepository = ({ userDb }): IUserRepository => {
   const userByEmailLoader = new Dataloader(userIds => _implementUserByEmailLoader(userIds), { cacheKeyFn: key => JSON.stringify(key) });
 
   const login = async (input: IUserInfo) => {
-    const { email } = input;
+    const { userId } = input;
 
-    if (isEmpty(email)) {
+    if (isEmpty(userId)) {
       return null;
     }
 
-    const foundUser = await userByEmailLoader.load(email);
-
-    if (!isEmpty(foundUser)) {
-      return null;
-    }
-
-    return createUser(input);
+    return upsertUser(input);
   };
 
-  const createUser = async (input: IUserInfo) => userDb.create(input);
+  const upsertUser = async (input: IUserInfo) => {
+    const options = { new: true, upsert: true, omitUndefined: true };
+
+    return userDb.findOneAndUpdate({ userId: input.userId }, input, options);
+  };
 
   const getUserById = async userId => userByIdLoader.load(userId);
 
@@ -82,7 +83,7 @@ const makeUserRepository = ({ userDb }): IUserRepository => {
 
   return {
     login,
-    createUser,
+    upsertUser,
     getUserById,
     getUsersByIds,
     getUserByEmail,
