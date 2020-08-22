@@ -21,7 +21,9 @@ const { getConfigs, getSecrets } = makeKloudStore({
 
 const getParameters = memoize(
   (): Promise<Parameters> => {
-    return Promise.all([getConfigs(['AUTH0_JWKS_ENDPOINT']), getSecrets(['AUTH0_SECRET', 'MONGO_DB_URL'])]).then(([configs, secrets]) => Object.assign(configs, secrets));
+    return Promise.all([getConfigs(['AUTH0_JWKS_ENDPOINT']), getSecrets(['AUTH0_SECRET', 'MONGO_DB_URL'])]).then(([configs, secrets]) =>
+      Object.assign(configs, secrets)
+    );
   }
 );
 

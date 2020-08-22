@@ -1,4 +1,4 @@
-import { handler } from '.';
+import { handler } from '../';
 
 const HS256_JWT_TOKEN =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFjZy1raWQifQ.eyJzdWIiOiJhdXRoMHwkaGVsbG8uZ3JlYXQiLCJhdWQiOiJtb2JpbGVDbGllbnQiLCJuYW1lIjoiSm9obiBEb2UiLCJpYXQiOjEwMTYyMzkwMjIsImV4cCI6MTkxNjI0OTAyMiwiaHR0cHM6Ly9ucy5hY2xvdWQuZ3VydS9yb2xlcyI6eyJhZG1pbiI6dHJ1ZSwibWVtYmVyIjp0cnVlfSwiaHR0cHM6Ly9ucy5hY2xvdWQuZ3VydS9vcmdhbmlzYXRpb25JZCI6InRoZU9yZ2FuaXNhdGlvbklkIn0.1M1qJzeAcsYbmnVjDyQpASPCeNV2hWBsuzp0dTys60Q';
@@ -16,7 +16,7 @@ const policyDocument = {
   ]
 };
 
-jest.mock('../utils/get-parameters', () => ({
+jest.mock('../../../utils/get-parameters', () => ({
   getParameters: jest.fn().mockResolvedValue({
     AUTH0_SECRET: 'eyJkZXNrdG9wQ2xpZW50IjoiZGVza3RvcFNlY3JldCIsIm1vYmlsZUNsaWVudCI6Im1vYmlsZVNlY3JldCJ9'
   })

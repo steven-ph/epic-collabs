@@ -6,7 +6,7 @@ jwt.verify = mockVerifyToken;
 const mockGetPublicKey = jest.fn().mockResolvedValue('publicKey');
 const mockGetSecret = jest.fn().mockResolvedValue('secret');
 
-import { makeValidateToken } from './make-validate-token';
+import { makeValidateToken } from '../make-validate-token';
 const validateToken = makeValidateToken({
   getPublicKey: mockGetPublicKey,
   getSecret: mockGetSecret

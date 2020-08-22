@@ -8,7 +8,7 @@
   },
   "scripts": {
     "gen-gql": "ts-node ./src/utils/generate-schema.ts",
-    "dev": "serverless offline start -s stevenp --noAuth",
+    "dev": "serverless offline start -s stevenp",
     "build": "tsc",
     "deploy": "./bin/deploy",
     "lint": "tslint -c tslint.json 'src/**/*.ts' && yarn prettier:check",
@@ -31,6 +31,7 @@
     "jwks-rsa": "^1.8.1",
     "lodash": "^4.17.20",
     "mongoose": "^5.10.0",
+    "pino": "^6.5.1",
     "serverless-dynamodb-parameters": "^1.0.1",
     "serverless-logless-plugin": "^0.0.2"
   },
@@ -40,6 +41,7 @@
     "@types/lodash": "^4.14.159",
     "@types/mongoose": "^5.7.36",
     "@types/node": "^14.0.27",
+    "@types/pino": "^6.3.0",
     "jest": "^26.4.0",
     "prettier": "^2.0.5",
     "serverless": "^1.78.1",

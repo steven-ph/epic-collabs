@@ -1,7 +1,24 @@
-import { pick } from 'lodash';
+import { get } from 'lodash';
+import { makeUserContext, IUserService } from './context/user';
 
-const makeContext = ({ context, dbConnection }) => {
-  return { ...context, db: pick(dbConnection, ['models']) };
+interface IViewer {
+  id: string;
+}
+
+interface IContext {
+  viewer: IViewer;
+  User: IUserService;
+}
+
+const getViewer = ({ event }) => {
+  const authorizer = get(event, 'requestContext.authorizer') || {};
+  return {
+    id: get(authorizer, 'principalId')
+  };
 };
 
-export { makeContext };
+const makeContext = ({ event, dbConnection }): IContext => {
+  return { viewer: getViewer({ event }), User: makeUserContext({ userDb: dbConnection.models.User }) };
+};
+
+export { makeContext, IContext };
