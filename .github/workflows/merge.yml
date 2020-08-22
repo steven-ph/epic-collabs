@@ -13,5 +13,7 @@ jobs:
         uses: buildkite/trigger-pipeline-action@v1.2.0
         env:
           PIPELINE: sp/merge
+          COMMIT: "HEAD"
+          BRANCH: "master"
           MESSAGE: ":github: ${{github.event.head_commit.message}}"
           BUILDKITE_API_ACCESS_TOKEN: ${{ secrets.BUILDKITE_API_ACCESS_TOKEN }}
