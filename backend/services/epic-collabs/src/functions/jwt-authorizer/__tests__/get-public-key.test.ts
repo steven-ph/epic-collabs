@@ -1,10 +1,10 @@
 const mockGetSigningKey = jest.fn();
 
-jest.mock('./get-signing-key', () => ({
+jest.mock('../get-signing-key', () => ({
   getSigningKey: mockGetSigningKey
 }));
 
-import { getPublicKey } from './get-public-key';
+import { getPublicKey } from '../get-public-key';
 
 describe('getPublicKey', () => {
   it('should throw an error when there is no public key', () => {

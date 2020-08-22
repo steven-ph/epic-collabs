@@ -1,5 +1,5 @@
 service: epic-collabs-service
-frameworkVersion: '>=1.21.0 <2.0.0'
+frameworkVersion: ">=1.21.0 <2.0.0"
 provider:
   name: aws
   runtime: nodejs12.x
@@ -23,6 +23,7 @@ custom:
 
 package:
   exclude:
+    - "*.sh"
     - .serverless/**
     - .build/**
     - .buildkite/**
@@ -36,7 +37,6 @@ package:
     - .gitignore
     - .node-version
     - .yarnrc
-    - '*.sh'
     - package.json
     - yarn.lock
     - README.md
@@ -48,12 +48,33 @@ package:
 
 functions:
   jwtAuthorizer:
-    handler: src/jwt-authorizer/index.handler
-    memorySize: 1536
+    handler: src/functions/jwt-authorizer/index.handler
+    memorySize: 512
     environment:
       STAGE: ${opt:stage}
+    alarms:
+      - name: functionInvocations
+        threshold: 3000
     tags:
       FunctionType: authorizer
+
+  auth0Login:
+    handler: src/functions/auth0-login/index.handler
+    memorySize: 512
+    timeout: 20
+    environment:
+      STAGE: ${opt:stage}
+    events:
+      - http:
+          path: auth0/login
+          method: post
+          private: true
+    alarms:
+      - name: functionInvocations
+        threshold: 3000
+    tags:
+      FunctionType: webhook
+      WebHookSource: auth0
 
   graphql:
     handler: src/graphql/index.handler
@@ -66,7 +87,7 @@ functions:
           path: graphql
           method: post
           cors:
-            origin: '*'
+            origin: "*"
             headers:
               - Content-Type
               - X-Amz-Date

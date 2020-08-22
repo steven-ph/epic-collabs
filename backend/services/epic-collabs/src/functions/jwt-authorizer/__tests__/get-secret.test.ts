@@ -1,9 +1,9 @@
 const mockGetParameters = jest.fn();
-jest.mock('../utils/get-parameters', () => ({
+jest.mock('../../../utils/get-parameters', () => ({
   getParameters: mockGetParameters
 }));
 
-import { getSecret } from './get-secret';
+import { getSecret } from '../get-secret';
 
 describe('getSecret', () => {
   it('should get the secret for the specified audience', () => {

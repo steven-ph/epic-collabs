@@ -1,0 +1,3 @@
+{
+  "body": "{\"version\":1,\"data\":{\"client\":\"MyWebApp\",\"connection\":{\"name\":\"MyDbConn\",\"strategy\":\"auth0\"},\"user\":{\"name\":\"jdoe@foobar.com\",\"email\":\"jdoe@foobar.com\",\"user_id\":\"auth0|0123456789\",\"nickname\":\"jdoe\",\"picture\":\"http://foobar.com/pictures/jdoe.png\",\"identities\":[{\"provider\":\"auth0\",\"user_id\":\"0123456789\",\"connection\":\"Username-Password-Connection\",\"isSocial\":false}],\"persistent\":{}},\"query\":{\"scope\":\"openid\"}}}"
+}

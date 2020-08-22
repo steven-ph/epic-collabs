@@ -1,13 +1,13 @@
 const mockCallbackGetSigningKey = jest.fn((_, cb) => cb(null, { publicKey: 'signingkey' }));
 
-jest.mock('./get-jwks-client', () => ({
+jest.mock('../get-jwks-client', () => ({
   getJwksClient: () =>
     Promise.resolve({
       getSigningKey: mockCallbackGetSigningKey
     })
 }));
 
-import { getSigningKey } from './get-signing-key';
+import { getSigningKey } from '../get-signing-key';
 
 describe('getSigningKey', () => {
   it('should get the signing key using kid', () => {

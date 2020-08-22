@@ -1,12 +1,11 @@
 import { get } from 'lodash';
 
 const mockGetParameters = jest.fn();
-
-jest.mock('../utils/get-parameters', () => ({
+jest.mock('../../../utils/get-parameters', () => ({
   getParameters: mockGetParameters
 }));
 
-import { getJwksClient } from './get-jwks-client';
+import { getJwksClient } from '../get-jwks-client';
 
 describe('getJwksClient', () => {
   beforeEach(() => getJwksClient.cache.clear());
