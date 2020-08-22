@@ -5,6 +5,7 @@ interface IUserInfo {
   email?: string;
   picture?: string;
   username?: string;
+  name?: string;
   firstName?: string;
   lastName?: string;
 }
@@ -17,20 +18,20 @@ const UserSchema: Schema = new Schema({
     required: true
   },
   username: {
-    type: String,
-    required: true
+    type: String
   },
   email: {
     type: String,
     required: true
   },
+  name: {
+    type: String
+  },
   firstName: {
-    type: String,
-    required: true
+    type: String
   },
   lastName: {
-    type: String,
-    required: true
+    type: String
   },
   picture: {
     type: String

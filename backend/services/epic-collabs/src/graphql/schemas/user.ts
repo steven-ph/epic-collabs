@@ -6,12 +6,13 @@ const typeDefs = gql`
     email: String
     picture: String
     username: String
+    name: String
     firstName: String
     lastName: String
   }
 
   type Query {
-    me: User
+    me: User @auth(roles: [VIEWER])
   }
 `;
 

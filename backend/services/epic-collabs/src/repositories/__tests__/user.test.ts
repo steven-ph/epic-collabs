@@ -8,8 +8,9 @@ import { makeUserRepository, IUserRepository } from '../user';
 const mockUser = {
   userId: 'johndoe',
   email: 'john@doe.com',
-  username: 'johndoe',
+  username: 'john@doe.com',
   picture: 'picture',
+  name: 'john doe',
   firstName: 'john',
   lastName: 'doe'
 };

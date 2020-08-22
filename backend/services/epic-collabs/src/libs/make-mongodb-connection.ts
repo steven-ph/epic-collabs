@@ -1,3 +1,4 @@
+import { isNil } from 'lodash';
 import mongoose, { Connection } from 'mongoose';
 import { UserModel, UserSchema } from '../models/user';
 
@@ -10,7 +11,7 @@ const makeConnectionWithModels = (conn: Connection) => {
 };
 
 const makeMongoDbConnection = async (uri): Promise<Connection> => {
-  if (connection) {
+  if (!isNil(connection)) {
     return connection;
   }
 

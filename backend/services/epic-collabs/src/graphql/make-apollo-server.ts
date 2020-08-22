@@ -1,3 +1,4 @@
+import { isNil } from 'lodash';
 import { ApolloServer } from 'apollo-server-lambda';
 import { makeContext } from './make-context';
 import { makeSchema } from './make-schema';
@@ -10,7 +11,7 @@ const makeApolloServer = async (): Promise<ApolloServer> => {
 
   const dbConnection = await makeMongoDbConnection(MONGO_DB_URL);
 
-  if (apolloServer) {
+  if (!isNil(apolloServer)) {
     return apolloServer;
   }
 
