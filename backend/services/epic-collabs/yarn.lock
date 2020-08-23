@@ -1618,10 +1618,10 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@sp-tools/kloud-config@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@sp-tools/kloud-config/-/kloud-config-0.0.4.tgz#ea05d69768aa99f70845af8c4f33b1d504916133"
-  integrity sha512-TxsDBV6YPtOYS3/7LzFCgiO5plo4HzFxU14JfILeFBRtUH7L27hjalOIrC9j8fMeCZBJCrRoETkANXWnAfOg7w==
+"@sp-tools/kloud-config@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@sp-tools/kloud-config/-/kloud-config-0.0.5.tgz#acd77195f3fbf6aedf9d64f1576a91f35a0a43bd"
+  integrity sha512-z04b0zK8bFJdNEfazDnBYOVQ5QlwlSCT+p1ql7l5UO1+D7YYM5ajA+UOQXB4NSWzZtsk+vRuIxWfTOxo6aK2yQ==
   dependencies:
     aws-sdk "^2.263.1"
     bluebird "^3.5.1"
@@ -1646,10 +1646,17 @@
     prompt "^1.0.0"
     root-path "^0.2.1"
 
-"@sp-tools/kloud-parameter@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@sp-tools/kloud-parameter/-/kloud-parameter-0.0.4.tgz#1a6b0c5a3e6c84f7d9a1fed2153b5a7fb795350f"
-  integrity sha512-NQzdmpom1p+emzQUmHSwG7gjFDqZmTtj6lF9N8p04EiikPcB8Im0ufeo1CtxBp6FZ/bGPw41vXNPwNIISLcu+A==
+"@sp-tools/kloud-logger@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@sp-tools/kloud-logger/-/kloud-logger-0.0.3.tgz#e7a271ae7aa6ac8373c67833ed3729ce3ef688c3"
+  integrity sha512-sea4BdnolfwPduhwAlp3HGsvOfSliK5tQ8oM5FOIobwqZ7OEVAI8S5bX6xYHh2NMsgB2/LWMj8CGEYNHoFT6IQ==
+  dependencies:
+    pino "^6.5.1"
+
+"@sp-tools/kloud-parameter@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@sp-tools/kloud-parameter/-/kloud-parameter-0.0.6.tgz#f1d84ecb27c0184db07b769b9df3c2487c10fffd"
+  integrity sha512-w/lWDenhDFRc6IZ5f3FvgvEJfVdyf7VELd9M3ulPT9Ipb1RWROGUv80IOyVfEEpxCd2zBsGonoK3pyxLgDP0zw==
   dependencies:
     bluebird "^3.5.3"
     dataloader "^1.4.0"
@@ -1658,10 +1665,10 @@
     lodash.get "^4.4.2"
     lodash.isplainobject "^4.0.6"
 
-"@sp-tools/kloud-stack@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@sp-tools/kloud-stack/-/kloud-stack-0.0.5.tgz#32f39c499b8378da779fee097bf31bcdb15bca78"
-  integrity sha512-HL6H3KhDn9kqVRw+TkuiwwrMrTWcLDfND5lQJLLQA5MXUj7wtZVOKSsQEvoqxShi/3kqvsT1/4HupeN1UOL97A==
+"@sp-tools/kloud-stack@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@sp-tools/kloud-stack/-/kloud-stack-0.0.6.tgz#2548b53b595f1439a740074d22df4878627a2e97"
+  integrity sha512-3tM5YONydDUEseOPi41R+rBFm2/YS6ZgYvQObZaYAq1JEBo2qTLvigvcmzj6yk5oLmQLP2iY0k0yxYrJvFS41g==
   dependencies:
     aws-sdk "^2.425.0"
     bluebird "^3.5.1"

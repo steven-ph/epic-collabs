@@ -1,5 +1,5 @@
 import { get } from 'lodash';
-import { logger } from '../../utils/logger';
+import { logger } from '@sp-tools/kloud-logger';
 import { makeValidateToken } from './make-validate-token';
 import { getPublicKey } from './get-public-key';
 import { getSecret } from './get-secret';

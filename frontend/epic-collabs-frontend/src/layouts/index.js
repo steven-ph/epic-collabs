@@ -48,7 +48,7 @@ const PageLayout = styled(_Layout)`
   h6 {
     margin-top: 0;
     margin-bottom: 0;
-    font-family: ${typography.mainFont};
+    font-family: ${typography.brandFont};
   }
 
   p,

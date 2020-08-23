@@ -1,5 +1,7 @@
 import fetch from 'cross-fetch';
 import { getConfig } from 'config';
+import jwtDecode from 'jwt-decode';
+import { isAfter } from 'date-fns';
 import { get, isEmpty } from 'lodash';
 import { getAuth0Client } from 'libs/auth0';
 import { onError } from '@apollo/client/link/error';
@@ -10,6 +12,21 @@ let accessToken = '';
 let cachedClient = null;
 const auth0 = getAuth0Client();
 const { GRAPHQL_ENDPOINT } = getConfig();
+
+const isTokenValid = token => {
+  if (!token) {
+    return false;
+  }
+
+  try {
+    const decodedToken = jwtDecode(token);
+    const expiresAt = decodedToken.exp * 1000;
+
+    return isAfter(expiresAt, Date.now());
+  } catch (error) {
+    return false;
+  }
+};
 
 const fetchToken = async () => {
   try {
@@ -38,14 +55,17 @@ const getAccessToken = async ctx => {
       const data = await tokenCache.getAccessToken();
 
       return get(data, 'accessToken') || '';
-      // eslint-disable-next-line
     } catch (error) {
       return '';
     }
   }
 
   if (!isEmpty(accessToken)) {
-    return accessToken;
+    const isValid = isTokenValid(accessToken);
+
+    if (isValid) {
+      return accessToken;
+    }
   }
 
   accessToken = await fetchToken();

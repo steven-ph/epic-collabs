@@ -20,9 +20,10 @@
     "test:watch": "jest --coverage --verbose --watch"
   },
   "dependencies": {
-    "@sp-tools/kloud-config": "^0.0.4",
-    "@sp-tools/kloud-parameter": "^0.0.4",
-    "@sp-tools/kloud-stack": "^0.0.5",
+    "@sp-tools/kloud-config": "^0.0.5",
+    "@sp-tools/kloud-logger": "^0.0.3",
+    "@sp-tools/kloud-parameter": "^0.0.6",
+    "@sp-tools/kloud-stack": "^0.0.6",
     "apollo-server-lambda": "^2.16.1",
     "dataloader": "^2.0.0",
     "graphql": "^15.3.0",
