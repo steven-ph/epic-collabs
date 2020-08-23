@@ -6,8 +6,6 @@ import { makeUserContext } from '../../graphql/context/user';
 import { makeMongoDbConnection } from '../../libs/make-mongodb-connection';
 
 const handler = async event => {
-  logger.info('auth0-login event received', { event });
-
   try {
     const parsedBody = JSON.parse(event.body);
     const auth0User = get(parsedBody, 'data.profile');
@@ -17,7 +15,7 @@ const handler = async event => {
         userId: get(auth0User, 'user_id'),
         email: get(auth0User, 'email'),
         picture: get(auth0User, 'picture'),
-        username: get(auth0User, 'email'),
+        username: get(auth0User, 'username') || get(auth0User, 'email'),
         name: get(auth0User, 'name'),
         firstName: get(auth0User, 'given_name'),
         lastName: get(auth0User, 'family_name')
