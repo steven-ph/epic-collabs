@@ -1,4 +1,4 @@
-import { IUserRepository, IUserInfo } from '../repositories/user';
+import { IUserRepository, IUserInfo } from 'repositories/user';
 
 interface IUserService {
   login: (input: IUserInfo) => Promise<IUserInfo | null>;

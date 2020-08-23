@@ -1,4 +1,4 @@
-import { makeUserRepository, IUserRepository } from '../user';
+import { makeUserRepository, IUserRepository } from 'repositories/user';
 
 const mockUser = {
   userId: 'johndoe',
@@ -15,13 +15,10 @@ const mockExec = jest.fn();
 
 const mockUserDb = {
   findOneAndUpdate: mockFindOneAndUpdate,
-  find: jest.fn().mockReturnValue({
-    where: jest.fn().mockReturnValue({
-      in: jest.fn().mockReturnValue({
-        exec: mockExec
-      })
-    })
-  })
+  find: jest.fn().mockReturnThis(),
+  where: jest.fn().mockReturnThis(),
+  in: jest.fn().mockReturnThis(),
+  exec: mockExec
 };
 
 describe('UserRepository', () => {

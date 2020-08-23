@@ -1,6 +1,6 @@
 import Dataloader from 'dataloader';
 import { find, isEmpty, map, reduce } from 'lodash';
-import { IUserInfo } from '../models/user';
+import { IUserInfo } from 'models/user';
 
 interface IUserRepository {
   login: (input: IUserInfo) => Promise<IUserInfo | null>;

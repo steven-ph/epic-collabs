@@ -1,5 +1,5 @@
 import { get } from 'lodash';
-import { getParameters } from '../../utils/get-parameters';
+import { getParameters } from 'utils/get-parameters';
 
 const getSecret = async ({ audience }) => {
   try {

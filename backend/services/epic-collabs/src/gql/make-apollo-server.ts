@@ -2,8 +2,8 @@ import { isNil } from 'lodash';
 import { ApolloServer } from 'apollo-server-lambda';
 import { makeContext } from './make-context';
 import { makeSchema } from './make-schema';
-import { makeMongoDbConnection } from '../libs/make-mongodb-connection';
-import { getParameters } from '../utils/get-parameters';
+import { getParameters } from 'utils/get-parameters';
+import { makeMongoDbConnection } from 'libs/make-mongodb-connection';
 
 let apolloServer = null;
 const makeApolloServer = async (): Promise<ApolloServer> => {
