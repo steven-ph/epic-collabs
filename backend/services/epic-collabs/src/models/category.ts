@@ -1,6 +1,7 @@
 import { Document, Schema } from 'mongoose';
 
-interface ICategory {
+interface ICategoryModel {
+  _id: string;
   name: string;
   description?: string;
   picture?: string;
@@ -9,9 +10,13 @@ interface ICategory {
   createdBy?: string;
 }
 
-interface CategoryModel extends ICategory, Document {}
+type CategoryDocument = ICategoryModel & Document;
 
 const CategorySchema: Schema = new Schema({
+  _id: {
+    type: String,
+    required: true
+  },
   name: {
     type: String,
     required: true
@@ -35,4 +40,4 @@ const CategorySchema: Schema = new Schema({
   }
 });
 
-export { ICategory, CategoryModel, CategorySchema };
+export { CategoryDocument, ICategoryModel, CategorySchema };

@@ -1,4 +1,3 @@
-import { property } from 'lodash';
 import { IContext } from '../make-context';
 
 export const resolvers = {
@@ -8,8 +7,5 @@ export const resolvers = {
     usersByIds: (_, { ids }, ctx: IContext) => ctx.User.getUsersByIds(ids),
     userByEmail: (_, { email }, ctx: IContext) => ctx.User.getUserByEmail(email),
     usersByEmails: (_, { emails }, ctx: IContext) => ctx.User.getUsersByEmails(emails)
-  },
-  User: {
-    id: property('userId')
   }
 };

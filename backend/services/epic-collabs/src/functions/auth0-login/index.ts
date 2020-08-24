@@ -1,6 +1,6 @@
 import { logger } from '@sp-tools/kloud-logger';
 import { get, omitBy, isNil, isEmpty } from 'lodash';
-import { IUserInfo } from '../../models/user';
+import { IUserModel } from '../../models/user';
 import { getParameters } from '../../utils/get-parameters';
 import { makeUserContext } from '../../gql/context/user';
 import { makeMongoDbConnection } from '../../libs/make-mongodb-connection';
@@ -9,12 +9,12 @@ const handler = async event => {
   try {
     const eventBody = JSON.parse(event.body);
     const auth0User = get(eventBody, 'data.profile');
-    const userId = get(auth0User, 'user_id');
+    const _id = get(auth0User, 'user_id');
     const createdAt = get(auth0User, 'created_at');
 
-    const user: IUserInfo = omitBy(
+    const user: IUserModel = omitBy(
       {
-        userId,
+        _id,
         email: get(auth0User, 'email'),
         picture: get(auth0User, 'picture'),
         username: get(auth0User, 'username') || get(auth0User, 'email'),
@@ -27,7 +27,7 @@ const handler = async event => {
       isNil
     );
 
-    if (isNil(userId) || isEmpty(user)) {
+    if (isNil(_id) || isEmpty(user)) {
       logger.warn('Handle auth0 login warning: No user info', null, { eventBody });
 
       return { statusCode: 200 };

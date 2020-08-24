@@ -1,7 +1,7 @@
 import { makeUserRepository, IUserRepository } from '..//user';
 
 const mockUser = {
-  userId: 'johndoe',
+  _id: 'johndoe',
   email: 'john@doe.com',
   username: 'john@doe.com',
   picture: 'picture',
@@ -39,7 +39,7 @@ describe('UserRepository', () => {
       const res = await userRepo.login({ ...mockUser });
 
       expect(res).toEqual(mockUser);
-      expect(mockFindOneAndUpdate).toHaveBeenCalledWith({ userId: mockUser.userId }, mockUser, { new: true, upsert: true, omitUndefined: true });
+      expect(mockFindOneAndUpdate).toHaveBeenCalledWith({ _id: mockUser._id }, mockUser, { new: true, upsert: true, omitUndefined: true });
     });
 
     it('should not upsert user in the db if the input is invalid', async () => {

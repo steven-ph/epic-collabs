@@ -2,7 +2,7 @@ import { gql } from 'apollo-server-lambda';
 
 const typeDefs = gql`
   type Category {
-    id: ID
+    _id: ID
     name: String
     description: String
     picture: String
@@ -11,16 +11,16 @@ const typeDefs = gql`
     createdBy: String
   }
 
+  input AddCategoryInput {
+    name: String
+  }
+
   type Query {
     allCategories: [Category]
   }
 
   type Mutation {
-    addCategory(input: AddCategoryInput!): Category
-  }
-
-  input AddCategoryInput {
-    name: String
+    addCategory(input: AddCategoryInput!): Category @auth(roles: [VIEWER], throwError: true)
   }
 `;
 

@@ -1,11 +1,11 @@
-import { IUserRepository, IUserInfo } from '../repositories/user';
+import { IUserRepository, IUserModel } from '../repositories/user';
 
 interface IUserService {
-  login: (input: IUserInfo) => Promise<IUserInfo | null>;
-  getUserById: (userId: string) => Promise<IUserInfo | null>;
-  getUsersByIds: (userIds: string[]) => Promise<IUserInfo[]>;
-  getUserByEmail: (email: string) => Promise<IUserInfo | null>;
-  getUsersByEmails: (emails: string[]) => Promise<IUserInfo[]>;
+  login: (input: IUserModel) => Promise<IUserModel | null>;
+  getUserById: (userId: string) => Promise<IUserModel | null>;
+  getUsersByIds: (userIds: string[]) => Promise<IUserModel[]>;
+  getUserByEmail: (email: string) => Promise<IUserModel | null>;
+  getUsersByEmails: (emails: string[]) => Promise<IUserModel[]>;
 }
 
 interface IUserServiceDI {
@@ -13,7 +13,7 @@ interface IUserServiceDI {
 }
 
 const makeUserService = ({ userRepo }: IUserServiceDI): IUserService => {
-  const login = (input: IUserInfo) => userRepo.login(input);
+  const login = (input: IUserModel) => userRepo.login(input);
   const getUserById = (userId: string) => userRepo.getUserById(userId);
   const getUsersByIds = (userIds: string[]) => userRepo.getUsersByIds(userIds);
   const getUserByEmail = (email: string) => userRepo.getUserByEmail(email);
@@ -28,4 +28,4 @@ const makeUserService = ({ userRepo }: IUserServiceDI): IUserService => {
   };
 };
 
-export { makeUserService, IUserService, IUserInfo };
+export { makeUserService, IUserService, IUserModel };

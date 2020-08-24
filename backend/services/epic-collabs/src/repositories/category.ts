@@ -1,17 +1,18 @@
 import Dataloader from 'dataloader';
 import { get, isEmpty } from 'lodash';
-import { ICategory } from '../models/category';
+import { ICategoryModel } from '../models/category';
 import { loader } from '../utils/dataloader';
 
 interface IAddCategoryInput {
   name: string;
+  createdBy: string;
 }
 
 interface ICategoryRepository {
-  getCategoryById: (id: string) => Promise<ICategory | null>;
-  getCategoriesByIds: (ids: string[]) => Promise<ICategory[] | null>;
-  getAllCategories: () => Promise<ICategory[] | null>;
-  addCategory: (input: IAddCategoryInput) => Promise<ICategory | null>;
+  getCategoryById: (id: string) => Promise<ICategoryModel | null>;
+  getCategoriesByIds: (ids: string[]) => Promise<ICategoryModel[] | null>;
+  getAllCategories: () => Promise<ICategoryModel[] | null>;
+  addCategory: (input: IAddCategoryInput) => Promise<ICategoryModel | null>;
 }
 
 const makeCategoryRepository = ({ categoryDb }): ICategoryRepository => {
@@ -27,8 +28,9 @@ const makeCategoryRepository = ({ categoryDb }): ICategoryRepository => {
 
   const addCategory = (input: IAddCategoryInput) => {
     const name = get(input, 'name');
+    const createdBy = get(input, 'createdBy');
 
-    if (isEmpty(name)) {
+    if (isEmpty(name) || isEmpty(createdBy)) {
       return null;
     }
 
@@ -43,4 +45,4 @@ const makeCategoryRepository = ({ categoryDb }): ICategoryRepository => {
   };
 };
 
-export { makeCategoryRepository, ICategoryRepository, ICategory, IAddCategoryInput };
+export { makeCategoryRepository, ICategoryRepository, ICategoryModel, IAddCategoryInput };

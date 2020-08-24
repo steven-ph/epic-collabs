@@ -1,4 +1,3 @@
-import { property } from 'lodash';
 import { IContext } from '../make-context';
 
 export const resolvers = {
@@ -8,9 +7,6 @@ export const resolvers = {
     allCategories: (_, __, ctx: IContext) => ctx.Category.getAllCategories()
   },
   Mutation: {
-    addCategory: (_, { input }, ctx: IContext) => ctx.Category.addCategory(input)
-  },
-  Category: {
-    id: property('_id')
+    addCategory: (_, { input }, ctx: IContext) => ctx.Category.addCategory({ ...input, createdBy: ctx.viewer.id })
   }
 };

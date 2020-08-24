@@ -1,7 +1,7 @@
 import { Document, Schema } from 'mongoose';
 
-interface IUserInfo {
-  userId?: string;
+interface IUserModel {
+  _id: string;
   email?: string;
   picture?: string;
   username?: string;
@@ -13,10 +13,10 @@ interface IUserInfo {
   emailVerified?: boolean;
 }
 
-interface UserModel extends IUserInfo, Document {}
+type UserDocument = IUserModel & Document;
 
 const UserSchema: Schema = new Schema({
-  userId: {
+  _id: {
     type: String,
     required: true
   },
@@ -24,8 +24,7 @@ const UserSchema: Schema = new Schema({
     type: String
   },
   email: {
-    type: String,
-    required: true
+    type: String
   },
   name: {
     type: String
@@ -50,4 +49,4 @@ const UserSchema: Schema = new Schema({
   }
 });
 
-export { IUserInfo, UserModel, UserSchema };
+export { UserDocument, IUserModel, UserSchema };

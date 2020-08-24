@@ -1,10 +1,10 @@
-import { ICategoryRepository, ICategory, IAddCategoryInput } from '../repositories/category';
+import { ICategoryRepository, ICategoryModel, IAddCategoryInput } from '../repositories/category';
 
 interface ICategoryService {
-  getCategoryById: (id: string) => Promise<ICategory | null>;
-  getCategoriesByIds: (ids: string[]) => Promise<ICategory[] | null>;
-  getAllCategories: () => Promise<ICategory[] | null>;
-  addCategory: (input: IAddCategoryInput) => Promise<ICategory | null>;
+  getCategoryById: (id: string) => Promise<ICategoryModel | null>;
+  getCategoriesByIds: (ids: string[]) => Promise<ICategoryModel[] | null>;
+  getAllCategories: () => Promise<ICategoryModel[] | null>;
+  addCategory: (input: IAddCategoryInput) => Promise<ICategoryModel | null>;
 }
 
 interface ICategoryServiceDI {
@@ -25,4 +25,4 @@ const makeCategoryService = ({ categoryRepo }: ICategoryServiceDI): ICategorySer
   };
 };
 
-export { makeCategoryService, ICategoryService, ICategory };
+export { makeCategoryService, ICategoryService, ICategoryModel };
