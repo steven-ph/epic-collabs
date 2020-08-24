@@ -1,9 +1,9 @@
 import { logger } from '@sp-tools/kloud-logger';
 import { get, omitBy, isNil, isEmpty } from 'lodash';
-import { IUserInfo } from 'models/user';
-import { getParameters } from 'utils/get-parameters';
-import { makeUserContext } from 'gql/context/user';
-import { makeMongoDbConnection } from 'libs/make-mongodb-connection';
+import { IUserInfo } from '../../models/user';
+import { getParameters } from '../../utils/get-parameters';
+import { makeUserContext } from '../../gql/context/user';
+import { makeMongoDbConnection } from '../../libs/make-mongodb-connection';
 
 const handler = async event => {
   try {

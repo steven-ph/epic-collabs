@@ -16,7 +16,7 @@ const policyDocument = {
   ]
 };
 
-jest.mock('utils/get-parameters', () => ({
+jest.mock('../../../utils/get-parameters', () => ({
   getParameters: jest.fn().mockResolvedValue({
     AUTH0_SECRET: 'eyJkZXNrdG9wQ2xpZW50IjoiZGVza3RvcFNlY3JldCIsIm1vYmlsZUNsaWVudCI6Im1vYmlsZVNlY3JldCJ9'
   })

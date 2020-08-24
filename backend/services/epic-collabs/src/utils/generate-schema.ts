@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { printSchema } from 'graphql';
-import { makeSchema } from 'gql/make-schema';
+import { makeSchema } from '../gql/make-schema';
 
 try {
   const outputPath = path.resolve(process.cwd(), 'schema.graphql');

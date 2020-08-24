@@ -1,6 +1,6 @@
 import { isNil } from 'lodash';
 import mongoose, { Connection } from 'mongoose';
-import { UserModel, UserSchema } from 'models/user';
+import { UserModel, UserSchema } from '../models/user';
 
 let connection = null;
 

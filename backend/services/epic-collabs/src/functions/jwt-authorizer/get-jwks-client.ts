@@ -1,6 +1,6 @@
 import { memoize } from 'lodash';
 import jwksClient from 'jwks-rsa';
-import { getParameters } from 'utils/get-parameters';
+import { getParameters } from '../../utils/get-parameters';
 
 const getClient = async () => {
   const { AUTH0_JWKS_ENDPOINT } = await getParameters();

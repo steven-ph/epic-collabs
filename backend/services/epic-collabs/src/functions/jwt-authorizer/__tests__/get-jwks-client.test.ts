@@ -1,7 +1,7 @@
 import { get } from 'lodash';
 
 const mockGetParameters = jest.fn();
-jest.mock('utils/get-parameters', () => ({
+jest.mock('../../../utils/get-parameters', () => ({
   getParameters: mockGetParameters
 }));
 

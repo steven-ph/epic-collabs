@@ -6,7 +6,7 @@ provider:
 config:
   path: /${stage}/epic-collabs/config
   defaults:
-    LOG_RETENTION_IN_DAYS: 30
+    LOG_RETENTION_IN_DAYS: 7
     AUTH0_JWKS_ENDPOINT: https://stevenp.au.auth0.com/.well-known/jwks.json
 
 secret:

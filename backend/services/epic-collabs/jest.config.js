@@ -5,7 +5,6 @@ module.exports = {
     '^.+\\.tsx?$': 'ts-jest'
   },
   clearMocks: true,
-  moduleDirectories: ['<rootDir>/src', 'node_modules'],
   testRegex: '(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'json']
 };

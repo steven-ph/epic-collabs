@@ -1,4 +1,4 @@
-import { makeUserRepository, IUserRepository } from 'repositories/user';
+import { makeUserRepository, IUserRepository } from '..//user';
 
 const mockUser = {
   userId: 'johndoe',
