@@ -10,6 +10,7 @@ const handler = async event => {
     const eventBody = JSON.parse(event.body);
     const auth0User = get(eventBody, 'data.profile');
     const userId = get(auth0User, 'user_id');
+    const createdAt = get(auth0User, 'created_at');
 
     const user: IUserInfo = omitBy(
       {
@@ -19,7 +20,9 @@ const handler = async event => {
         username: get(auth0User, 'username') || get(auth0User, 'email'),
         name: get(auth0User, 'name'),
         firstName: get(auth0User, 'given_name'),
-        lastName: get(auth0User, 'family_name')
+        lastName: get(auth0User, 'family_name'),
+        createdAt: createdAt ? new Date(`${createdAt}`).getTime() : Date.now(),
+        emailVerified: !!get(auth0User, 'email_verified')
       },
       isNil
     );

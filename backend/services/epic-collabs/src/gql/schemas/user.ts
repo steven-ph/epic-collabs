@@ -9,6 +9,9 @@ const typeDefs = gql`
     name: String
     firstName: String
     lastName: String
+    bio: String
+    createdAt: Float
+    emailVerified: Boolean
   }
 
   type Query {

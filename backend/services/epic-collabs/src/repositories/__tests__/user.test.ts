@@ -7,7 +7,10 @@ const mockUser = {
   picture: 'picture',
   name: 'john doe',
   firstName: 'john',
-  lastName: 'doe'
+  lastName: 'doe',
+  bio: 'blah',
+  createdAt: 12345,
+  emailVerified: true
 };
 
 const mockFindOneAndUpdate = jest.fn();

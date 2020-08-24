@@ -8,6 +8,9 @@ interface IUserInfo {
   name?: string;
   firstName?: string;
   lastName?: string;
+  bio?: string;
+  createdAt?: number;
+  emailVerified?: boolean;
 }
 
 interface UserModel extends IUserInfo, Document {}
@@ -33,8 +36,17 @@ const UserSchema: Schema = new Schema({
   lastName: {
     type: String
   },
+  bio: {
+    type: String
+  },
   picture: {
     type: String
+  },
+  createdAt: {
+    type: Number
+  },
+  emailVerified: {
+    type: Boolean
   }
 });
 
