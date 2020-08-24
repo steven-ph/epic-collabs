@@ -16,6 +16,10 @@ const typeDefs = gql`
 
   type Query {
     me: User @auth(roles: [VIEWER], throwError: true)
+    userById(id: String!): User
+    usersByIds(ids: [String!]!): [User]
+    userByEmail(email: String!): User
+    usersByEmails(emails: [String!]!): [User]
   }
 `;
 

@@ -3,6 +3,7 @@ import { get, omitBy, isNil, isEmpty } from 'lodash';
 import { IUserModel } from '../../models/user';
 import { getParameters } from '../../utils/get-parameters';
 import { makeUserContext } from '../../gql/context/user';
+import { generateAvatar } from '../../utils/generate-avatar';
 import { makeMongoDbConnection } from '../../libs/make-mongodb-connection';
 
 const handler = async event => {
@@ -16,7 +17,7 @@ const handler = async event => {
       {
         _id,
         email: get(auth0User, 'email'),
-        picture: get(auth0User, 'picture'),
+        picture: get(auth0User, 'picture') || generateAvatar(),
         username: get(auth0User, 'username') || get(auth0User, 'email'),
         name: get(auth0User, 'name'),
         firstName: get(auth0User, 'given_name'),

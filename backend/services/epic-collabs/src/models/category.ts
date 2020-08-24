@@ -1,8 +1,9 @@
 import { Document, Schema } from 'mongoose';
+import { generateAvatar } from '../utils/generate-avatar';
 
 interface ICategoryModel {
-  _id: string;
-  name: string;
+  _id?: string;
+  name?: string;
   description?: string;
   picture?: string;
   createdAt?: number;
@@ -13,28 +14,29 @@ interface ICategoryModel {
 type CategoryDocument = ICategoryModel & Document;
 
 const CategorySchema: Schema = new Schema({
-  _id: {
-    type: String,
-    required: true
-  },
   name: {
     type: String,
-    required: true
+    required: true,
+    trim: true
   },
   description: {
-    type: String
+    type: String,
+    trim: true
   },
   picture: {
-    type: String
+    type: String,
+    default: generateAvatar
   },
   createdAt: {
-    type: Number
+    type: Number,
+    default: Date.now
   },
   updatedAt: {
-    type: Number
+    type: Number,
+    default: Date.now
   },
   createdBy: {
-    type: Schema.Types.ObjectId,
+    type: String,
     required: true,
     ref: 'User'
   }

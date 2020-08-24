@@ -5,6 +5,8 @@ import { loader } from '../utils/dataloader';
 
 interface IAddCategoryInput {
   name: string;
+  description: string;
+  picture: string;
   createdBy: string;
 }
 

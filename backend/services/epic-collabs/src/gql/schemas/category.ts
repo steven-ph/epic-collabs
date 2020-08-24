@@ -13,9 +13,13 @@ const typeDefs = gql`
 
   input AddCategoryInput {
     name: String
+    description: String
+    picture: String
   }
 
   type Query {
+    categoryById(id: String!): Category
+    categoriesByIds(ids: [String!]!): [Category]
     allCategories: [Category]
   }
 

@@ -1,7 +1,8 @@
 import { Document, Schema } from 'mongoose';
+import { generateAvatar } from '../utils/generate-avatar';
 
 interface IUserModel {
-  _id: string;
+  _id?: string;
   email?: string;
   picture?: string;
   username?: string;
@@ -18,31 +19,39 @@ type UserDocument = IUserModel & Document;
 const UserSchema: Schema = new Schema({
   _id: {
     type: String,
-    required: true
+    trim: true
   },
   username: {
-    type: String
+    type: String,
+    trim: true
   },
   email: {
-    type: String
+    type: String,
+    trim: true
   },
   name: {
-    type: String
+    type: String,
+    trim: true
   },
   firstName: {
-    type: String
+    type: String,
+    trim: true
   },
   lastName: {
-    type: String
+    type: String,
+    trim: true
   },
   bio: {
-    type: String
+    type: String,
+    trim: true
   },
   picture: {
-    type: String
+    type: String,
+    default: generateAvatar
   },
   createdAt: {
-    type: Number
+    type: Number,
+    default: Date.now
   },
   emailVerified: {
     type: Boolean
