@@ -1,7 +1,7 @@
 import Dataloader from 'dataloader';
 import { isEmpty, get } from 'lodash';
 import { IUserModel } from '../models/user';
-import { loader } from '../utils/dataloader';
+import { makeLoader } from '../utils/dataloader';
 
 interface IUserRepository {
   login: (input: IUserModel) => Promise<IUserModel | null>;
@@ -13,11 +13,11 @@ interface IUserRepository {
 }
 
 const makeUserRepository = ({ userDb }): IUserRepository => {
-  const userByIdLoader = new Dataloader((userIds: string[]) => loader({ db: userDb, key: '_id', ids: userIds }), {
+  const userByIdLoader = new Dataloader((userIds: string[]) => makeLoader({ db: userDb, key: '_id', ids: userIds }), {
     cacheKeyFn: key => JSON.stringify(key)
   });
 
-  const userByEmailLoader = new Dataloader((emails: string[]) => loader({ db: userDb, key: 'email', ids: emails }), {
+  const userByEmailLoader = new Dataloader((emails: string[]) => makeLoader({ db: userDb, key: 'email', ids: emails }), {
     cacheKeyFn: key => JSON.stringify(key)
   });
 

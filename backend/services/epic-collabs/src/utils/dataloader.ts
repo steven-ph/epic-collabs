@@ -33,7 +33,7 @@ const buildDataMapForLoader = ({ key, ids, values }: IBuildDataMapForLoaderInput
   );
 };
 
-const loader = async ({ db, key, ids }: ILoaderInput): Promise<any[]> => {
+const makeLoader = async ({ db, key, ids }: ILoaderInput): Promise<any[]> => {
   const results = await mongoFindMany({ db, key, values: ids });
 
   const resultsMap = buildDataMapForLoader({ key, ids, values: results });
@@ -41,4 +41,4 @@ const loader = async ({ db, key, ids }: ILoaderInput): Promise<any[]> => {
   return map(ids, id => resultsMap[id] || null);
 };
 
-export { loader, buildDataMapForLoader, mongoFindMany };
+export { makeLoader, buildDataMapForLoader, mongoFindMany };

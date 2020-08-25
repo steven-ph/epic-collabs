@@ -6,7 +6,7 @@ import { Headline, Title, Subtitle } from 'components/common';
 
 const LandingPage = () => {
   const { allCategories } = useGetAllCategories();
-  console.log({ allCategories });
+  console.log(allCategories.length);
 
   return (
     <Container>

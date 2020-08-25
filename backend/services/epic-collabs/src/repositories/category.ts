@@ -1,7 +1,7 @@
 import Dataloader from 'dataloader';
 import { get, isEmpty } from 'lodash';
 import { ICategoryModel } from '../models/category';
-import { loader } from '../utils/dataloader';
+import { makeLoader } from '../utils/dataloader';
 
 interface IAddCategoryInput {
   name: string;
@@ -18,7 +18,7 @@ interface ICategoryRepository {
 }
 
 const makeCategoryRepository = ({ categoryDb }): ICategoryRepository => {
-  const categoryByIdLoader = new Dataloader((ids: string[]) => loader({ db: categoryDb, key: '_id', ids }), {
+  const categoryByIdLoader = new Dataloader((ids: string[]) => makeLoader({ db: categoryDb, key: '_id', ids }), {
     cacheKeyFn: key => JSON.stringify(key)
   });
 
