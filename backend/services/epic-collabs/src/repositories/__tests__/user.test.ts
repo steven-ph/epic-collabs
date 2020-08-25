@@ -1,4 +1,13 @@
-import { makeUserRepository, IUserRepository } from '..//user';
+import { makeUserRepository, IUserRepository } from '../user';
+
+const mockLoad = jest.fn();
+const mockLoadMany = jest.fn();
+jest.mock('dataloader', () =>
+  jest.fn(() => ({
+    load: mockLoad,
+    loadMany: mockLoadMany
+  }))
+);
 
 const mockUser = {
   _id: 'johndoe',
@@ -17,11 +26,7 @@ const mockFindOneAndUpdate = jest.fn();
 const mockExec = jest.fn();
 
 const mockUserDb = {
-  findOneAndUpdate: mockFindOneAndUpdate,
-  find: jest.fn().mockReturnThis(),
-  where: jest.fn().mockReturnThis(),
-  in: jest.fn().mockReturnThis(),
-  exec: mockExec
+  findOneAndUpdate: mockFindOneAndUpdate
 };
 
 describe('UserRepository', () => {
@@ -53,7 +58,7 @@ describe('UserRepository', () => {
 
   describe('#getUserById', () => {
     it('should get user by id', async () => {
-      mockExec.mockResolvedValue([mockUser]);
+      mockLoad.mockResolvedValue(mockUser);
 
       const response = await userRepo.getUserById('johndoe');
 
@@ -63,7 +68,7 @@ describe('UserRepository', () => {
 
   describe('#getUsersByIds', () => {
     it('should get multiple users by ids', async () => {
-      mockExec.mockResolvedValue([mockUser]);
+      mockLoadMany.mockResolvedValue([mockUser]);
 
       const response = await userRepo.getUsersByIds(['johndoe']);
 
@@ -73,7 +78,7 @@ describe('UserRepository', () => {
 
   describe('#getUserByEmail', () => {
     it('should get user by email', async () => {
-      mockExec.mockResolvedValue([mockUser]);
+      mockLoad.mockResolvedValue(mockUser);
 
       const response = await userRepo.getUserByEmail('john@doe.com');
 
@@ -83,7 +88,7 @@ describe('UserRepository', () => {
 
   describe('#getUsersByEmails', () => {
     it('should get multiple users by emails', async () => {
-      mockExec.mockResolvedValue([mockUser]);
+      mockLoadMany.mockResolvedValue([mockUser]);
 
       const response = await userRepo.getUsersByEmails(['john@doe.com']);
 
