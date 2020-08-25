@@ -1,5 +1,14 @@
 import { makeCategoryRepository, ICategoryRepository } from '../category';
 
+const mockLoad = jest.fn();
+const mockLoadMany = jest.fn();
+jest.mock('dataloader', () =>
+  jest.fn(() => ({
+    load: mockLoad,
+    loadMany: mockLoadMany
+  }))
+);
+
 const mockCategory = {
   id: 'cat-id',
   name: 'Cat name',
@@ -30,10 +39,11 @@ describe('CategoryRepository', () => {
     categoryRepo = makeCategoryRepository({ categoryDb: mockCategoryDb });
   });
 
-  describe('#login', () => {
+  describe('#addCategory', () => {
     it('should create a category in the db', async () => {
       mockCreate.mockResolvedValue(mockCategory);
 
+      // @ts-ignore
       const res = await categoryRepo.addCategory({ name: 'Cat name', createdBy: 'blah' });
 
       expect(res).toEqual(mockCategory);
@@ -59,25 +69,25 @@ describe('CategoryRepository', () => {
     });
   });
 
-  // describe('#getCategoryById', () => {
-  //   it('should get category by id', async () => {
-  //     mockExec.mockResolvedValue([mockCategory]);
+  describe('#getCategoryById', () => {
+    it('should get category by id', async () => {
+      mockLoad.mockResolvedValue(mockCategory);
 
-  //     const response = await categoryRepo.getCategoryById('cat-id');
+      const response = await categoryRepo.getCategoryById('cat-id');
 
-  //     expect(response).toEqual(mockCategory);
-  //   });
-  // });
+      expect(response).toEqual(mockCategory);
+    });
+  });
 
-  // describe('#getCategoriesByIds', () => {
-  //   it('should get multiple categories by ids', async () => {
-  //     mockExec.mockResolvedValue([mockCategory]);
+  describe('#getCategoriesByIds', () => {
+    it('should get multiple categories by ids', async () => {
+      mockLoadMany.mockResolvedValue([mockCategory]);
 
-  //     const response = await categoryRepo.getCategoriesByIds(['cat-id']);
+      const response = await categoryRepo.getCategoriesByIds(['cat-id']);
 
-  //     expect(response).toEqual([mockCategory]);
-  //   });
-  // });
+      expect(response).toEqual([mockCategory]);
+    });
+  });
 
   describe('#getAllCategories', () => {
     it('should get all', async () => {
