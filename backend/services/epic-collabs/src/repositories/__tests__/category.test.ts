@@ -39,7 +39,7 @@ describe('CategoryRepository', () => {
     categoryRepo = makeCategoryRepository({ categoryDb: mockCategoryDb });
   });
 
-  describe('#login', () => {
+  describe('#addCategory', () => {
     it('should create a category in the db', async () => {
       mockCreate.mockResolvedValue(mockCategory);
 
