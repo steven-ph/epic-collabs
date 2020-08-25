@@ -1,13 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Navigation } from 'components/navigation';
 import { colours } from 'styles';
+import { Box } from 'components/common';
+import { Navigation } from 'components/navigation';
 
 const Header = () => (
   <StyledHeader>
-    <Container>
+    <Box sx={{ margin: '0 auto', height: '100%' }}>
       <Navigation />
-    </Container>
+    </Box>
   </StyledHeader>
 );
 
@@ -22,11 +23,6 @@ const StyledHeader = styled.header`
   border-radius: 0 0 12px 12px;
   background-color: ${colours.white};
   border-bottom: 1px solid ${colours.navy100};
-`;
-
-const Container = styled.div`
-  margin: 0 auto;
-  height: 100%;
 `;
 
 export { Header };

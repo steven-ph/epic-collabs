@@ -3,9 +3,10 @@ import styled from 'styled-components';
 import { Avatar, Dropdown, Menu } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSortDown, faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
-import { breakpoints, colours } from 'styles';
+import { breakpoints, colours, easing } from 'styles';
 import { useUserContext } from 'context/user';
 import { Link } from 'components/link';
+import { Flexbox } from 'components/common';
 
 const getDropdownMenu = ({ name }) => (
   <StyledMenu>
@@ -47,7 +48,7 @@ const UserNav = () => {
     const { picture, name } = user;
     return (
       <Dropdown trigger={['click']} overlay={getDropdownMenu({ name })} placement="bottomRight">
-        <ProfileButton>
+        <ProfileButton alignItems="center">
           <StyledAvatar src={picture} alt={name} />
           <Icon icon={faSortDown} />
         </ProfileButton>
@@ -58,8 +59,7 @@ const UserNav = () => {
   return null;
 };
 
-const LoginLogout = styled.div`
-  display: flex;
+const LoginLogout = styled(Flexbox)`
   align-items: center;
   justify-items: center;
 
@@ -78,9 +78,7 @@ const StyledMenu = styled(Menu)`
   min-width: 180px;
 `;
 
-const ProfileButton = styled.div`
-  display: flex;
-  align-items: center;
+const ProfileButton = styled(Flexbox)`
   margin-left: 6px;
   cursor: pointer;
 
@@ -99,6 +97,7 @@ const ProfileButton = styled.div`
 const StyledAvatar = styled(Avatar)`
   height: 40px;
   width: 40px;
+  transition: all 0.2s ${easing.default};
 
   @media screen and (max-width: ${breakpoints.sm}) {
     height: 32px;

@@ -1,9 +1,9 @@
 import Link from 'next/link';
 
-const LinkAs = ({ href, as, children, ...rest }) => (
+const LinkComponent = ({ href, as, children, ...rest }) => (
   <Link href={href} as={as || href}>
     <a {...rest}>{children}</a>
   </Link>
 );
 
-export { LinkAs as Link };
+export { LinkComponent as Link };

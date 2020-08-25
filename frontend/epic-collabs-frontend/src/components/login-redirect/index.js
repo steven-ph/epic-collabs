@@ -8,7 +8,7 @@ class RedirectToLogin extends Component {
   }
 
   render() {
-    return <div>Signing you in...</div>;
+    return <span>Signing you in...</span>;
   }
 }
 

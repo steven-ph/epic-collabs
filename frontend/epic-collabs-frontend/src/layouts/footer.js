@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import { colours } from 'styles';
-import { SmallText } from 'components/common/typography';
+import { Flexbox, SmallText } from 'components/common';
 
 const Footer = () => (
   <StyledFooter>
-    <Container>
+    <Container alignItems="center" justifyContent="center" sx={{ margin: '0 auto', height: '100%' }}>
       <SmallText>Made with ♥ by SP</SmallText>
     </Container>
   </StyledFooter>
@@ -19,13 +19,7 @@ const StyledFooter = styled.footer`
   background-color: ${colours.lightGrey200};
 `;
 
-const Container = styled.div`
-  margin: 0 auto;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
+const Container = styled(Flexbox)`
   small {
     -webkit-user-select: none;
     -moz-user-select: none;

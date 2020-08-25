@@ -2,35 +2,36 @@ import React from 'react';
 import { Input } from 'antd';
 import { ReactSVG } from 'react-svg';
 import styled from 'styled-components';
-import { breakpoints, colours } from 'styles';
+import { Styled } from 'theme-ui';
+import { breakpoints, colours, easing } from 'styles';
 import { UserNav } from './user-nav';
 import { Link } from 'components/link';
+import { Flexbox } from 'components/common';
 
 const Navigation = () => {
   return (
     <Container>
-      <Left>
-        <HomeLink href="/">
-          <LogoContainer>
+      <Flexbox>
+        <Link href="/" sx={{ alignSelf: 'center' }}>
+          <LogoContainer alignItems="center">
             <ReactSVG src={'/images/svg/rocket.svg'} />
             <Title>EpicCollabs</Title>
           </LogoContainer>
-        </HomeLink>
-      </Left>
-      <Middle>
-        <NavContainer>
+        </Link>
+      </Flexbox>
+      <Flexbox flexGrow={1}>
+        <Flexbox alignItems="center">
           <SearchInput placeholder="Search..." onSearch={value => console.log(value)} />
-        </NavContainer>
-      </Middle>
-      <Right>
+        </Flexbox>
+      </Flexbox>
+      <Flexbox alignItems="center">
         <UserNav />
-      </Right>
+      </Flexbox>
     </Container>
   );
 };
 
-const Container = styled.div`
-  display: flex;
+const Container = styled(Flexbox)`
   height: 100%;
 
   > * + * {
@@ -44,72 +45,40 @@ const Container = styled.div`
   }
 `;
 
-const Title = styled.h1`
-  font-weight: 400 !important;
+const Title = styled(Styled.h4)`
+  font-weight: 500 !important;
   text-align: center;
   color: ${colours.darkGrey900};
-`;
 
-const HomeLink = styled(Link)`
-  align-self: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 
-  h1 {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+  @media screen and (max-width: ${breakpoints.md}) {
+    display: none;
   }
 `;
 
-const Left = styled.div`
-  display: flex;
-`;
-
-const Middle = styled.div`
-  display: flex;
-  flex-grow: 1;
-`;
-
-const Right = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const LogoContainer = styled.div`
-  display: flex;
-  align-items: center;
+const LogoContainer = styled(Flexbox)`
   cursor: pointer;
 
   svg {
     width: 48px;
     margin-right: 16px;
+    transition: all 0.2s ${easing.default};
   }
 
   @media screen and (max-width: ${breakpoints.sm}) {
-    h1 {
-      display: none;
-    }
-
     svg {
       width: 40px;
       margin-right: 5px;
     }
   }
-
-  @media screen and (max-width: ${breakpoints.md}) {
-    h1 {
-      display: none;
-    }
-  }
-`;
-
-const NavContainer = styled.div`
-  display: flex;
-  align-items: center;
 `;
 
 const SearchInput = styled(Input.Search)`
-  min-width: 180px;
+  min-width: 200px;
 `;
 
 export { Navigation };
