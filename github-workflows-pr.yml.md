@@ -1,3 +1,4 @@
+```
 name: Trigger Buildkite PR Pipeline
 on:
   push:
@@ -17,3 +18,4 @@ jobs:
           PIPELINE: sp/pr
           MESSAGE: ":github: ${{github.event.head_commit.message}}"
           BUILDKITE_API_ACCESS_TOKEN: ${{ secrets.BUILDKITE_API_ACCESS_TOKEN }}
+```

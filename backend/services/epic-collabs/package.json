@@ -8,7 +8,7 @@
   },
   "scripts": {
     "gen-gql": "ts-node ./src/utils/generate-schema.ts",
-    "dev": "serverless offline start -s stevenp",
+    "dev": "serverless offline start -s sp",
     "build": "tsc",
     "deploy": "./bin/deploy",
     "lint": "tslint -c tslint.json 'src/**/*.ts' && yarn prettier:check",
