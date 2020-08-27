@@ -3,6 +3,7 @@ import mongoose, { Connection } from 'mongoose';
 import { UserDocument, UserSchema } from '../models/user';
 import { CategoryDocument, CategorySchema } from '../models/category';
 import { PositionDocument, PositionSchema } from '../models/position';
+import { ProjectDocument, ProjectSchema } from '../models/project';
 
 let connection = null;
 
@@ -10,6 +11,7 @@ const makeConnectionWithModels = (conn: Connection) => {
   conn.model<UserDocument>('User', UserSchema);
   conn.model<CategoryDocument>('Category', CategorySchema);
   conn.model<PositionDocument>('Position', PositionSchema);
+  conn.model<ProjectDocument>('Project', ProjectSchema);
 
   return conn;
 };
