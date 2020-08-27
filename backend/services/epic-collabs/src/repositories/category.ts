@@ -5,8 +5,8 @@ import { makeLoader } from '../utils/dataloader';
 
 interface IAddCategoryInput {
   name: string;
-  description: string;
-  picture: string;
+  description?: string;
+  picture?: string;
   createdBy: string;
 }
 

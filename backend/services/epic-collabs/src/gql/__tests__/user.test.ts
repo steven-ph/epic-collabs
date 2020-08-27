@@ -33,8 +33,8 @@ describe('User schema', () => {
     const query = `
       query me {
         me {
-        _id
-        email
+          _id
+          email
         }
       }
     `;
