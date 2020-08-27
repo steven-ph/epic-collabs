@@ -43,7 +43,6 @@ describe('CategoryRepository', () => {
     it('should create a category in the db', async () => {
       mockCreate.mockResolvedValue(mockCategory);
 
-      // @ts-ignore
       const res = await categoryRepo.addCategory({ name: 'Cat name', createdBy: 'blah' });
 
       expect(res).toEqual(mockCategory);

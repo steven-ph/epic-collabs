@@ -2,12 +2,14 @@ import { isNil } from 'lodash';
 import mongoose, { Connection } from 'mongoose';
 import { UserDocument, UserSchema } from '../models/user';
 import { CategoryDocument, CategorySchema } from '../models/category';
+import { PositionDocument, PositionSchema } from '../models/position';
 
 let connection = null;
 
 const makeConnectionWithModels = (conn: Connection) => {
   conn.model<UserDocument>('User', UserSchema);
   conn.model<CategoryDocument>('Category', CategorySchema);
+  conn.model<PositionDocument>('Position', PositionSchema);
 
   return conn;
 };

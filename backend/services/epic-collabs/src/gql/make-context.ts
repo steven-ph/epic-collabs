@@ -1,6 +1,7 @@
 import { get } from 'lodash';
 import { makeUserContext, IUserService } from './context/user';
 import { makeCategoryContext, ICategoryService } from './context/category';
+import { makePositionContext, IPositionService } from './context/position';
 
 interface IViewer {
   id: string;
@@ -10,6 +11,7 @@ interface IContext {
   viewer: IViewer;
   User: IUserService;
   Category: ICategoryService;
+  Position: IPositionService;
 }
 
 const getViewer = ({ event }) => {
@@ -23,7 +25,8 @@ const makeContext = ({ event, dbConnection }): IContext => {
   return {
     viewer: getViewer({ event }),
     User: makeUserContext({ userDb: dbConnection.models.User }),
-    Category: makeCategoryContext({ categoryDb: dbConnection.models.Category })
+    Category: makeCategoryContext({ categoryDb: dbConnection.models.Category }),
+    Position: makePositionContext({ positionDb: dbConnection.models.Position })
   };
 };
 

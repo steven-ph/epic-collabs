@@ -9,7 +9,8 @@ const mockCategory = {
 const categoryContext = {
   getCategoryById: jest.fn(),
   getCategoriesByIds: jest.fn(),
-  getAllCategories: jest.fn()
+  getAllCategories: jest.fn(),
+  addCategory: jest.fn()
 };
 
 const viewer = {
@@ -53,7 +54,7 @@ describe('Category schema', () => {
     });
   });
 
-  describe('Query.usersByIds', () => {
+  describe('Query.categoriesByIds', () => {
     const query = `
       query categoriesByIds($ids: [String!]!) {
         categoriesByIds(ids: $ids) {
@@ -94,6 +95,25 @@ describe('Category schema', () => {
       const { data } = await graphql(schema, query, null, context);
 
       expect(data.allCategories).toEqual([mockCategory]);
+    });
+  });
+
+  describe('Mutation.addPosition', () => {
+    const mutation = `
+      mutation addCategory($input: AddCategoryInput!) {
+        addCategory(input: $input) {
+          _id
+          name
+        }
+      }
+    `;
+
+    it('should add a category', async () => {
+      categoryContext.addCategory.mockResolvedValue(mockCategory);
+
+      const { data } = await graphql(schema, mutation, null, context, { input: { name: 'some-name' } });
+
+      expect(data.addCategory).toEqual(mockCategory);
     });
   });
 });
