@@ -35,7 +35,6 @@
     "pino": "^6.5.1",
     "serverless-dynamodb-parameters": "^1.0.1",
     "serverless-logless-plugin": "^0.0.2",
-    "unsplash": "^4.2.0",
     "uuid": "^8.3.0"
   },
   "devDependencies": {

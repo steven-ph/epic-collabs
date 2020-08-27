@@ -1,9 +1,9 @@
-import unsplash from 'unsplash';
 import { Document, Schema } from 'mongoose';
+import { UserSchema } from './user';
 import { CategorySchema } from './category';
 import { PositionSchema } from './position';
 import { Status, Visibility } from '../types/common';
-import { UserSchema } from './user';
+import { generateImage } from '../utils/random-image';
 
 interface IResourceModel {
   _id?: string;
@@ -49,11 +49,11 @@ const ProjectSchema: Schema = new Schema({
   },
   image: {
     type: String,
-    default: () => unsplash(200, 200)
+    default: () => generateImage({ width: 200, height: 200 })
   },
   coverImage: {
     type: String,
-    default: () => unsplash(1280, 200)
+    default: () => generateImage({ width: 1280, height: 200 })
   },
   createdAt: {
     type: Number,

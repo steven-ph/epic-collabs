@@ -1,5 +1,5 @@
 import { Document, Schema } from 'mongoose';
-import { generateAvatar } from '../utils/generate-avatar';
+import { generateAvatar } from '../utils/random-image';
 import { Visibility } from '../types/common';
 import { ProjectSchema } from './project';
 import { UserSchema } from './user';

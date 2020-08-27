@@ -1,5 +1,5 @@
 import { Document, Schema } from 'mongoose';
-import { generateAvatar } from '../utils/generate-avatar';
+import { generateAvatar } from '../utils/random-image';
 import { ProjectSchema } from './project';
 
 interface IUserModel {
