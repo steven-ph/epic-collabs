@@ -1,5 +1,8 @@
 import { Document, Schema } from 'mongoose';
 import { generateAvatar } from '../utils/generate-avatar';
+import { Visibility } from '../types/common';
+import { ProjectSchema } from './project';
+import { UserSchema } from './user';
 
 interface ICategoryModel {
   _id?: string;
@@ -9,6 +12,8 @@ interface ICategoryModel {
   createdAt?: number;
   updatedAt?: number;
   createdBy?: string;
+  visibility?: Visibility;
+  projects?: string[];
 }
 
 type CategoryDocument = ICategoryModel & Document;
@@ -27,6 +32,10 @@ const CategorySchema: Schema = new Schema({
     type: String,
     default: generateAvatar
   },
+  visibility: {
+    type: String,
+    default: Visibility.VISIBLE
+  },
   createdAt: {
     type: Number,
     default: Date.now
@@ -35,11 +44,8 @@ const CategorySchema: Schema = new Schema({
     type: Number,
     default: Date.now
   },
-  createdBy: {
-    type: String,
-    required: true,
-    ref: 'User'
-  }
+  createdBy: UserSchema,
+  projects: [ProjectSchema]
 });
 
 export { CategoryDocument, ICategoryModel, CategorySchema };

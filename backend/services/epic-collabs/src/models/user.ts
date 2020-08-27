@@ -1,5 +1,6 @@
 import { Document, Schema } from 'mongoose';
 import { generateAvatar } from '../utils/generate-avatar';
+import { ProjectSchema } from './project';
 
 interface IUserModel {
   _id?: string;
@@ -12,6 +13,8 @@ interface IUserModel {
   bio?: string;
   createdAt?: number;
   emailVerified?: boolean;
+  projects?: string[];
+  followingProjects?: string[];
 }
 
 type UserDocument = IUserModel & Document;
@@ -55,7 +58,9 @@ const UserSchema: Schema = new Schema({
   },
   emailVerified: {
     type: Boolean
-  }
+  },
+  projects: [ProjectSchema],
+  followingProjects: [ProjectSchema]
 });
 
 export { UserDocument, IUserModel, UserSchema };

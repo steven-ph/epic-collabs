@@ -1,4 +1,7 @@
 import { Document, Schema } from 'mongoose';
+import { Visibility } from '../types/common';
+import { ProjectSchema } from './project';
+import { UserSchema } from './user';
 
 interface IPositionModel {
   _id?: string;
@@ -7,6 +10,8 @@ interface IPositionModel {
   createdAt?: number;
   updatedAt?: number;
   createdBy?: string;
+  projects?: string[];
+  visibility?: Visibility;
 }
 
 type PositionDocument = IPositionModel & Document;
@@ -21,6 +26,10 @@ const PositionSchema: Schema = new Schema({
     type: String,
     trim: true
   },
+  visibility: {
+    type: String,
+    default: Visibility.VISIBLE
+  },
   createdAt: {
     type: Number,
     default: Date.now
@@ -29,11 +38,8 @@ const PositionSchema: Schema = new Schema({
     type: Number,
     default: Date.now
   },
-  createdBy: {
-    type: String,
-    required: true,
-    ref: 'User'
-  }
+  createdBy: UserSchema,
+  projects: [ProjectSchema]
 });
 
 export { PositionDocument, IPositionModel, PositionSchema };
