@@ -38,7 +38,6 @@ const typeDefs = gql`
     coverImage: String
     createdAt: Float
     updatedAt: Float
-    createdBy: String
     collaborators: [CollaboratorInput!]
     categories: [String!]!
     resources: [ResourceInput!]

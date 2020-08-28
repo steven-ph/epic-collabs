@@ -7,9 +7,6 @@ const GET_ALL_CATEGORIES_QUERY = gql`
       name
       description
       picture
-      createdAt
-      updatedAt
-      createdBy
     }
   }
 `;

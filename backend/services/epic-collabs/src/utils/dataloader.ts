@@ -1,4 +1,4 @@
-import { find, map, reduce } from 'lodash';
+import { get, find, map, reduce } from 'lodash';
 
 interface IMongoFindManyInput {
   db: any;
@@ -26,7 +26,15 @@ const buildDataMapForLoader = ({ key, ids, values }: IBuildDataMapForLoaderInput
   return reduce(
     ids,
     (obj, id) => {
-      obj[id] = find(values, { [key]: id });
+      obj[id] = find(values, val => {
+        const valueforKey = get(val, key);
+
+        if (key === '_id') {
+          return valueforKey.toString() === id;
+        }
+
+        return valueforKey === id;
+      });
       return obj;
     },
     {}

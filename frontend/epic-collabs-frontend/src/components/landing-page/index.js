@@ -1,9 +1,14 @@
 import React from 'react';
+import { values } from 'lodash';
 import styled from 'styled-components';
 import { breakpoints, easing } from 'styles';
 import { Flexbox, Headline, Title, Subtitle } from 'components/common';
+import { useGetAllCategories } from 'hooks/use-category';
 
 const LandingPage = () => {
+  const { allCategories } = useGetAllCategories();
+  console.log(values(allCategories).length);
+
   return (
     <Flexbox flexDirection="column" justifyContent="center">
       <Headline>Find collaborators</Headline>

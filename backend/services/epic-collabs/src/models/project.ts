@@ -1,5 +1,4 @@
 import { Document, Schema } from 'mongoose';
-import { UserSchema } from './user';
 import { Status, Visibility } from '../types/common';
 import { generateImage } from '../utils/random-image';
 
@@ -34,7 +33,6 @@ interface IProjectModel {
 }
 
 const ProjectSchema: Schema = new Schema({
-  createdBy: UserSchema,
   name: {
     type: String,
     required: true,
@@ -104,7 +102,11 @@ const ProjectSchema: Schema = new Schema({
         trim: true
       }
     }
-  ]
+  ],
+  createdBy: {
+    type: String,
+    ref: 'User'
+  }
 });
 
 export { ProjectDocument, IProjectModel, ProjectSchema };
