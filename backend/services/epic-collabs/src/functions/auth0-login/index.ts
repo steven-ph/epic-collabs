@@ -20,10 +20,13 @@ const handler = async event => {
         picture: get(auth0User, 'picture') || generateAvatar(),
         username: get(auth0User, 'username') || get(auth0User, 'email'),
         name: get(auth0User, 'name'),
+        bio: '',
         firstName: get(auth0User, 'given_name'),
         lastName: get(auth0User, 'family_name'),
         createdAt: createdAt ? new Date(`${createdAt}`).getTime() : Date.now(),
-        emailVerified: !!get(auth0User, 'email_verified')
+        emailVerified: !!get(auth0User, 'email_verified'),
+        projects: [],
+        followingProjects: []
       },
       isNil
     );
@@ -42,7 +45,7 @@ const handler = async event => {
 
     return userService.login(user);
   } catch (error) {
-    logger.warn('Handle auth0 login error', error, { event });
+    logger.error('Handle auth0 login error', error, { event });
     return { statusCode: 200 };
   }
 };

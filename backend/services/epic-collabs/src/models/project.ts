@@ -1,7 +1,5 @@
 import { Document, Schema } from 'mongoose';
 import { UserSchema } from './user';
-import { CategorySchema } from './category';
-import { PositionSchema } from './position';
 import { Status, Visibility } from '../types/common';
 import { generateImage } from '../utils/random-image';
 
@@ -10,31 +8,10 @@ interface ICollaboratorModel {
   positionId?: string;
 }
 
-type CollaboratorDocument = ICollaboratorModel & Document;
-
-const CollaboratorSchema: Schema = new Schema({
-  userId: UserSchema,
-  positionId: PositionSchema
-});
-
 interface IResourceModel {
-  _id?: string;
   name?: string;
   url?: string;
 }
-
-type ResourceDocument = IResourceModel & Document;
-
-const ResourceSchema: Schema = new Schema({
-  name: {
-    type: String,
-    trim: true
-  },
-  url: {
-    type: String,
-    trim: true
-  }
-});
 
 type ProjectDocument = IProjectModel & Document;
 
@@ -96,20 +73,38 @@ const ProjectSchema: Schema = new Schema({
     type: String,
     default: Visibility.VISIBLE
   },
-  collaborators: [CollaboratorSchema],
-  categories: [CategorySchema],
-  followers: [UserSchema],
-  resources: [ResourceSchema]
+  collaborators: [
+    {
+      userId: {
+        type: String,
+        ref: 'User'
+      },
+      positionId: {
+        type: String,
+        ref: 'Position'
+      }
+    }
+  ],
+  categories: {
+    type: [String],
+    ref: 'Category'
+  },
+  followers: {
+    type: [String],
+    ref: 'User'
+  },
+  resources: [
+    {
+      name: {
+        type: String,
+        trim: true
+      },
+      url: {
+        type: String,
+        trim: true
+      }
+    }
+  ]
 });
 
-export {
-  ProjectDocument,
-  IProjectModel,
-  ProjectSchema,
-  CollaboratorDocument,
-  ICollaboratorModel,
-  CollaboratorSchema,
-  ResourceDocument,
-  IResourceModel,
-  ResourceSchema
-};
+export { ProjectDocument, IProjectModel, ProjectSchema };
