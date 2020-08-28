@@ -12,6 +12,8 @@ const typeDefs = gql`
     bio: String
     createdAt: Float
     emailVerified: Boolean
+    projects: [Project]
+    followingProjects: [Project]
   }
 
   type Query {

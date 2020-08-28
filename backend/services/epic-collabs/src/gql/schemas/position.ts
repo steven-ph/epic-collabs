@@ -7,7 +7,8 @@ const typeDefs = gql`
     description: String
     createdAt: Float
     updatedAt: Float
-    createdBy: String
+    createdBy: User
+    visibility: Visibility
   }
 
   input AddPositionInput {

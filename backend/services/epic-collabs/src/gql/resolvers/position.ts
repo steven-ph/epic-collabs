@@ -8,5 +8,8 @@ export const resolvers = {
   },
   Mutation: {
     addPosition: (_, { input }, ctx: IContext) => ctx.Position.addPosition({ ...input, createdBy: ctx.viewer.id })
+  },
+  Position: {
+    createdBy: ({ createdBy }, _, ctx: IContext) => ctx.User.getUserById(createdBy)
   }
 };

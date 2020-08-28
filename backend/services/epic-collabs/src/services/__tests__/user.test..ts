@@ -21,7 +21,7 @@ const mockUser = {
   email: 'some-email'
 };
 
-describe('makeUserService', () => {
+describe('UserService', () => {
   const service = makeUserService({ userRepo: mockRepo });
 
   describe('getUserById', () => {

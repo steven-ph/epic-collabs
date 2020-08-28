@@ -8,7 +8,8 @@ const typeDefs = gql`
     picture: String
     createdAt: Float
     updatedAt: Float
-    createdBy: String
+    createdBy: User
+    visibility: Visibility
   }
 
   input AddCategoryInput {

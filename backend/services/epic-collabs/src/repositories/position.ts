@@ -3,17 +3,11 @@ import { get, isEmpty } from 'lodash';
 import { IPositionModel } from '../models/position';
 import { makeLoader } from '../utils/dataloader';
 
-interface IAddPositionInput {
-  name: string;
-  description?: string;
-  createdBy: string;
-}
-
 interface IPositionRepository {
   getPositionById: (id: string) => Promise<IPositionModel | null>;
   getPositionByIds: (ids: string[]) => Promise<IPositionModel[] | null>;
   getAllPosition: () => Promise<IPositionModel[] | null>;
-  addPosition: (input: IAddPositionInput) => Promise<IPositionModel | null>;
+  addPosition: (input: IPositionModel) => Promise<IPositionModel | null>;
 }
 
 const makePositionRepository = ({ positionDb }): IPositionRepository => {
@@ -27,7 +21,7 @@ const makePositionRepository = ({ positionDb }): IPositionRepository => {
 
   const getAllPosition = async () => positionDb.find();
 
-  const addPosition = (input: IAddPositionInput) => {
+  const addPosition = (input: IPositionModel) => {
     const name = get(input, 'name');
     const createdBy = get(input, 'createdBy');
 
@@ -46,4 +40,4 @@ const makePositionRepository = ({ positionDb }): IPositionRepository => {
   };
 };
 
-export { makePositionRepository, IPositionRepository, IPositionModel, IAddPositionInput };
+export { makePositionRepository, IPositionRepository, IPositionModel };

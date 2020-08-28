@@ -3,18 +3,11 @@ import { get, isEmpty } from 'lodash';
 import { ICategoryModel } from '../models/category';
 import { makeLoader } from '../utils/dataloader';
 
-interface IAddCategoryInput {
-  name: string;
-  description?: string;
-  picture?: string;
-  createdBy: string;
-}
-
 interface ICategoryRepository {
   getCategoryById: (id: string) => Promise<ICategoryModel | null>;
   getCategoriesByIds: (ids: string[]) => Promise<ICategoryModel[] | null>;
   getAllCategories: () => Promise<ICategoryModel[] | null>;
-  addCategory: (input: IAddCategoryInput) => Promise<ICategoryModel | null>;
+  addCategory: (input: ICategoryModel) => Promise<ICategoryModel | null>;
 }
 
 const makeCategoryRepository = ({ categoryDb }): ICategoryRepository => {
@@ -28,7 +21,7 @@ const makeCategoryRepository = ({ categoryDb }): ICategoryRepository => {
 
   const getAllCategories = async () => categoryDb.find();
 
-  const addCategory = (input: IAddCategoryInput) => {
+  const addCategory = (input: ICategoryModel) => {
     const name = get(input, 'name');
     const createdBy = get(input, 'createdBy');
 
@@ -47,4 +40,4 @@ const makeCategoryRepository = ({ categoryDb }): ICategoryRepository => {
   };
 };
 
-export { makeCategoryRepository, ICategoryRepository, ICategoryModel, IAddCategoryInput };
+export { makeCategoryRepository, ICategoryRepository, ICategoryModel };

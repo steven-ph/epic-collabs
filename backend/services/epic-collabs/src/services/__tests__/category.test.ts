@@ -18,7 +18,7 @@ const mockCategory = {
   createdBy: 'some-user'
 };
 
-describe('makeCategoryService', () => {
+describe('CategoryService', () => {
   const service = makeCategoryService({ categoryRepo: mockRepo });
 
   describe('getCategoryById', () => {

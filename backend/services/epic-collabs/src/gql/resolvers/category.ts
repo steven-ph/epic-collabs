@@ -8,5 +8,8 @@ export const resolvers = {
   },
   Mutation: {
     addCategory: (_, { input }, ctx: IContext) => ctx.Category.addCategory({ ...input, createdBy: ctx.viewer.id })
+  },
+  Category: {
+    createdBy: ({ createdBy }, _, ctx: IContext) => ctx.User.getUserById(createdBy)
   }
 };

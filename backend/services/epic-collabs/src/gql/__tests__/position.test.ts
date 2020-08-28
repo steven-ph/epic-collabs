@@ -1,10 +1,24 @@
 import { graphql } from 'graphql';
 import { makeSchema } from '../make-schema';
 
+const mockUser = {
+  _id: 'mock-userId',
+  name: 'some-name'
+};
+
 const mockPosition = {
   _id: 'some-id',
   name: 'some-name',
   createdBy: 'mock-userId'
+};
+
+const mockExpectedPosition = {
+  _id: 'some-id',
+  name: 'some-name',
+  createdBy: {
+    _id: 'mock-userId',
+    name: 'some-name'
+  }
 };
 
 const positionContext = {
@@ -14,14 +28,28 @@ const positionContext = {
   addPosition: jest.fn()
 };
 
+const userContext = {
+  getUserById: jest.fn()
+};
+
 const viewer = {
   id: 'mock-userId'
 };
 
 const context = {
   Position: positionContext,
+  User: userContext,
   viewer
 };
+
+const FIELDS = `
+  _id
+  name
+  createdBy {
+    _id
+    name
+  }
+`;
 
 describe('Position schema', () => {
   let schema;
@@ -34,9 +62,7 @@ describe('Position schema', () => {
     const query = `
       query positionById($id: String!) {
         positionById(id: $id) {
-          _id
-          name
-          createdBy
+          ${FIELDS}
         }
       }
     `;
@@ -48,11 +74,12 @@ describe('Position schema', () => {
     });
 
     it('should return a position when an id is provided', async () => {
+      userContext.getUserById.mockResolvedValue(mockUser);
       positionContext.getPositionById.mockResolvedValue(mockPosition);
 
       const { data } = await graphql(schema, query, null, context, { id: 'some-id' });
 
-      expect(data.positionById).toEqual(mockPosition);
+      expect(data.positionById).toEqual(mockExpectedPosition);
     });
   });
 
@@ -60,9 +87,7 @@ describe('Position schema', () => {
     const query = `
       query positionsByIds($ids: [String!]!) {
         positionsByIds(ids: $ids) {
-          _id
-          name
-          createdBy
+          ${FIELDS}
         }
       }
     `;
@@ -74,11 +99,12 @@ describe('Position schema', () => {
     });
 
     it('should return positions when ids are provided', async () => {
+      userContext.getUserById.mockResolvedValue(mockUser);
       positionContext.getPositionByIds.mockResolvedValue([mockPosition]);
 
       const { data } = await graphql(schema, query, null, context, { ids: ['some-id'] });
 
-      expect(data.positionsByIds).toEqual([mockPosition]);
+      expect(data.positionsByIds).toEqual([mockExpectedPosition]);
     });
   });
 
@@ -86,19 +112,18 @@ describe('Position schema', () => {
     const query = `
       query allPositions {
         allPositions {
-          _id
-          name
-          createdBy
+          ${FIELDS}
         }
       }
     `;
 
     it('should return all positions', async () => {
+      userContext.getUserById.mockResolvedValue(mockUser);
       positionContext.getAllPosition.mockResolvedValue([mockPosition]);
 
       const { data } = await graphql(schema, query, null, context);
 
-      expect(data.allPositions).toEqual([mockPosition]);
+      expect(data.allPositions).toEqual([mockExpectedPosition]);
     });
   });
 
@@ -106,19 +131,18 @@ describe('Position schema', () => {
     const mutation = `
       mutation addPosition($input: AddPositionInput!) {
         addPosition(input: $input) {
-          _id
-          name
-          createdBy
+          ${FIELDS}
         }
       }
     `;
 
     it('should add a position', async () => {
+      userContext.getUserById.mockResolvedValue(mockUser);
       positionContext.addPosition.mockResolvedValue(mockPosition);
 
       const { data } = await graphql(schema, mutation, null, context, { input: { name: 'some-name' } });
 
-      expect(data.addPosition).toEqual(mockPosition);
+      expect(data.addPosition).toEqual(mockExpectedPosition);
     });
   });
 });

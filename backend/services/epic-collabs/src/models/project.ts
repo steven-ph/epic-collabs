@@ -5,11 +5,38 @@ import { PositionSchema } from './position';
 import { Status, Visibility } from '../types/common';
 import { generateImage } from '../utils/random-image';
 
+interface ICollaboratorModel {
+  userId?: string;
+  positionId?: string;
+}
+
+type CollaboratorDocument = ICollaboratorModel & Document;
+
+const CollaboratorSchema: Schema = new Schema({
+  userId: UserSchema,
+  positionId: PositionSchema
+});
+
 interface IResourceModel {
   _id?: string;
   name?: string;
   url?: string;
 }
+
+type ResourceDocument = IResourceModel & Document;
+
+const ResourceSchema: Schema = new Schema({
+  name: {
+    type: String,
+    trim: true
+  },
+  url: {
+    type: String,
+    trim: true
+  }
+});
+
+type ProjectDocument = IProjectModel & Document;
 
 interface IProjectModel {
   _id?: string;
@@ -21,15 +48,13 @@ interface IProjectModel {
   createdAt?: number;
   updatedAt?: number;
   createdBy?: string;
-  positions?: string[];
-  categories: string[];
-  resources: IResourceModel[];
-  followers: string[];
+  collaborators?: ICollaboratorModel[];
+  categories?: string[];
+  resources?: IResourceModel[];
+  followers?: string[];
   status?: Status;
   visibility?: Visibility;
 }
-
-type ProjectDocument = IProjectModel & Document;
 
 const ProjectSchema: Schema = new Schema({
   createdBy: UserSchema,
@@ -71,30 +96,20 @@ const ProjectSchema: Schema = new Schema({
     type: String,
     default: Visibility.VISIBLE
   },
-  positions: [
-    {
-      userId: UserSchema,
-      positionId: PositionSchema
-    }
-  ],
+  collaborators: [CollaboratorSchema],
   categories: [CategorySchema],
   followers: [UserSchema],
-  resources: [
-    {
-      _id: {
-        type: String,
-        trim: true
-      },
-      name: {
-        type: String,
-        trim: true
-      },
-      url: {
-        type: String,
-        trim: true
-      }
-    }
-  ]
+  resources: [ResourceSchema]
 });
 
-export { ProjectDocument, IProjectModel, ProjectSchema };
+export {
+  ProjectDocument,
+  IProjectModel,
+  ProjectSchema,
+  CollaboratorDocument,
+  ICollaboratorModel,
+  CollaboratorSchema,
+  ResourceDocument,
+  IResourceModel,
+  ResourceSchema
+};
