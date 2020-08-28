@@ -10,6 +10,7 @@ export const resolvers = {
     addCategory: (_, { input }, ctx: IContext) => ctx.Category.addCategory({ ...input, createdBy: ctx.viewer.id })
   },
   Category: {
-    createdBy: ({ createdBy }, _, ctx: IContext) => ctx.User.getUserById(createdBy)
+    createdBy: ({ createdBy }, _, ctx: IContext) => ctx.User.getUserById(createdBy),
+    projects: ({ _id }, _, ctx: IContext) => ctx.Project.getProjectsByCategoryId(_id)
   }
 };

@@ -10,6 +10,7 @@ const typeDefs = gql`
     updatedAt: Float
     createdBy: User
     visibility: Visibility
+    projects: [Project]
   }
 
   input AddCategoryInput {

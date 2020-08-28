@@ -1,5 +1,5 @@
 import Dataloader from 'dataloader';
-import { get, isEmpty } from 'lodash';
+import { get, isEmpty, memoize } from 'lodash';
 import { IPositionModel } from '../models/position';
 import { makeLoader } from '../utils/dataloader';
 
@@ -15,11 +15,11 @@ const makePositionRepository = ({ positionDb }): IPositionRepository => {
     cacheKeyFn: key => JSON.stringify(key)
   });
 
-  const getPositionById = async id => positionByIdLoader.load(id);
+  const getPositionById = async id => positionByIdLoader.load(`${id}`);
 
-  const getPositionByIds = async ids => positionByIdLoader.loadMany(ids);
+  const getPositionByIds = async ids => positionByIdLoader.loadMany(ids.map(id => `${id}`));
 
-  const getAllPosition = async () => positionDb.find();
+  const getAllPosition = memoize(async () => positionDb.find());
 
   const addPosition = (input: IPositionModel) => {
     const name = get(input, 'name');

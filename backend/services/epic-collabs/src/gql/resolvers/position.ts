@@ -10,6 +10,7 @@ export const resolvers = {
     addPosition: (_, { input }, ctx: IContext) => ctx.Position.addPosition({ ...input, createdBy: ctx.viewer.id })
   },
   Position: {
-    createdBy: ({ createdBy }, _, ctx: IContext) => ctx.User.getUserById(createdBy)
+    createdBy: ({ createdBy }, _, ctx: IContext) => ctx.User.getUserById(createdBy),
+    projects: ({ _id }, _, ctx: IContext) => ctx.Project.getProjectsByPositionId(_id)
   }
 };

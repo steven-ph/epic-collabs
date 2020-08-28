@@ -35,13 +35,13 @@ const makeUserRepository = ({ userDb }): IUserRepository => {
     return userDb.findOneAndUpdate({ _id }, input, options);
   };
 
-  const getUserById = async userId => userByIdLoader.load(userId);
+  const getUserById = async id => userByIdLoader.load(`${id}`);
 
-  const getUsersByIds = async userIds => userByIdLoader.loadMany(userIds);
+  const getUsersByIds = async ids => userByIdLoader.loadMany(ids.map(id => `${id}`));
 
-  const getUserByEmail = async email => userByEmailLoader.load(email);
+  const getUserByEmail = async email => userByEmailLoader.load(`${email}`);
 
-  const getUsersByEmails = async emails => userByEmailLoader.loadMany(emails);
+  const getUsersByEmails = async emails => userByEmailLoader.loadMany(emails.map(email => `${email}`));
 
   return {
     login,

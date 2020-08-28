@@ -1,5 +1,5 @@
 import Dataloader from 'dataloader';
-import { get, isEmpty } from 'lodash';
+import { get, isEmpty, memoize } from 'lodash';
 import { ICategoryModel } from '../models/category';
 import { makeLoader } from '../utils/dataloader';
 
@@ -15,11 +15,11 @@ const makeCategoryRepository = ({ categoryDb }): ICategoryRepository => {
     cacheKeyFn: key => JSON.stringify(key)
   });
 
-  const getCategoryById = async id => categoryByIdLoader.load(id);
+  const getCategoryById = async id => categoryByIdLoader.load(`${id}`);
 
-  const getCategoriesByIds = async ids => categoryByIdLoader.loadMany(ids);
+  const getCategoriesByIds = async ids => categoryByIdLoader.loadMany(ids.map(id => `${id}`));
 
-  const getAllCategories = async () => categoryDb.find();
+  const getAllCategories = memoize(async () => categoryDb.find());
 
   const addCategory = (input: ICategoryModel) => {
     const name = get(input, 'name');

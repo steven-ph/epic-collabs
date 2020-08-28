@@ -1,11 +1,14 @@
 import Dataloader from 'dataloader';
-import { get, isEmpty } from 'lodash';
+import { get, isEmpty, memoize } from 'lodash';
 import { IProjectModel } from '../models/project';
-import { makeLoader } from '../utils/dataloader';
+import { makeLoader, mongoFindMany } from '../utils/dataloader';
 
 interface IProjectRepository {
   getProjectById: (id: string) => Promise<IProjectModel | null>;
   getProjectsByIds: (ids: string[]) => Promise<IProjectModel[] | null>;
+  getProjectsByUserId: (id: string) => Promise<IProjectModel[] | null>;
+  getProjectsByCategoryId: (id: string) => Promise<IProjectModel[] | null>;
+  getProjectsByPositionId: (id: string) => Promise<IProjectModel[] | null>;
   getAllProjects: () => Promise<IProjectModel[] | null>;
   addProject: (input: IProjectModel) => Promise<IProjectModel | null>;
 }
@@ -15,11 +18,26 @@ const makeProjectRepository = ({ projectDb }): IProjectRepository => {
     cacheKeyFn: key => JSON.stringify(key)
   });
 
-  const getProjectById = async id => projectByIdLoader.load(id);
+  const getProjectById = async id => projectByIdLoader.load(`${id}`);
 
-  const getProjectsByIds = async ids => projectByIdLoader.loadMany(ids);
+  const getProjectsByIds = async ids => projectByIdLoader.loadMany(ids.map(id => `${id}`));
 
-  const getAllProjects = async () => projectDb.find();
+  const getProjectsByUserId = memoize(
+    async id => projectDb.find({ createdBy: id }),
+    (...args) => JSON.stringify(args)
+  );
+
+  const getProjectsByCategoryId = memoize(
+    async id => mongoFindMany({ db: projectDb, key: 'categories', values: [id] }),
+    (...args) => JSON.stringify(args)
+  );
+
+  const getProjectsByPositionId = memoize(
+    async id => projectDb.find({ 'collaborators.positionId': id }),
+    (...args) => JSON.stringify(args)
+  );
+
+  const getAllProjects = memoize(async () => projectDb.find());
 
   const addProject = (input: IProjectModel) => {
     const slug = get(input, 'slug');
@@ -38,6 +56,9 @@ const makeProjectRepository = ({ projectDb }): IProjectRepository => {
   return {
     getProjectById,
     getProjectsByIds,
+    getProjectsByUserId,
+    getProjectsByCategoryId,
+    getProjectsByPositionId,
     getAllProjects,
     addProject
   };

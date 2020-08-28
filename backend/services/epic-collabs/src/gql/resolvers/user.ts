@@ -9,7 +9,7 @@ export const resolvers = {
     usersByEmails: (_, { emails }, ctx: IContext) => ctx.User.getUsersByEmails(emails)
   },
   User: {
-    projects: ({ projects }, _, ctx: IContext) => ctx.Project.getProjectsByIds(projects),
+    projects: ({ _id }, _, ctx: IContext) => ctx.Project.getProjectsByUserId(_id),
     followingProjects: ({ followingProjects }, _, ctx: IContext) => ctx.Project.getProjectsByIds(followingProjects)
   }
 };
