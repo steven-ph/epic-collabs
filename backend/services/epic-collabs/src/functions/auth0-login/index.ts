@@ -43,7 +43,9 @@ const handler = async event => {
 
     const userService = makeUserContext({ userDb: dbConnection.models.User });
 
-    return userService.login(user);
+    await userService.login(user);
+
+    return { statusCode: 200 };
   } catch (error) {
     logger.error('Handle auth0 login error', error, { event });
     return { statusCode: 200 };
