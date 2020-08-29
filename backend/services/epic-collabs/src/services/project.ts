@@ -1,13 +1,14 @@
 import { IProjectRepository, IProjectModel } from '../repositories/project';
 
 interface IProjectService {
-  getProjectById: (id: string) => Promise<IProjectModel | null>;
-  getProjectsByIds: (ids: string[]) => Promise<IProjectModel[] | null>;
-  getProjectsByUserId: (id: string) => Promise<IProjectModel[] | null>;
-  getProjectsByCategoryId: (id: string) => Promise<IProjectModel[] | null>;
-  getProjectsByPositionId: (id: string) => Promise<IProjectModel[] | null>;
-  getAllProjects: () => Promise<IProjectModel[] | null>;
-  addProject: (input: IProjectModel) => Promise<IProjectModel | null>;
+  getProjectById: (id: string) => Promise<IProjectModel>;
+  getProjectsByIds: (ids: string[]) => Promise<IProjectModel[]>;
+  getProjectsByUserId: (id: string) => Promise<IProjectModel[]>;
+  getProjectsByCategoryId: (id: string) => Promise<IProjectModel[]>;
+  getProjectsByPositionId: (id: string) => Promise<IProjectModel[]>;
+  getAllProjects: () => Promise<IProjectModel[]>;
+  createProject: (input: IProjectModel) => Promise<IProjectModel>;
+  updateProject: (input: IProjectModel) => Promise<IProjectModel>;
 }
 
 interface IProjectServiceDI {
@@ -21,7 +22,8 @@ const makeProjectService = ({ projectRepo }: IProjectServiceDI): IProjectService
   const getProjectsByCategoryId = id => projectRepo.getProjectsByCategoryId(id);
   const getProjectsByPositionId = id => projectRepo.getProjectsByPositionId(id);
   const getAllProjects = () => projectRepo.getAllProjects();
-  const addProject = (input: IProjectModel) => projectRepo.addProject(input);
+  const createProject = (input: IProjectModel) => projectRepo.createProject(input);
+  const updateProject = (input: IProjectModel) => projectRepo.updateProject(input);
 
   return {
     getProjectById,
@@ -30,7 +32,8 @@ const makeProjectService = ({ projectRepo }: IProjectServiceDI): IProjectService
     getProjectsByCategoryId,
     getProjectsByPositionId,
     getAllProjects,
-    addProject
+    createProject,
+    updateProject
   };
 };
 

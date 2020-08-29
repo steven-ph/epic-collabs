@@ -1,10 +1,10 @@
 import { IPositionRepository, IPositionModel } from '../repositories/position';
 
 interface IPositionService {
-  getPositionById: (id: string) => Promise<IPositionModel | null>;
-  getPositionByIds: (ids: string[]) => Promise<IPositionModel[] | null>;
-  getAllPosition: () => Promise<IPositionModel[] | null>;
-  addPosition: (input: IPositionModel) => Promise<IPositionModel | null>;
+  getPositionById: (id: string) => Promise<IPositionModel>;
+  getPositionByIds: (ids: string[]) => Promise<IPositionModel[]>;
+  getAllPosition: () => Promise<IPositionModel[]>;
+  createPosition: (input: IPositionModel) => Promise<IPositionModel>;
 }
 
 interface IPositionServiceDI {
@@ -15,13 +15,13 @@ const makePositionService = ({ positionRepo }: IPositionServiceDI): IPositionSer
   const getPositionById = id => positionRepo.getPositionById(id);
   const getPositionByIds = ids => positionRepo.getPositionByIds(ids);
   const getAllPosition = () => positionRepo.getAllPosition();
-  const addPosition = (input: IPositionModel) => positionRepo.addPosition(input);
+  const createPosition = (input: IPositionModel) => positionRepo.createPosition(input);
 
   return {
     getPositionById,
     getPositionByIds,
     getAllPosition,
-    addPosition
+    createPosition
   };
 };
 

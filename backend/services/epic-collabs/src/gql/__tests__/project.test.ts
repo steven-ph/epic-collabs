@@ -31,7 +31,8 @@ const projectContext = {
   getProjectById: jest.fn(),
   getProjectsByIds: jest.fn(),
   getAllProjects: jest.fn(),
-  addProject: jest.fn()
+  createProject: jest.fn(),
+  updateProject: jest.fn()
 };
 
 const categoryContext = {
@@ -134,10 +135,10 @@ describe('Project schema', () => {
     });
   });
 
-  describe('Mutation.addProject', () => {
+  describe('Mutation.newProject', () => {
     const mutation = `
-      mutation addProject($input: AddProjectInput!) {
-        addProject(input: $input) {
+      mutation newProject($input: ProjectInput!) {
+        newProject(input: $input) {
           ${FIELDS}
         }
       }
@@ -145,13 +146,34 @@ describe('Project schema', () => {
 
     it('should add a project', async () => {
       categoryContext.getCategoriesByIds.mockResolvedValue([mockCategory]);
-      projectContext.addProject.mockResolvedValue(mockProject);
+      projectContext.createProject.mockResolvedValue(mockProject);
 
       const { data } = await graphql(schema, mutation, null, context, {
         input: { name: 'project name', slug: 'slug', description: 'description', categories: ['cat-id'] }
       });
 
-      expect(data.addProject).toEqual(mockExpectedProject);
+      expect(data.newProject).toEqual(mockExpectedProject);
+    });
+  });
+
+  describe('Mutation.updateProject', () => {
+    const mutation = `
+      mutation updateProject($input: ProjectInput!) {
+        updateProject(input: $input) {
+          ${FIELDS}
+        }
+      }
+    `;
+
+    it('should update a project', async () => {
+      categoryContext.getCategoriesByIds.mockResolvedValue([mockCategory]);
+      projectContext.updateProject.mockResolvedValue(mockProject);
+
+      const { data } = await graphql(schema, mutation, null, context, {
+        input: { name: 'project name', slug: 'slug', description: 'description', categories: ['cat-id'] }
+      });
+
+      expect(data.updateProject).toEqual(mockExpectedProject);
     });
   });
 });

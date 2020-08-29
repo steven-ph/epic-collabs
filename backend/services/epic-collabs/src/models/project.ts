@@ -1,6 +1,8 @@
+import Joi from 'joi';
 import { Document, Schema } from 'mongoose';
 import { Status, Visibility } from '../types/common';
 import { generateImage } from '../utils/random-image';
+import { optionalEmptyString, optionalEmpty } from './common';
 
 interface ICollaboratorModel {
   userId?: string;
@@ -24,6 +26,7 @@ interface IProjectModel {
   createdAt?: number;
   updatedAt?: number;
   createdBy?: string;
+  updatedBy?: string;
   collaborators?: ICollaboratorModel[];
   categories?: string[];
   resources?: IResourceModel[];
@@ -85,11 +88,13 @@ const ProjectSchema: Schema = new Schema({
   ],
   categories: {
     type: [String],
-    ref: 'Category'
+    ref: 'Category',
+    default: []
   },
   followers: {
     type: [String],
-    ref: 'User'
+    ref: 'User',
+    default: []
   },
   resources: [
     {
@@ -109,4 +114,64 @@ const ProjectSchema: Schema = new Schema({
   }
 });
 
-export { ProjectDocument, IProjectModel, ProjectSchema };
+const newProjectValidationSchema = Joi.object()
+  .keys({
+    name: Joi.string().required(),
+    slug: Joi.string().required(),
+    description: Joi.string().required(),
+    image: optionalEmptyString,
+    coverImage: optionalEmptyString,
+    createdAt: optionalEmpty,
+    updatedAt: optionalEmpty,
+    createdBy: Joi.string().required(),
+    status: Joi.any().allow(Status.CLOSED, Status.FINISHED, Status.ON_HOLD, Status.OPEN),
+    visibility: Joi.any().allow(Visibility.HIDDEN, Visibility.VISIBLE),
+    collaborators: Joi.array().items(
+      Joi.object().keys({
+        userId: optionalEmptyString,
+        positionId: optionalEmptyString
+      })
+    ),
+    categories: Joi.array().items(Joi.string().required()).required(),
+    followers: Joi.array().items(Joi.string()),
+    resources: Joi.array().items(
+      Joi.object().keys({
+        name: optionalEmptyString,
+        url: optionalEmptyString
+      })
+    )
+  })
+  .required();
+
+const updateProjectValidationSchema = Joi.object()
+  .keys({
+    _id: Joi.string().required(),
+    updatedBy: Joi.string().required(),
+    name: optionalEmptyString,
+    slug: optionalEmptyString,
+    description: optionalEmptyString,
+    image: optionalEmptyString,
+    coverImage: optionalEmptyString,
+    createdAt: optionalEmpty,
+    updatedAt: optionalEmpty,
+    createdBy: optionalEmptyString,
+    status: Joi.any().allow(Status.CLOSED, Status.FINISHED, Status.ON_HOLD, Status.OPEN),
+    visibility: Joi.any().allow(Visibility.HIDDEN, Visibility.VISIBLE),
+    collaborators: Joi.array().items(
+      Joi.object().keys({
+        userId: optionalEmptyString,
+        positionId: optionalEmptyString
+      })
+    ),
+    categories: Joi.array().items(Joi.string()),
+    followers: Joi.array().items(Joi.string()),
+    resources: Joi.array().items(
+      Joi.object().keys({
+        name: optionalEmptyString,
+        url: optionalEmptyString
+      })
+    )
+  })
+  .required();
+
+export { ProjectDocument, IProjectModel, ProjectSchema, newProjectValidationSchema, updateProjectValidationSchema };

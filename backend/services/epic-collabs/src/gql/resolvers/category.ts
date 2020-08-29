@@ -7,7 +7,7 @@ export const resolvers = {
     allCategories: (_, __, ctx: IContext) => ctx.Category.getAllCategories()
   },
   Mutation: {
-    addCategory: (_, { input }, ctx: IContext) => ctx.Category.addCategory({ ...input, createdBy: ctx.viewer.id })
+    newCategory: (_, { input }, ctx: IContext) => ctx.Category.createCategory({ ...input, createdBy: ctx.viewer.id })
   },
   Category: {
     createdBy: ({ createdBy }, _, ctx: IContext) => ctx.User.getUserById(createdBy),

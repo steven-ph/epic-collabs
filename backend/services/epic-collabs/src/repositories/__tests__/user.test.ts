@@ -23,7 +23,6 @@ const mockUser = {
 };
 
 const mockFindOneAndUpdate = jest.fn();
-const mockExec = jest.fn();
 
 const mockUserDb = {
   findOneAndUpdate: mockFindOneAndUpdate
@@ -37,22 +36,18 @@ describe('UserRepository', () => {
     userRepo = makeUserRepository({ userDb: mockUserDb });
   });
 
-  describe('#login', () => {
+  describe('#handleLogin', () => {
     it('should upsert user in the db', async () => {
       mockFindOneAndUpdate.mockResolvedValue(mockUser);
 
-      const res = await userRepo.login({ ...mockUser });
+      const res = await userRepo.handleLogin({ ...mockUser });
 
       expect(res).toEqual(mockUser);
-      expect(mockFindOneAndUpdate).toHaveBeenCalledWith({ _id: mockUser._id }, mockUser, { new: true, upsert: true, omitUndefined: true });
+      expect(mockFindOneAndUpdate).toHaveBeenCalledWith({ _id: mockUser._id }, { ...mockUser }, { new: true, upsert: true, omitUndefined: true });
     });
 
-    it('should not upsert user in the db if the input is invalid', async () => {
-      const result = await userRepo.login({ name: 'johndoe' });
-
-      expect(result).toEqual(null);
-      expect(mockExec).not.toHaveBeenCalled();
-      expect(mockFindOneAndUpdate).not.toHaveBeenCalled();
+    it('should not upsert user in the db if the input is invalid', () => {
+      return expect(() => userRepo.handleLogin({ name: 'johndoe' })).rejects.toThrow();
     });
   });
 

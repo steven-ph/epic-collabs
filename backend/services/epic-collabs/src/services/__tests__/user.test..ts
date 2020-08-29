@@ -7,7 +7,7 @@ const mockGetByEmail = jest.fn();
 const mockGetByEmails = jest.fn();
 
 const mockRepo = {
-  login: mockLogin,
+  handleLogin: mockLogin,
   upsertUser: jest.fn(),
   getUserById: mockGetById,
   getUsersByIds: mockGetByIds,
@@ -68,11 +68,11 @@ describe('UserService', () => {
     });
   });
 
-  describe('login', () => {
+  describe('handleLogin', () => {
     it('should log user in', async () => {
       mockLogin.mockResolvedValue(mockUser);
 
-      const res = await service.login({ ...mockUser });
+      const res = await service.handleLogin({ ...mockUser });
 
       expect(res).toEqual(mockUser);
       expect(mockLogin).toHaveBeenCalledWith({ ...mockUser });

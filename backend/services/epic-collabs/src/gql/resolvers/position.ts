@@ -7,7 +7,7 @@ export const resolvers = {
     allPositions: (_, __, ctx: IContext) => ctx.Position.getAllPosition()
   },
   Mutation: {
-    addPosition: (_, { input }, ctx: IContext) => ctx.Position.addPosition({ ...input, createdBy: ctx.viewer.id })
+    newPosition: (_, { input }, ctx: IContext) => ctx.Position.createPosition({ ...input, createdBy: ctx.viewer.id })
   },
   Position: {
     createdBy: ({ createdBy }, _, ctx: IContext) => ctx.User.getUserById(createdBy),

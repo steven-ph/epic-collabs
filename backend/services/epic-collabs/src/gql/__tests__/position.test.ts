@@ -25,7 +25,7 @@ const positionContext = {
   getPositionById: jest.fn(),
   getPositionByIds: jest.fn(),
   getAllPosition: jest.fn(),
-  addPosition: jest.fn()
+  createPosition: jest.fn()
 };
 
 const userContext = {
@@ -127,10 +127,10 @@ describe('Position schema', () => {
     });
   });
 
-  describe('Mutation.addPosition', () => {
+  describe('Mutation.newPosition', () => {
     const mutation = `
-      mutation addPosition($input: AddPositionInput!) {
-        addPosition(input: $input) {
+      mutation newPosition($input: PositionInput!) {
+        newPosition(input: $input) {
           ${FIELDS}
         }
       }
@@ -138,11 +138,11 @@ describe('Position schema', () => {
 
     it('should add a position', async () => {
       userContext.getUserById.mockResolvedValue(mockUser);
-      positionContext.addPosition.mockResolvedValue(mockPosition);
+      positionContext.createPosition.mockResolvedValue(mockPosition);
 
       const { data } = await graphql(schema, mutation, null, context, { input: { name: 'some-name' } });
 
-      expect(data.addPosition).toEqual(mockExpectedPosition);
+      expect(data.newPosition).toEqual(mockExpectedPosition);
     });
   });
 });

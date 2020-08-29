@@ -1,13 +1,14 @@
 import Dataloader from 'dataloader';
-import { get, isEmpty, memoize } from 'lodash';
-import { ICategoryModel } from '../models/category';
+import { memoize } from 'lodash';
+import { logger } from '@sp-tools/kloud-logger';
 import { makeLoader } from '../utils/dataloader';
+import { ICategoryModel, newCategoryValidationSchema } from '../models/category';
 
 interface ICategoryRepository {
-  getCategoryById: (id: string) => Promise<ICategoryModel | null>;
-  getCategoriesByIds: (ids: string[]) => Promise<ICategoryModel[] | null>;
-  getAllCategories: () => Promise<ICategoryModel[] | null>;
-  addCategory: (input: ICategoryModel) => Promise<ICategoryModel | null>;
+  getCategoryById: (id: string) => Promise<ICategoryModel>;
+  getCategoriesByIds: (ids: string[]) => Promise<ICategoryModel[]>;
+  getAllCategories: () => Promise<ICategoryModel[]>;
+  createCategory: (input: ICategoryModel) => Promise<ICategoryModel>;
 }
 
 const makeCategoryRepository = ({ categoryDb }): ICategoryRepository => {
@@ -21,12 +22,13 @@ const makeCategoryRepository = ({ categoryDb }): ICategoryRepository => {
 
   const getAllCategories = memoize(async () => categoryDb.find());
 
-  const addCategory = (input: ICategoryModel) => {
-    const name = get(input, 'name');
-    const createdBy = get(input, 'createdBy');
+  const createCategory = (input: ICategoryModel) => {
+    const validated = newCategoryValidationSchema.validate(input);
 
-    if (isEmpty(name) || isEmpty(createdBy)) {
-      return null;
+    if (validated.error) {
+      logger.error('createCategory error', validated.error, { input });
+
+      throw new Error('createCategory error:' + validated.error.message);
     }
 
     return categoryDb.create(input);
@@ -36,7 +38,7 @@ const makeCategoryRepository = ({ categoryDb }): ICategoryRepository => {
     getCategoryById,
     getCategoriesByIds,
     getAllCategories,
-    addCategory
+    createCategory
   };
 };
 

@@ -7,7 +7,8 @@ export const resolvers = {
     allProjects: (_, __, ctx: IContext) => ctx.Project.getAllProjects()
   },
   Mutation: {
-    addProject: (_, { input }, ctx: IContext) => ctx.Project.addProject({ ...input, createdBy: ctx.viewer.id })
+    newProject: (_, { input }, ctx: IContext) => ctx.Project.createProject({ ...input, createdBy: ctx.viewer.id }),
+    updateProject: (_, { input }, ctx: IContext) => ctx.Project.updateProject({ ...input, updatedBy: ctx.viewer.id })
   },
   Project: {
     createdBy: ({ createdBy }, _, ctx: IContext) => ctx.User.getUserById(createdBy),

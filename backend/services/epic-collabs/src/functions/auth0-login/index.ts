@@ -25,8 +25,9 @@ const handler = async event => {
         lastName: get(auth0User, 'family_name'),
         createdAt: createdAt ? new Date(`${createdAt}`).getTime() : Date.now(),
         emailVerified: !!get(auth0User, 'email_verified'),
-        projects: [],
-        followingProjects: []
+        createdProjects: [],
+        followingProjects: [],
+        contributingProjects: []
       },
       isNil
     );
@@ -43,7 +44,7 @@ const handler = async event => {
 
     const userService = makeUserContext({ userDb: dbConnection.models.User });
 
-    await userService.login(user);
+    await userService.handleLogin(user);
 
     return { statusCode: 200 };
   } catch (error) {

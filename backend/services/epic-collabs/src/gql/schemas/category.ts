@@ -13,7 +13,7 @@ const typeDefs = gql`
     projects: [Project]
   }
 
-  input AddCategoryInput {
+  input CategoryInput {
     name: String
     description: String
     picture: String
@@ -26,7 +26,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    addCategory(input: AddCategoryInput!): Category @auth(roles: [VIEWER], throwError: true)
+    newCategory(input: CategoryInput!): Category @auth(roles: [VIEWER], throwError: true)
   }
 `;
 

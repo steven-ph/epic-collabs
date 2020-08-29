@@ -30,7 +30,8 @@ const typeDefs = gql`
     url: String
   }
 
-  input AddProjectInput {
+  input ProjectInput {
+    _id: ID
     slug: String!
     name: String!
     description: String!
@@ -63,7 +64,8 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    addProject(input: AddProjectInput!): Project @auth(roles: [VIEWER], throwError: true)
+    newProject(input: ProjectInput!): Project @auth(roles: [VIEWER], throwError: true)
+    updateProject(input: ProjectInput!): Project @auth(roles: [VIEWER], throwError: true)
   }
 `;
 

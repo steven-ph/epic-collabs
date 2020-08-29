@@ -1,14 +1,14 @@
 import Dataloader from 'dataloader';
-import { isEmpty, get } from 'lodash';
-import { IUserModel } from '../models/user';
+import { get } from 'lodash';
+import { logger } from '@sp-tools/kloud-logger';
 import { makeLoader } from '../utils/dataloader';
+import { IUserModel, upsertUserValidationSchema } from '../models/user';
 
 interface IUserRepository {
-  login: (input: IUserModel) => Promise<IUserModel | null>;
-  upsertUser: (input: IUserModel) => Promise<IUserModel | null>;
-  getUserById: (userId: string) => Promise<IUserModel | null>;
+  handleLogin: (input: IUserModel) => Promise<IUserModel>;
+  getUserById: (userId: string) => Promise<IUserModel>;
   getUsersByIds: (userIds: string[]) => Promise<IUserModel[]>;
-  getUserByEmail: (email: string) => Promise<IUserModel | null>;
+  getUserByEmail: (email: string) => Promise<IUserModel>;
   getUsersByEmails: (emails: string[]) => Promise<IUserModel[]>;
 }
 
@@ -21,14 +21,18 @@ const makeUserRepository = ({ userDb }): IUserRepository => {
     cacheKeyFn: key => JSON.stringify(key)
   });
 
-  const login = async (input: IUserModel) => upsertUser(input);
+  const handleLogin = async (input: IUserModel) => _upsertUser(input);
 
-  const upsertUser = async (input: IUserModel) => {
-    const _id = get(input, '_id');
+  const _upsertUser = async (input: IUserModel) => {
+    const validated = upsertUserValidationSchema.validate(input);
 
-    if (isEmpty(_id)) {
-      return null;
+    if (validated.error) {
+      logger.error('upsertUser error', validated.error, { input });
+
+      throw new Error('upsertUser error: ' + validated.error.message);
     }
+
+    const _id = get(input, '_id');
 
     const options = { new: true, upsert: true, omitUndefined: true };
 
@@ -44,8 +48,7 @@ const makeUserRepository = ({ userDb }): IUserRepository => {
   const getUsersByEmails = async emails => userByEmailLoader.loadMany(emails.map(email => `${email}`));
 
   return {
-    login,
-    upsertUser,
+    handleLogin,
     getUserById,
     getUsersByIds,
     getUserByEmail,

@@ -10,7 +10,7 @@ const categoryContext = {
   getCategoryById: jest.fn(),
   getCategoriesByIds: jest.fn(),
   getAllCategories: jest.fn(),
-  addCategory: jest.fn()
+  createCategory: jest.fn()
 };
 
 const viewer = {
@@ -98,10 +98,10 @@ describe('Category schema', () => {
     });
   });
 
-  describe('Mutation.addPosition', () => {
+  describe('Mutation.newCategory', () => {
     const mutation = `
-      mutation addCategory($input: AddCategoryInput!) {
-        addCategory(input: $input) {
+      mutation newCategory($input: CategoryInput!) {
+        newCategory(input: $input) {
           _id
           name
         }
@@ -109,11 +109,11 @@ describe('Category schema', () => {
     `;
 
     it('should add a category', async () => {
-      categoryContext.addCategory.mockResolvedValue(mockCategory);
+      categoryContext.createCategory.mockResolvedValue(mockCategory);
 
       const { data } = await graphql(schema, mutation, null, context, { input: { name: 'some-name' } });
 
-      expect(data.addCategory).toEqual(mockCategory);
+      expect(data.newCategory).toEqual(mockCategory);
     });
   });
 });

@@ -1,5 +1,7 @@
+import Joi from 'joi';
 import { Document, Schema } from 'mongoose';
 import { generateAvatar } from '../utils/random-image';
+import { optionalEmptyString, optionalEmpty } from './common';
 
 interface IUserModel {
   _id?: string;
@@ -12,8 +14,9 @@ interface IUserModel {
   bio?: string;
   createdAt?: number;
   emailVerified?: boolean;
-  projects?: string[];
+  createdProjects?: string[];
   followingProjects?: string[];
+  contributingProjects?: string[];
 }
 
 type UserDocument = IUserModel & Document;
@@ -58,14 +61,39 @@ const UserSchema: Schema = new Schema({
   emailVerified: {
     type: Boolean
   },
-  projects: {
+  createdProjects: {
     type: [String],
-    ref: 'Project'
+    ref: 'Project',
+    default: []
   },
   followingProjects: {
     type: [String],
-    ref: 'Project'
+    ref: 'Project',
+    default: []
+  },
+  contributingProjects: {
+    type: [String],
+    ref: 'Project',
+    default: []
   }
 });
 
-export { UserDocument, IUserModel, UserSchema };
+const upsertUserValidationSchema = Joi.object()
+  .keys({
+    _id: Joi.string().required(),
+    email: Joi.string().required(),
+    username: optionalEmptyString,
+    name: optionalEmptyString,
+    firstName: optionalEmptyString,
+    lastName: optionalEmptyString,
+    bio: optionalEmptyString,
+    picture: optionalEmptyString,
+    createdAt: optionalEmpty,
+    emailVerified: Joi.boolean().optional(),
+    createdProjects: Joi.array().items(Joi.string()),
+    followingProjects: Joi.array().items(Joi.string()),
+    contributingProjects: Joi.array().items(Joi.string())
+  })
+  .required();
+
+export { UserDocument, IUserModel, UserSchema, upsertUserValidationSchema };

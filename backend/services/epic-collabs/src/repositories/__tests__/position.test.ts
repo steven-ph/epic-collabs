@@ -37,32 +37,22 @@ describe('PositionRepository', () => {
     positionRepo = makePositionRepository({ positionDb: mockPositionDb });
   });
 
-  describe('#addPosition', () => {
+  describe('#createPosition', () => {
     it('should create a position in the db', async () => {
       mockCreate.mockResolvedValue(mockPosition);
 
-      const res = await positionRepo.addPosition({ name: 'Pos name', createdBy: 'blah' });
+      const res = await positionRepo.createPosition({ name: 'Pos name', createdBy: 'blah' });
 
       expect(res).toEqual(mockPosition);
       expect(mockCreate).toHaveBeenCalledWith({ name: 'Pos name', createdBy: 'blah' });
     });
 
-    it('should not create a position in the db if createdBy is missing', async () => {
-      // @ts-ignore
-      const result = await positionRepo.addPosition({ name: 'Pos name' });
-
-      expect(result).toEqual(null);
-      expect(mockFind).not.toHaveBeenCalled();
-      expect(mockCreate).not.toHaveBeenCalled();
+    it('should not create a position in the db if createdBy is missing', () => {
+      return expect(() => positionRepo.createPosition({ name: 'Pos name' })).toThrow('createPosition error:"createdBy" is required');
     });
 
-    it('should not create a position in the db if position name is missing', async () => {
-      // @ts-ignore
-      const result = await positionRepo.addPosition({ createdBy: 'blah' });
-
-      expect(result).toEqual(null);
-      expect(mockFind).not.toHaveBeenCalled();
-      expect(mockCreate).not.toHaveBeenCalled();
+    it('should not create a position in the db if position name is missing', () => {
+      return expect(() => positionRepo.createPosition({ createdBy: 'blah' })).toThrow('createPosition error:"name" is required');
     });
   });
 

@@ -1,15 +1,23 @@
 import { makeProjectService } from '../project';
 
 const mockGetById = jest.fn();
+const mockGetByCatId = jest.fn();
+const mockGetByPosId = jest.fn();
+const mockGetByUserId = jest.fn();
 const mockGetByIds = jest.fn();
 const mockGetAll = jest.fn();
 const mockAdd = jest.fn();
+const mockUpdate = jest.fn();
 
 const mockRepo = {
   getProjectById: mockGetById,
   getProjectsByIds: mockGetByIds,
+  getProjectsByCategoryId: mockGetByCatId,
+  getProjectsByPositionId: mockGetByPosId,
+  getProjectsByUserId: mockGetByUserId,
   getAllProjects: mockGetAll,
-  addProject: mockAdd
+  createProject: mockAdd,
+  updateProject: mockUpdate
 };
 
 const mockProject = {
@@ -37,6 +45,39 @@ describe('ProjectService', () => {
     });
   });
 
+  describe('getProjectsByUserId', () => {
+    it('should get project by userId', async () => {
+      mockGetByUserId.mockResolvedValue(mockProject);
+
+      const res = await service.getProjectsByUserId('mock-id');
+
+      expect(res).toEqual(mockProject);
+      expect(mockGetByUserId).toHaveBeenCalledWith('mock-id');
+    });
+  });
+
+  describe('getProjectsByCategoryId', () => {
+    it('should get project by categoryId', async () => {
+      mockGetByCatId.mockResolvedValue(mockProject);
+
+      const res = await service.getProjectsByCategoryId('mock-id');
+
+      expect(res).toEqual(mockProject);
+      expect(mockGetByCatId).toHaveBeenCalledWith('mock-id');
+    });
+  });
+
+  describe('getProjectsByPositionId', () => {
+    it('should get project by positionId', async () => {
+      mockGetByPosId.mockResolvedValue(mockProject);
+
+      const res = await service.getProjectsByPositionId('mock-id');
+
+      expect(res).toEqual(mockProject);
+      expect(mockGetByPosId).toHaveBeenCalledWith('mock-id');
+    });
+  });
+
   describe('getProjectsByIds', () => {
     it('should get projects by ids', async () => {
       mockGetByIds.mockResolvedValue([mockProject]);
@@ -59,14 +100,25 @@ describe('ProjectService', () => {
     });
   });
 
-  describe('addProject', () => {
+  describe('createProject', () => {
     it('should add a project', async () => {
       mockAdd.mockResolvedValue(mockProject);
 
-      const res = await service.addProject({ slug: 'mock-slug', name: 'some-name', description: 'mock-description', createdBy: 'some-user' });
+      const res = await service.createProject({ slug: 'mock-slug', name: 'some-name', description: 'mock-description', createdBy: 'some-user' });
 
       expect(res).toEqual(mockProject);
       expect(mockAdd).toHaveBeenCalledWith({ slug: 'mock-slug', name: 'some-name', description: 'mock-description', createdBy: 'some-user' });
+    });
+  });
+
+  describe('updateProject', () => {
+    it('should update a project', async () => {
+      mockUpdate.mockResolvedValue(mockProject);
+
+      const res = await service.updateProject({ slug: 'mock-slug', name: 'some-name', description: 'mock-description', createdBy: 'some-user' });
+
+      expect(res).toEqual(mockProject);
+      expect(mockUpdate).toHaveBeenCalledWith({ slug: 'mock-slug', name: 'some-name', description: 'mock-description', createdBy: 'some-user' });
     });
   });
 });

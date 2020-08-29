@@ -12,7 +12,7 @@ const typeDefs = gql`
     projects: [Project]
   }
 
-  input AddPositionInput {
+  input PositionInput {
     name: String
   }
 
@@ -23,7 +23,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    addPosition(input: AddPositionInput!): Position @auth(roles: [VIEWER], throwError: true)
+    newPosition(input: PositionInput!): Position @auth(roles: [VIEWER], throwError: true)
   }
 `;
 

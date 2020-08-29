@@ -9,7 +9,7 @@ const mockRepo = {
   getCategoryById: mockGetById,
   getCategoriesByIds: mockGetByIds,
   getAllCategories: mockGetAll,
-  addCategory: mockAdd
+  createCategory: mockAdd
 };
 
 const mockCategory = {
@@ -54,11 +54,11 @@ describe('CategoryService', () => {
     });
   });
 
-  describe('addCategory', () => {
+  describe('createCategory', () => {
     it('should add a category', async () => {
       mockAdd.mockResolvedValue(mockCategory);
 
-      const res = await service.addCategory({ name: 'some-name', createdBy: 'some-user' });
+      const res = await service.createCategory({ name: 'some-name', createdBy: 'some-user' });
 
       expect(res).toEqual(mockCategory);
       expect(mockAdd).toHaveBeenCalledWith({ name: 'some-name', createdBy: 'some-user' });

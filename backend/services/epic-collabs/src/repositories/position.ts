@@ -1,13 +1,14 @@
 import Dataloader from 'dataloader';
-import { get, isEmpty, memoize } from 'lodash';
-import { IPositionModel } from '../models/position';
+import { memoize } from 'lodash';
+import { logger } from '@sp-tools/kloud-logger';
 import { makeLoader } from '../utils/dataloader';
+import { IPositionModel, newPositionValidationSchema } from '../models/position';
 
 interface IPositionRepository {
-  getPositionById: (id: string) => Promise<IPositionModel | null>;
-  getPositionByIds: (ids: string[]) => Promise<IPositionModel[] | null>;
-  getAllPosition: () => Promise<IPositionModel[] | null>;
-  addPosition: (input: IPositionModel) => Promise<IPositionModel | null>;
+  getPositionById: (id: string) => Promise<IPositionModel>;
+  getPositionByIds: (ids: string[]) => Promise<IPositionModel[]>;
+  getAllPosition: () => Promise<IPositionModel[]>;
+  createPosition: (input: IPositionModel) => Promise<IPositionModel>;
 }
 
 const makePositionRepository = ({ positionDb }): IPositionRepository => {
@@ -21,12 +22,13 @@ const makePositionRepository = ({ positionDb }): IPositionRepository => {
 
   const getAllPosition = memoize(async () => positionDb.find());
 
-  const addPosition = (input: IPositionModel) => {
-    const name = get(input, 'name');
-    const createdBy = get(input, 'createdBy');
+  const createPosition = (input: IPositionModel) => {
+    const validated = newPositionValidationSchema.validate(input);
 
-    if (isEmpty(name) || isEmpty(createdBy)) {
-      return null;
+    if (validated.error) {
+      logger.error('createPosition error', validated.error, { input });
+
+      throw new Error('createPosition error:' + validated.error.message);
     }
 
     return positionDb.create(input);
@@ -36,7 +38,7 @@ const makePositionRepository = ({ positionDb }): IPositionRepository => {
     getPositionById,
     getPositionByIds,
     getAllPosition,
-    addPosition
+    createPosition
   };
 };
 

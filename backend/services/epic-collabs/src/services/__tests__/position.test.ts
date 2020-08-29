@@ -9,7 +9,7 @@ const mockRepo = {
   getPositionById: mockGetById,
   getPositionByIds: mockGetByIds,
   getAllPosition: mockGetAll,
-  addPosition: mockAdd
+  createPosition: mockAdd
 };
 
 const mockCategory = {
@@ -54,11 +54,11 @@ describe('PositionService', () => {
     });
   });
 
-  describe('addPosition', () => {
+  describe('createPosition', () => {
     it('should add a position', async () => {
       mockAdd.mockResolvedValue(mockCategory);
 
-      const res = await service.addPosition({ name: 'some-name', createdBy: 'some-user' });
+      const res = await service.createPosition({ name: 'some-name', createdBy: 'some-user' });
 
       expect(res).toEqual(mockCategory);
       expect(mockAdd).toHaveBeenCalledWith({ name: 'some-name', createdBy: 'some-user' });

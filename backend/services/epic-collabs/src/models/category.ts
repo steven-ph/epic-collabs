@@ -1,6 +1,8 @@
+import Joi from 'joi';
 import { Document, Schema } from 'mongoose';
 import { generateAvatar } from '../utils/random-image';
 import { Visibility } from '../types/common';
+import { optionalEmptyString, optionalEmpty } from './common';
 
 interface ICategoryModel {
   _id?: string;
@@ -48,8 +50,22 @@ const CategorySchema: Schema = new Schema({
   },
   projects: {
     type: [String],
-    ref: 'Project'
+    ref: 'Project',
+    default: []
   }
 });
 
-export { CategoryDocument, ICategoryModel, CategorySchema };
+const newCategoryValidationSchema = Joi.object()
+  .keys({
+    name: Joi.string().required(),
+    description: optionalEmptyString,
+    picture: optionalEmptyString,
+    visibility: Joi.any().allow(Visibility.HIDDEN, Visibility.VISIBLE),
+    createdAt: optionalEmpty,
+    updatedAt: optionalEmpty,
+    createdBy: Joi.string().required(),
+    projects: Joi.array().items(Joi.string())
+  })
+  .required();
+
+export { CategoryDocument, ICategoryModel, CategorySchema, newCategoryValidationSchema };
