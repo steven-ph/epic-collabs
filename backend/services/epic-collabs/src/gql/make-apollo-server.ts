@@ -1,4 +1,6 @@
 import { isNil } from 'lodash';
+import depthLimit from 'graphql-depth-limit';
+import { logger } from '@sp-tools/kloud-logger';
 import { ApolloServer } from 'apollo-server-lambda';
 import { makeContext } from './make-context';
 import { makeSchema } from './make-schema';
@@ -19,6 +21,8 @@ const makeApolloServer = async (): Promise<ApolloServer> => {
 
   apolloServer = new ApolloServer({
     schema,
+    logger,
+    validationRules: [depthLimit(5)],
     context: async ({ event }) => makeContext({ event, dbConnection })
   });
 

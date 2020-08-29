@@ -96,4 +96,31 @@ const upsertUserValidationSchema = Joi.object()
   })
   .required();
 
-export { UserDocument, IUserModel, UserSchema, upsertUserValidationSchema };
+const joinProjectValidationSchema = Joi.object()
+  .keys({
+    userId: Joi.string().required(),
+    projectId: Joi.string().required(),
+    positionId: Joi.string().required()
+  })
+  .required();
+
+const followProjectValidationSchema = Joi.object()
+  .keys({
+    userId: Joi.string().required(),
+    projectId: Joi.string().required()
+  })
+  .required();
+
+const unfollowProjectValidationSchema = followProjectValidationSchema;
+const leaveProjectValidationSchema = followProjectValidationSchema;
+
+export {
+  UserDocument,
+  IUserModel,
+  UserSchema,
+  upsertUserValidationSchema,
+  joinProjectValidationSchema,
+  followProjectValidationSchema,
+  unfollowProjectValidationSchema,
+  leaveProjectValidationSchema
+};

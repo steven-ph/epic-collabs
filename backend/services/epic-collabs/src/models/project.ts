@@ -174,4 +174,12 @@ const updateProjectValidationSchema = Joi.object()
   })
   .required();
 
-export { ProjectDocument, IProjectModel, ProjectSchema, newProjectValidationSchema, updateProjectValidationSchema };
+const changeOwnershipValidationSchema = Joi.object()
+  .keys({
+    projectId: Joi.string().required(),
+    fromUserId: Joi.string().required(),
+    toUserId: Joi.string().required()
+  })
+  .required();
+
+export { ProjectDocument, IProjectModel, ProjectSchema, newProjectValidationSchema, updateProjectValidationSchema, changeOwnershipValidationSchema };

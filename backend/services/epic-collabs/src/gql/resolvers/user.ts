@@ -8,6 +8,12 @@ export const resolvers = {
     userByEmail: (_, { email }, ctx: IContext) => ctx.User.getUserByEmail(email),
     usersByEmails: (_, { emails }, ctx: IContext) => ctx.User.getUsersByEmails(emails)
   },
+  Mutation: {
+    joinProject: (_, __, { input }, ctx: IContext) => ctx.User.joinProject({ ...input, userId: ctx.viewer.id }),
+    followProject: (_, __, { input }, ctx: IContext) => ctx.User.followProject({ ...input, userId: ctx.viewer.id }),
+    unfollowProject: (_, __, { input }, ctx: IContext) => ctx.User.unfollowProject({ ...input, userId: ctx.viewer.id }),
+    leaveProject: (_, __, { input }, ctx: IContext) => ctx.User.leaveProject({ ...input, userId: ctx.viewer.id })
+  },
   User: {
     createdProjects: ({ _id }, _, ctx: IContext) => ctx.Project.getProjectsByUserId(_id),
     followingProjects: ({ followingProjects }, _, ctx: IContext) => ctx.Project.getProjectsByIds(followingProjects),

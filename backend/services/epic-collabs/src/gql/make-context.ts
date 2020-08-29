@@ -24,12 +24,18 @@ const getViewer = ({ event }) => {
 };
 
 const makeContext = ({ event, dbConnection }): IContext => {
+  const viewer = getViewer({ event });
+  const Category = makeCategoryContext({ categoryDb: dbConnection.models.Category });
+  const Position = makePositionContext({ positionDb: dbConnection.models.Position });
+  const Project = makeProjectContext({ projectDb: dbConnection.models.Project });
+  const User = makeUserContext({ userDb: dbConnection.models.User, projectService: Project });
+
   return {
-    viewer: getViewer({ event }),
-    User: makeUserContext({ userDb: dbConnection.models.User }),
-    Category: makeCategoryContext({ categoryDb: dbConnection.models.Category }),
-    Position: makePositionContext({ positionDb: dbConnection.models.Position }),
-    Project: makeProjectContext({ projectDb: dbConnection.models.Project })
+    viewer,
+    User,
+    Category,
+    Position,
+    Project
   };
 };
 

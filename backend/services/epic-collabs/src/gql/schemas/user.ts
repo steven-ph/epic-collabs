@@ -24,6 +24,30 @@ const typeDefs = gql`
     userByEmail(email: String!): User
     usersByEmails(emails: [String!]!): [User]
   }
+
+  input JoinProjectInput {
+    projectId: String!
+    positionId: String!
+  }
+
+  input FollowProjectInput {
+    projectId: String!
+  }
+
+  input UnfollowProjectInput {
+    projectId: String!
+  }
+
+  input LeaveProjectInput {
+    projectId: String!
+  }
+
+  type Mutation {
+    joinProject(input: JoinProjectInput!): Boolean @auth(roles: [VIEWER], throwError: true)
+    followProject(input: FollowProjectInput!): Boolean @auth(roles: [VIEWER], throwError: true)
+    unfollowProject(input: UnfollowProjectInput!): Boolean @auth(roles: [VIEWER], throwError: true)
+    leaveProject(input: LeaveProjectInput!): Boolean @auth(roles: [VIEWER], throwError: true)
+  }
 `;
 
 export { typeDefs };

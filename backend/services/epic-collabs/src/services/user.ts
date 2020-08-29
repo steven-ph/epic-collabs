@@ -1,4 +1,12 @@
-import { IUserRepository, IUserModel } from '../repositories/user';
+import {
+  IUserRepository,
+  IUserModel,
+  IJoinProjectInput,
+  IFollowProjectInput,
+  IUnfollowProjectInput,
+  ILeaveProjectInput,
+  IUserRepositoryDI
+} from '../repositories/user';
 
 interface IUserService {
   handleLogin: (input: IUserModel) => Promise<IUserModel>;
@@ -6,6 +14,10 @@ interface IUserService {
   getUsersByIds: (userIds: string[]) => Promise<IUserModel[]>;
   getUserByEmail: (email: string) => Promise<IUserModel>;
   getUsersByEmails: (emails: string[]) => Promise<IUserModel[]>;
+  joinProject: (input: IJoinProjectInput) => Promise<boolean>;
+  followProject: (input: IFollowProjectInput) => Promise<boolean>;
+  unfollowProject: (input: IUnfollowProjectInput) => Promise<boolean>;
+  leaveProject: (input: ILeaveProjectInput) => Promise<boolean>;
 }
 
 interface IUserServiceDI {
@@ -18,14 +30,22 @@ const makeUserService = ({ userRepo }: IUserServiceDI): IUserService => {
   const getUsersByIds = (userIds: string[]) => userRepo.getUsersByIds(userIds);
   const getUserByEmail = (email: string) => userRepo.getUserByEmail(email);
   const getUsersByEmails = (emails: string[]) => userRepo.getUsersByEmails(emails);
+  const joinProject = (input: IJoinProjectInput) => userRepo.joinProject(input);
+  const followProject = (input: IFollowProjectInput) => userRepo.followProject(input);
+  const unfollowProject = (input: IUnfollowProjectInput) => userRepo.followProject(input);
+  const leaveProject = (input: ILeaveProjectInput) => userRepo.leaveProject(input);
 
   return {
     handleLogin,
     getUserById,
     getUsersByIds,
     getUserByEmail,
-    getUsersByEmails
+    getUsersByEmails,
+    joinProject,
+    followProject,
+    unfollowProject,
+    leaveProject
   };
 };
 
-export { makeUserService, IUserService, IUserModel };
+export { makeUserService, IUserService, IUserModel, IUserRepositoryDI };

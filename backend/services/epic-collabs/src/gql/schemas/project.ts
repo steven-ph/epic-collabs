@@ -57,6 +57,11 @@ const typeDefs = gql`
     url: String
   }
 
+  input ChangeProjectOwnershipInput {
+    projectId: String
+    toUserId: String
+  }
+
   type Query {
     projectById(id: String!): Project
     projectsByIds(ids: [String!]!): [Project]
@@ -66,6 +71,7 @@ const typeDefs = gql`
   type Mutation {
     newProject(input: ProjectInput!): Project @auth(roles: [VIEWER], throwError: true)
     updateProject(input: ProjectInput!): Project @auth(roles: [VIEWER], throwError: true)
+    changeProjectOwnership(input: ChangeProjectOwnershipInput!): Project @auth(roles: [VIEWER], throwError: true)
   }
 `;
 

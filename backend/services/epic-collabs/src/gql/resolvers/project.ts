@@ -8,7 +8,8 @@ export const resolvers = {
   },
   Mutation: {
     newProject: (_, { input }, ctx: IContext) => ctx.Project.createProject({ ...input, createdBy: ctx.viewer.id }),
-    updateProject: (_, { input }, ctx: IContext) => ctx.Project.updateProject({ ...input, updatedBy: ctx.viewer.id })
+    updateProject: (_, { input }, ctx: IContext) => ctx.Project.updateProject({ ...input, updatedBy: ctx.viewer.id }),
+    changeProjectOwnership: (_, { input }, ctx: IContext) => ctx.Project.changeProjectOwnership({ ...input, fromUserId: ctx.viewer.id })
   },
   Project: {
     createdBy: ({ createdBy }, _, ctx: IContext) => ctx.User.getUserById(createdBy),
