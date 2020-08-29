@@ -1,0 +1,191 @@
+directive @auth(roles: [Role!], throwError: Boolean) on FIELD_DEFINITION
+
+enum Status {
+  OPEN
+  CLOSED
+  ON_HOLD
+  FINISHED
+}
+
+enum Visibility {
+  VISIBLE
+  HIDDEN
+}
+
+type User {
+  _id: ID
+  email: String
+  picture: String
+  username: String
+  name: String
+  firstName: String
+  lastName: String
+  bio: String
+  createdAt: Float
+  emailVerified: Boolean
+  createdProjects: [Project]
+  followingProjects: [Project]
+  contributingProjects: [Project]
+}
+
+type Query {
+  """restricted to: [VIEWER]"""
+  me: User
+  userById(id: String!): User
+  usersByIds(ids: [String!]!): [User]
+  userByEmail(email: String!): User
+  usersByEmails(emails: [String!]!): [User]
+  categoryById(id: String!): Category
+  categoriesByIds(ids: [String!]!): [Category]
+  allCategories: [Category]
+  positionById(id: String!): Position
+  positionsByIds(ids: [String!]!): [Position]
+  allPositions: [Position]
+  projectById(id: String!): Project
+  projectsByIds(ids: [String!]!): [Project]
+  allProjects: [Project]
+}
+
+input JoinProjectInput {
+  projectId: String!
+  positionId: String!
+}
+
+input FollowProjectInput {
+  projectId: String!
+}
+
+input UnfollowProjectInput {
+  projectId: String!
+}
+
+input LeaveProjectInput {
+  projectId: String!
+}
+
+type Mutation {
+  """restricted to: [VIEWER]"""
+  joinProject(input: JoinProjectInput!): Boolean
+
+  """restricted to: [VIEWER]"""
+  followProject(input: FollowProjectInput!): Boolean
+
+  """restricted to: [VIEWER]"""
+  unfollowProject(input: UnfollowProjectInput!): Boolean
+
+  """restricted to: [VIEWER]"""
+  leaveProject(input: LeaveProjectInput!): Boolean
+
+  """restricted to: [VIEWER]"""
+  newCategory(input: CategoryInput!): Category
+
+  """restricted to: [VIEWER]"""
+  newPosition(input: PositionInput!): Position
+
+  """restricted to: [VIEWER]"""
+  newProject(input: ProjectInput!): Project
+
+  """restricted to: [VIEWER]"""
+  updateProject(input: ProjectInput!): Project
+
+  """restricted to: [VIEWER]"""
+  changeProjectOwnership(input: ChangeProjectOwnershipInput!): Project
+}
+
+type Category {
+  _id: ID
+  name: String
+  description: String
+  picture: String
+  createdAt: Float
+  updatedAt: Float
+  createdBy: User
+  visibility: Visibility
+  projects: [Project]
+}
+
+input CategoryInput {
+  name: String
+  description: String
+  picture: String
+}
+
+type Position {
+  _id: ID
+  name: String
+  description: String
+  createdAt: Float
+  updatedAt: Float
+  createdBy: User
+  visibility: Visibility
+  projects: [Project]
+}
+
+input PositionInput {
+  name: String
+}
+
+type Project {
+  _id: ID
+  slug: String
+  name: String
+  description: String
+  image: String
+  coverImage: String
+  createdAt: Float
+  updatedAt: Float
+  createdBy: User
+  collaborators: [Collaborator]
+  categories: [Category]
+  resources: [Resource]
+  followers: [User]
+  status: Status
+  visibility: Visibility
+}
+
+type Collaborator {
+  user: User
+  position: Position
+}
+
+type Resource {
+  _id: ID
+  name: String
+  url: String
+}
+
+input ProjectInput {
+  _id: ID
+  slug: String!
+  name: String!
+  description: String!
+  image: String
+  coverImage: String
+  createdAt: Float
+  updatedAt: Float
+  collaborators: [CollaboratorInput!]
+  categories: [String!]!
+  resources: [ResourceInput!]
+  followers: [String!]
+  status: Status
+  visibility: Visibility
+}
+
+input CollaboratorInput {
+  userId: ID
+  positionId: ID
+}
+
+input ResourceInput {
+  name: String
+  url: String
+}
+
+input ChangeProjectOwnershipInput {
+  projectId: String
+  toUserId: String
+}
+
+enum Role {
+  VIEWER
+}
