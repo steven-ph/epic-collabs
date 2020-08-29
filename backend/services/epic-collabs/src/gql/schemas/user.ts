@@ -30,23 +30,47 @@ const typeDefs = gql`
     positionId: String!
   }
 
+  type JoinProjectResult {
+    _id: ID
+    success: Boolean
+    project: Project
+  }
+
   input FollowProjectInput {
     projectId: String!
+  }
+
+  type FollowProjectResult {
+    _id: ID
+    success: Boolean
+    project: Project
   }
 
   input UnfollowProjectInput {
     projectId: String!
   }
 
+  type UnfollowProjectResult {
+    _id: ID
+    success: Boolean
+    project: Project
+  }
+
   input LeaveProjectInput {
     projectId: String!
   }
 
+  type LeaveProjectResult {
+    _id: ID
+    success: Boolean
+    project: Project
+  }
+
   type Mutation {
-    joinProject(input: JoinProjectInput!): Boolean @auth(roles: [VIEWER], throwError: true)
-    followProject(input: FollowProjectInput!): Boolean @auth(roles: [VIEWER], throwError: true)
-    unfollowProject(input: UnfollowProjectInput!): Boolean @auth(roles: [VIEWER], throwError: true)
-    leaveProject(input: LeaveProjectInput!): Boolean @auth(roles: [VIEWER], throwError: true)
+    joinProject(input: JoinProjectInput!): JoinProjectResult @auth(roles: [VIEWER], throwError: true)
+    followProject(input: FollowProjectInput!): FollowProjectResult @auth(roles: [VIEWER], throwError: true)
+    unfollowProject(input: UnfollowProjectInput!): UnfollowProjectResult @auth(roles: [VIEWER], throwError: true)
+    leaveProject(input: LeaveProjectInput!): LeaveProjectResult @auth(roles: [VIEWER], throwError: true)
   }
 `;
 

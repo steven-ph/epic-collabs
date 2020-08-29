@@ -11,7 +11,8 @@ const mockProject = {
   slug: 'mock-slug',
   name: 'some-name',
   description: 'description',
-  categories: ['cat-id']
+  categories: ['cat-id'],
+  createdBy: 'mock-userId'
 };
 
 const mockExpectedProject = {
@@ -19,6 +20,9 @@ const mockExpectedProject = {
   slug: 'mock-slug',
   name: 'some-name',
   description: 'description',
+  createdBy: {
+    _id: 'mock-userId'
+  },
   categories: [
     {
       _id: 'cat-id',
@@ -32,7 +36,12 @@ const projectContext = {
   getProjectsByIds: jest.fn(),
   getAllProjects: jest.fn(),
   createProject: jest.fn(),
-  updateProject: jest.fn()
+  updateProject: jest.fn(),
+  changeProjectOwnership: jest.fn()
+};
+
+const userContext = {
+  getUserById: jest.fn()
 };
 
 const categoryContext = {
@@ -46,6 +55,7 @@ const viewer = {
 const context = {
   Project: projectContext,
   Category: categoryContext,
+  User: userContext,
   viewer
 };
 
@@ -54,6 +64,9 @@ const FIELDS = `
   slug
   name
   description
+  createdBy {
+    _id
+  }
   categories {
     _id
     name
@@ -83,6 +96,7 @@ describe('Project schema', () => {
     });
 
     it('should return a project when an id is provided', async () => {
+      userContext.getUserById.mockResolvedValue({ _id: 'mock-userId' });
       categoryContext.getCategoriesByIds.mockResolvedValue([mockCategory]);
       projectContext.getProjectById.mockResolvedValue(mockProject);
 
@@ -108,6 +122,7 @@ describe('Project schema', () => {
     });
 
     it('should return projects when ids are provided', async () => {
+      userContext.getUserById.mockResolvedValue({ _id: 'mock-userId' });
       projectContext.getProjectsByIds.mockResolvedValue([mockProject]);
 
       const { data } = await graphql(schema, query, null, context, { ids: ['mock-id'] });
@@ -126,6 +141,7 @@ describe('Project schema', () => {
     `;
 
     it('should return all projects', async () => {
+      userContext.getUserById.mockResolvedValue({ _id: 'mock-userId' });
       categoryContext.getCategoriesByIds.mockResolvedValue([mockCategory]);
       projectContext.getAllProjects.mockResolvedValue([mockProject]);
 
@@ -137,7 +153,7 @@ describe('Project schema', () => {
 
   describe('Mutation.newProject', () => {
     const mutation = `
-      mutation newProject($input: ProjectInput!) {
+      mutation newProject($input: NewProjectInput!) {
         newProject(input: $input) {
           ${FIELDS}
         }
@@ -145,6 +161,7 @@ describe('Project schema', () => {
     `;
 
     it('should add a project', async () => {
+      userContext.getUserById.mockResolvedValue({ _id: 'mock-userId' });
       categoryContext.getCategoriesByIds.mockResolvedValue([mockCategory]);
       projectContext.createProject.mockResolvedValue(mockProject);
 
@@ -158,22 +175,59 @@ describe('Project schema', () => {
 
   describe('Mutation.updateProject', () => {
     const mutation = `
-      mutation updateProject($input: ProjectInput!) {
+      mutation updateProject($input: UpdateProjectInput!) {
         updateProject(input: $input) {
-          ${FIELDS}
+          _id
+          project {
+            ${FIELDS}
+          }
         }
       }
     `;
 
     it('should update a project', async () => {
+      userContext.getUserById.mockResolvedValue({ _id: 'mock-userId' });
       categoryContext.getCategoriesByIds.mockResolvedValue([mockCategory]);
       projectContext.updateProject.mockResolvedValue(mockProject);
 
       const { data } = await graphql(schema, mutation, null, context, {
-        input: { name: 'project name', slug: 'slug', description: 'description', categories: ['cat-id'] }
+        input: { _id: 'mock-id', name: 'project name', slug: 'slug', description: 'description', categories: ['cat-id'] }
       });
 
-      expect(data.updateProject).toEqual(mockExpectedProject);
+      expect(data.updateProject).toEqual({
+        _id: 'mock-id',
+        project: mockExpectedProject
+      });
+    });
+  });
+
+  describe('Mutation.changeProjectOwnership', () => {
+    const mutation = `
+      mutation changeProjectOwnership($input: ChangeProjectOwnershipInput!) {
+        changeProjectOwnership(input: $input) {
+          _id
+          success
+          project {
+            ${FIELDS}
+          }
+        }
+      }
+    `;
+
+    it('should change owner of a project', async () => {
+      userContext.getUserById.mockResolvedValue({ _id: 'new-userId' });
+      categoryContext.getCategoriesByIds.mockResolvedValue([mockCategory]);
+      projectContext.changeProjectOwnership.mockResolvedValue({ ...mockProject, createdBy: 'new-userId' });
+
+      const { data } = await graphql(schema, mutation, null, context, {
+        input: { projectId: 'mock-id', toUserId: 'new-userId' }
+      });
+
+      expect(data.changeProjectOwnership).toEqual({
+        _id: 'mock-id',
+        success: true,
+        project: { ...mockExpectedProject, createdBy: { _id: 'new-userId' } }
+      });
     });
   });
 });

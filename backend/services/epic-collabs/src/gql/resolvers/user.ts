@@ -1,3 +1,4 @@
+import { property } from 'lodash';
 import { IContext } from '../make-context';
 
 export const resolvers = {
@@ -9,14 +10,54 @@ export const resolvers = {
     usersByEmails: (_, { emails }, ctx: IContext) => ctx.User.getUsersByEmails(emails)
   },
   Mutation: {
-    joinProject: (_, __, { input }, ctx: IContext) => ctx.User.joinProject({ ...input, userId: ctx.viewer.id }),
-    followProject: (_, __, { input }, ctx: IContext) => ctx.User.followProject({ ...input, userId: ctx.viewer.id }),
-    unfollowProject: (_, __, { input }, ctx: IContext) => ctx.User.unfollowProject({ ...input, userId: ctx.viewer.id }),
-    leaveProject: (_, __, { input }, ctx: IContext) => ctx.User.leaveProject({ ...input, userId: ctx.viewer.id })
+    joinProject: async (_, __, { input }, ctx: IContext) => {
+      const userId = ctx.viewer.id;
+      const success = await ctx.User.joinProject({ ...input, userId });
+
+      return { userId, success: !!success, projectId: input.projectId };
+    },
+    followProject: async (_, __, { input }, ctx: IContext) => {
+      const userId = ctx.viewer.id;
+      const success = await ctx.User.followProject({ ...input, userId });
+
+      return { userId, success: !!success, projectId: input.projectId };
+    },
+    unfollowProject: async (_, __, { input }, ctx: IContext) => {
+      const userId = ctx.viewer.id;
+      const success = await ctx.User.unfollowProject({ ...input, userId });
+
+      return { userId, success: !!success, projectId: input.projectId };
+    },
+    leaveProject: async (_, __, { input }, ctx: IContext) => {
+      const userId = ctx.viewer.id;
+      const success = await ctx.User.leaveProject({ ...input, userId });
+
+      return { userId, success: !!success, projectId: input.projectId };
+    }
   },
   User: {
     createdProjects: ({ _id }, _, ctx: IContext) => ctx.Project.getProjectsByUserId(_id),
     followingProjects: ({ followingProjects }, _, ctx: IContext) => ctx.Project.getProjectsByIds(followingProjects),
     contributingProjects: ({ contributingProjects }, _, ctx: IContext) => ctx.Project.getProjectsByIds(contributingProjects)
+  },
+  JoinProjectResult: {
+    _id: property('userId'),
+    success: ({ success }) => !!success,
+    project: ({ projectId }, _, ctx: IContext) => ctx.Project.getProjectById(projectId)
+  },
+  FollowProjectResult: {
+    _id: property('userId'),
+    success: ({ success }) => !!success,
+    project: ({ projectId }, _, ctx: IContext) => ctx.Project.getProjectById(projectId)
+  },
+  UnfollowProjectResult: {
+    _id: property('userId'),
+    success: ({ success }) => !!success,
+    project: ({ projectId }, _, ctx: IContext) => ctx.Project.getProjectById(projectId)
+  },
+  LeaveProjectResult: {
+    _id: property('userId'),
+    success: ({ success }) => !!success,
+    project: ({ projectId }, _, ctx: IContext) => ctx.Project.getProjectById(projectId)
   }
 };

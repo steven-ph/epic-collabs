@@ -1,3 +1,4 @@
+import { property } from 'lodash';
 import { IContext } from '../make-context';
 
 export const resolvers = {
@@ -8,8 +9,16 @@ export const resolvers = {
   },
   Mutation: {
     newProject: (_, { input }, ctx: IContext) => ctx.Project.createProject({ ...input, createdBy: ctx.viewer.id }),
-    updateProject: (_, { input }, ctx: IContext) => ctx.Project.updateProject({ ...input, updatedBy: ctx.viewer.id }),
-    changeProjectOwnership: (_, { input }, ctx: IContext) => ctx.Project.changeProjectOwnership({ ...input, fromUserId: ctx.viewer.id })
+    updateProject: async (_, { input }, ctx: IContext) => {
+      const result = await ctx.Project.updateProject({ ...input, updatedBy: ctx.viewer.id });
+
+      return { _id: input._id, success: !!result };
+    },
+    changeProjectOwnership: async (_, { input }, ctx: IContext) => {
+      const result = await ctx.Project.changeProjectOwnership({ ...input, fromUserId: ctx.viewer.id });
+
+      return { _id: input.projectId, success: !!result };
+    }
   },
   Project: {
     createdBy: ({ createdBy }, _, ctx: IContext) => ctx.User.getUserById(createdBy),
@@ -19,5 +28,13 @@ export const resolvers = {
   Collaborator: {
     user: ({ userId }, _, ctx: IContext) => ctx.User.getUserById(userId),
     position: ({ positionId }, _, ctx: IContext) => ctx.Position.getPositionById(positionId)
+  },
+  UpdateProjectResult: {
+    _id: property('_id'),
+    project: ({ _id }, _, ctx: IContext) => ctx.Project.getProjectById(_id)
+  },
+  ChangeProjectOwnershipResult: {
+    _id: property('_id'),
+    project: ({ _id }, _, ctx: IContext) => ctx.Project.getProjectById(_id)
   }
 };

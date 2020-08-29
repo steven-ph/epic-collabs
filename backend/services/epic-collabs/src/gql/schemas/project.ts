@@ -30,8 +30,37 @@ const typeDefs = gql`
     url: String
   }
 
-  input ProjectInput {
+  type UpdateProjectResult {
     _id: ID
+    success: Boolean
+    project: Project
+  }
+
+  type ChangeProjectOwnershipResult {
+    _id: ID
+    success: Boolean
+    project: Project
+  }
+
+  input NewProjectInput {
+    _id: ID
+    slug: String!
+    name: String!
+    description: String!
+    image: String
+    coverImage: String
+    createdAt: Float
+    updatedAt: Float
+    collaborators: [CollaboratorInput!]
+    categories: [String!]!
+    resources: [ResourceInput!]
+    followers: [String!]
+    status: Status
+    visibility: Visibility
+  }
+
+  input UpdateProjectInput {
+    _id: ID!
     slug: String!
     name: String!
     description: String!
@@ -69,9 +98,9 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    newProject(input: ProjectInput!): Project @auth(roles: [VIEWER], throwError: true)
-    updateProject(input: ProjectInput!): Project @auth(roles: [VIEWER], throwError: true)
-    changeProjectOwnership(input: ChangeProjectOwnershipInput!): Project @auth(roles: [VIEWER], throwError: true)
+    newProject(input: NewProjectInput!): Project @auth(roles: [VIEWER], throwError: true)
+    updateProject(input: UpdateProjectInput!): UpdateProjectResult @auth(roles: [VIEWER], throwError: true)
+    changeProjectOwnership(input: ChangeProjectOwnershipInput!): ChangeProjectOwnershipResult @auth(roles: [VIEWER], throwError: true)
   }
 `;
 
