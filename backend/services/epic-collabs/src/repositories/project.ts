@@ -1,5 +1,5 @@
 import Dataloader from 'dataloader';
-import { get, isEmpty, isEqual, memoize, omit } from 'lodash';
+import { get, isEmpty, memoize, omit, values } from 'lodash';
 import { logger } from '@sp-tools/kloud-logger';
 import { makeLoader, mongoFindMany } from '../utils/dataloader';
 import { IProjectModel, newProjectValidationSchema, updateProjectValidationSchema, changeOwnershipValidationSchema } from '../models/project';
@@ -86,9 +86,11 @@ const makeProjectRepository = ({ projectDb }): IProjectRepository => {
 
     const updatedBy = get(input, 'updatedBy');
     const createdBy = get(existingProject, 'createdBy');
+    const collaborators = values(get(existingProject, 'collaborators'));
+    const collabIds = [createdBy, ...collaborators.map(c => c.userId)].filter(Boolean);
 
-    if (!isEqual(updatedBy, createdBy)) {
-      const errMsg = 'updateProject error: user is not the project owner';
+    if (!collabIds.includes(updatedBy)) {
+      const errMsg = 'updateProject error: user is not the project owner or collaborator';
       logger.error(errMsg, null, { input });
 
       throw new Error(errMsg);
@@ -120,7 +122,7 @@ const makeProjectRepository = ({ projectDb }): IProjectRepository => {
     }
 
     if (existingProject.createdBy !== fromUserId) {
-      const errMsg = 'changeProjectOwnership error: user is not the owner of the project';
+      const errMsg = 'changeProjectOwnership error: user is not the project owner';
       logger.error(errMsg, null, { input });
 
       throw new Error(errMsg);

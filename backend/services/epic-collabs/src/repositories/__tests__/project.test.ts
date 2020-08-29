@@ -24,7 +24,13 @@ const mockProject = {
   categories: ['mock-cat'],
   createdBy: 'some-user',
   createdAt: 12345,
-  updatedAt: 12345
+  updatedAt: 12345,
+  collaborators: [
+    {
+      positionId: 'mock-positionId',
+      userId: 'mock-userId'
+    }
+  ]
 };
 
 const mockCreate = jest.fn();
@@ -93,14 +99,14 @@ describe('ProjectRepository', () => {
       return expect(() => projectRepo.updateProject({ ...mockProject, updatedBy: 'blah' })).rejects.toThrow('updateProject error: project not found');
     });
 
-    it('should not update the project in the db if the user is not the project owner', () => {
+    it('should not update the project in the db if the user is not the project owner or collaborator', () => {
       mockLoad.mockResolvedValue(mockProject);
       return expect(() => projectRepo.updateProject({ ...mockProject, updatedBy: 'blah' })).rejects.toThrow(
         'updateProject error: user is not the project owner'
       );
     });
 
-    it('should not update the project in the db', async () => {
+    it('should update the project in the db if the user is the owner', async () => {
       mockLoad.mockResolvedValue(mockProject);
       mockFindOneAndUpdate.mockResolvedValue(mockProject);
 
@@ -113,6 +119,64 @@ describe('ProjectRepository', () => {
       expect(mockFindOneAndUpdate).toHaveBeenCalledWith(
         { _id: mockProject._id },
         { ...mockProject },
+        { new: true, upsert: true, omitUndefined: true }
+      );
+    });
+
+    it('should update the project in the db if the user is the collaborator', async () => {
+      mockLoad.mockResolvedValue(mockProject);
+      mockFindOneAndUpdate.mockResolvedValue(mockProject);
+
+      const res = await projectRepo.updateProject({ ...mockProject, updatedBy: 'mock-userId' });
+
+      expect(res).toEqual(mockProject);
+
+      expect(mockClear).toHaveBeenCalled();
+
+      expect(mockFindOneAndUpdate).toHaveBeenCalledWith(
+        { _id: mockProject._id },
+        { ...mockProject },
+        { new: true, upsert: true, omitUndefined: true }
+      );
+    });
+  });
+
+  describe('#changeProjectOwnership', () => {
+    const input = { projectId: mockProject._id, fromUserId: 'some-user', toUserId: 'new-userid' };
+    beforeEach(() => {
+      mockLoad.mockReset();
+    });
+
+    it('should not change the ownership of the project in the db if the input is invalid', () => {
+      // @ts-ignore
+      return expect(() => projectRepo.changeProjectOwnership({ foo: 'bar' })).rejects.toThrow();
+    });
+
+    it('should not change the ownership of the project in the db if it does not exist', () => {
+      mockLoad.mockResolvedValue(null);
+      return expect(() => projectRepo.changeProjectOwnership({ ...input })).rejects.toThrow('changeProjectOwnership error: project not found');
+    });
+
+    it('should not change the ownership of the project in the db if the user is not the project owner', () => {
+      mockLoad.mockResolvedValue({ ...mockProject, createdBy: 'blah-id' });
+      return expect(() => projectRepo.changeProjectOwnership({ ...input })).rejects.toThrow(
+        'changeProjectOwnership error: user is not the project owner'
+      );
+    });
+
+    it('should change the ownership of the project in the db', async () => {
+      mockLoad.mockResolvedValue(mockProject);
+      mockFindOneAndUpdate.mockResolvedValue({ ...mockProject, createdBy: 'new-userid' });
+
+      const res = await projectRepo.changeProjectOwnership({ ...input });
+
+      expect(res).toEqual({ ...mockProject, createdBy: 'new-userid' });
+
+      expect(mockClear).toHaveBeenCalled();
+
+      expect(mockFindOneAndUpdate).toHaveBeenCalledWith(
+        { _id: mockProject._id },
+        { ...mockProject, createdBy: 'new-userid' },
         { new: true, upsert: true, omitUndefined: true }
       );
     });

@@ -1,15 +1,10 @@
 import { makePositionService } from '../position';
 
-const mockGetById = jest.fn();
-const mockGetByIds = jest.fn();
-const mockGetAll = jest.fn();
-const mockAdd = jest.fn();
-
 const mockRepo = {
-  getPositionById: mockGetById,
-  getPositionByIds: mockGetByIds,
-  getAllPosition: mockGetAll,
-  createPosition: mockAdd
+  getPositionById: jest.fn(),
+  getPositionByIds: jest.fn(),
+  getAllPosition: jest.fn(),
+  createPosition: jest.fn()
 };
 
 const mockCategory = {
@@ -23,45 +18,45 @@ describe('PositionService', () => {
 
   describe('getPositionById', () => {
     it('should get position by id', async () => {
-      mockGetById.mockResolvedValue(mockCategory);
+      mockRepo.getPositionById.mockResolvedValue(mockCategory);
 
       const res = await service.getPositionById('mock-id');
 
       expect(res).toEqual(mockCategory);
-      expect(mockGetById).toHaveBeenCalledWith('mock-id');
+      expect(mockRepo.getPositionById).toHaveBeenCalledWith('mock-id');
     });
   });
 
   describe('getPositionByIds', () => {
     it('should get positions by ids', async () => {
-      mockGetByIds.mockResolvedValue([mockCategory]);
+      mockRepo.getPositionByIds.mockResolvedValue([mockCategory]);
 
       const res = await service.getPositionByIds(['mock-id']);
 
       expect(res).toEqual([mockCategory]);
-      expect(mockGetByIds).toHaveBeenCalledWith(['mock-id']);
+      expect(mockRepo.getPositionByIds).toHaveBeenCalledWith(['mock-id']);
     });
   });
 
   describe('getAllPosition', () => {
     it('should get all positions', async () => {
-      mockGetAll.mockResolvedValue([mockCategory]);
+      mockRepo.getAllPosition.mockResolvedValue([mockCategory]);
 
       const res = await service.getAllPosition();
 
       expect(res).toEqual([mockCategory]);
-      expect(mockGetAll).toHaveBeenCalled();
+      expect(mockRepo.getAllPosition).toHaveBeenCalled();
     });
   });
 
   describe('createPosition', () => {
     it('should add a position', async () => {
-      mockAdd.mockResolvedValue(mockCategory);
+      mockRepo.createPosition.mockResolvedValue(mockCategory);
 
       const res = await service.createPosition({ name: 'some-name', createdBy: 'some-user' });
 
       expect(res).toEqual(mockCategory);
-      expect(mockAdd).toHaveBeenCalledWith({ name: 'some-name', createdBy: 'some-user' });
+      expect(mockRepo.createPosition).toHaveBeenCalledWith({ name: 'some-name', createdBy: 'some-user' });
     });
   });
 });
