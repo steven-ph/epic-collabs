@@ -32,7 +32,7 @@ const makeUserService = ({ userRepo }: IUserServiceDI): IUserService => {
   const getUsersByEmails = (emails: string[]) => userRepo.getUsersByEmails(emails);
   const joinProject = (input: IJoinProjectInput) => userRepo.joinProject(input);
   const followProject = (input: IFollowProjectInput) => userRepo.followProject(input);
-  const unfollowProject = (input: IUnfollowProjectInput) => userRepo.followProject(input);
+  const unfollowProject = (input: IUnfollowProjectInput) => userRepo.unfollowProject(input);
   const leaveProject = (input: ILeaveProjectInput) => userRepo.leaveProject(input);
 
   return {

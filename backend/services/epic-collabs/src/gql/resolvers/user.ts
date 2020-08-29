@@ -10,25 +10,25 @@ export const resolvers = {
     usersByEmails: (_, { emails }, ctx: IContext) => ctx.User.getUsersByEmails(emails)
   },
   Mutation: {
-    joinProject: async (_, __, { input }, ctx: IContext) => {
+    joinProject: async (_, { input }, ctx: IContext) => {
       const userId = ctx.viewer.id;
       const success = await ctx.User.joinProject({ ...input, userId });
 
       return { userId, success: !!success, projectId: input.projectId };
     },
-    followProject: async (_, __, { input }, ctx: IContext) => {
+    followProject: async (_, { input }, ctx: IContext) => {
       const userId = ctx.viewer.id;
       const success = await ctx.User.followProject({ ...input, userId });
 
       return { userId, success: !!success, projectId: input.projectId };
     },
-    unfollowProject: async (_, __, { input }, ctx: IContext) => {
+    unfollowProject: async (_, { input }, ctx: IContext) => {
       const userId = ctx.viewer.id;
       const success = await ctx.User.unfollowProject({ ...input, userId });
 
       return { userId, success: !!success, projectId: input.projectId };
     },
-    leaveProject: async (_, __, { input }, ctx: IContext) => {
+    leaveProject: async (_, { input }, ctx: IContext) => {
       const userId = ctx.viewer.id;
       const success = await ctx.User.leaveProject({ ...input, userId });
 

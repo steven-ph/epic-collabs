@@ -10,7 +10,11 @@ const userContext = {
   getUserById: jest.fn(),
   getUsersByIds: jest.fn(),
   getUserByEmail: jest.fn(),
-  getUsersByEmails: jest.fn()
+  getUsersByEmails: jest.fn(),
+  joinProject: jest.fn(),
+  followProject: jest.fn(),
+  unfollowProject: jest.fn(),
+  leaveProject: jest.fn()
 };
 
 const viewer = {
@@ -153,6 +157,75 @@ describe('User schema', () => {
       const { data } = await graphql(schema, query, null, context, { emails: ['john@doe.com'] });
 
       expect(data.usersByEmails).toEqual([mockUser]);
+    });
+  });
+
+  describe('Mutation.joinProject', () => {
+    const mutation = `
+      mutation joinProject($input: JoinProjectInput!) {
+        joinProject(input: $input) {
+          _id
+          success
+        }
+      }
+    `;
+
+    it('should join a project', async () => {
+      userContext.joinProject.mockResolvedValue(true);
+      const { data } = await graphql(schema, mutation, null, context, {
+        input: { projectId: 'mock-id', positionId: 'mock-positionId' }
+      });
+
+      expect(data.joinProject).toEqual({
+        _id: 'mock-userId',
+        success: true
+      });
+    });
+  });
+
+  describe('Mutation.followProject', () => {
+    const mutation = `
+      mutation followProject($input: FollowProjectInput!) {
+        followProject(input: $input) {
+          _id
+          success
+        }
+      }
+    `;
+
+    it('should follow a project', async () => {
+      userContext.followProject.mockResolvedValue(true);
+      const { data } = await graphql(schema, mutation, null, context, {
+        input: { projectId: 'mock-id' }
+      });
+
+      expect(data.followProject).toEqual({
+        _id: 'mock-userId',
+        success: true
+      });
+    });
+  });
+
+  describe('Mutation.leaveProject', () => {
+    const mutation = `
+      mutation leaveProject($input: LeaveProjectInput!) {
+        leaveProject(input: $input) {
+          _id
+          success
+        }
+      }
+    `;
+
+    it('should leave a project', async () => {
+      userContext.leaveProject.mockResolvedValue(true);
+      const { data } = await graphql(schema, mutation, null, context, {
+        input: { projectId: 'mock-id' }
+      });
+
+      expect(data.leaveProject).toEqual({
+        _id: 'mock-userId',
+        success: true
+      });
     });
   });
 });

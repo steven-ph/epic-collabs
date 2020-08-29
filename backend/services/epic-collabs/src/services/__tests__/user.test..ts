@@ -1,18 +1,16 @@
 import { makeUserService } from '../user';
 
-const mockLogin = jest.fn();
-const mockGetById = jest.fn();
-const mockGetByIds = jest.fn();
-const mockGetByEmail = jest.fn();
-const mockGetByEmails = jest.fn();
-
 const mockRepo = {
-  handleLogin: mockLogin,
+  handleLogin: jest.fn(),
   upsertUser: jest.fn(),
-  getUserById: mockGetById,
-  getUsersByIds: mockGetByIds,
-  getUserByEmail: mockGetByEmail,
-  getUsersByEmails: mockGetByEmails
+  getUserById: jest.fn(),
+  getUsersByIds: jest.fn(),
+  getUserByEmail: jest.fn(),
+  getUsersByEmails: jest.fn(),
+  joinProject: jest.fn(),
+  followProject: jest.fn(),
+  unfollowProject: jest.fn(),
+  leaveProject: jest.fn()
 };
 
 const mockUser = {
@@ -26,56 +24,100 @@ describe('UserService', () => {
 
   describe('getUserById', () => {
     it('should get user by id', async () => {
-      mockGetById.mockResolvedValue(mockUser);
+      mockRepo.getUserById.mockResolvedValue(mockUser);
 
       const res = await service.getUserById('mock-id');
 
       expect(res).toEqual(mockUser);
-      expect(mockGetById).toHaveBeenCalledWith('mock-id');
+      expect(mockRepo.getUserById).toHaveBeenCalledWith('mock-id');
     });
   });
 
   describe('getUsersByIds', () => {
     it('should get categories by ids', async () => {
-      mockGetByIds.mockResolvedValue([mockUser]);
+      mockRepo.getUsersByIds.mockResolvedValue([mockUser]);
 
       const res = await service.getUsersByIds(['mock-id']);
 
       expect(res).toEqual([mockUser]);
-      expect(mockGetByIds).toHaveBeenCalledWith(['mock-id']);
+      expect(mockRepo.getUsersByIds).toHaveBeenCalledWith(['mock-id']);
     });
   });
 
   describe('getUserByEmail', () => {
     it('should get user by email', async () => {
-      mockGetByEmail.mockResolvedValue(mockUser);
+      mockRepo.getUserByEmail.mockResolvedValue(mockUser);
 
       const res = await service.getUserByEmail('some-email');
 
       expect(res).toEqual(mockUser);
-      expect(mockGetByEmail).toHaveBeenCalledWith('some-email');
+      expect(mockRepo.getUserByEmail).toHaveBeenCalledWith('some-email');
     });
   });
 
-  describe('getUserByEmails', () => {
+  describe('getUsersByEmails', () => {
     it('should get users by emails', async () => {
-      mockGetByEmails.mockResolvedValue([mockUser]);
+      mockRepo.getUsersByEmails.mockResolvedValue([mockUser]);
 
       const res = await service.getUsersByEmails(['mock-id']);
 
       expect(res).toEqual([mockUser]);
-      expect(mockGetByEmails).toHaveBeenCalledWith(['mock-id']);
+      expect(mockRepo.getUsersByEmails).toHaveBeenCalledWith(['mock-id']);
     });
   });
 
   describe('handleLogin', () => {
     it('should log user in', async () => {
-      mockLogin.mockResolvedValue(mockUser);
+      mockRepo.handleLogin.mockResolvedValue(mockUser);
 
       const res = await service.handleLogin({ ...mockUser });
 
       expect(res).toEqual(mockUser);
-      expect(mockLogin).toHaveBeenCalledWith({ ...mockUser });
+      expect(mockRepo.handleLogin).toHaveBeenCalledWith({ ...mockUser });
+    });
+  });
+
+  describe('joinProject', () => {
+    it('should join a project', async () => {
+      mockRepo.joinProject.mockResolvedValue(true);
+      const input = { userId: mockUser._id, projectId: 'projectId', positionId: 'positionId' };
+      const res = await service.joinProject({ ...input });
+
+      expect(res).toBe(true);
+      expect(mockRepo.joinProject).toHaveBeenCalledWith({ ...input });
+    });
+  });
+
+  describe('followProject', () => {
+    it('should follow a project', async () => {
+      mockRepo.followProject.mockResolvedValue(true);
+      const input = { userId: mockUser._id, projectId: 'projectId' };
+      const res = await service.followProject({ ...input });
+
+      expect(res).toBe(true);
+      expect(mockRepo.followProject).toHaveBeenCalledWith({ ...input });
+    });
+  });
+
+  describe('unfollowProject', () => {
+    it('should unfollow a project', async () => {
+      mockRepo.unfollowProject.mockResolvedValue(true);
+      const input = { userId: mockUser._id, projectId: 'projectId' };
+      const res = await service.unfollowProject({ ...input });
+
+      expect(res).toBe(true);
+      expect(mockRepo.unfollowProject).toHaveBeenCalledWith({ ...input });
+    });
+  });
+
+  describe('leaveProject', () => {
+    it('should leave a project', async () => {
+      mockRepo.leaveProject.mockResolvedValue(true);
+      const input = { userId: mockUser._id, projectId: 'projectId' };
+      const res = await service.leaveProject({ ...input });
+
+      expect(res).toBe(true);
+      expect(mockRepo.leaveProject).toHaveBeenCalledWith({ ...input });
     });
   });
 });
