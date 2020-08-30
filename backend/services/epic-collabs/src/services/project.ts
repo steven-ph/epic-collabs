@@ -9,7 +9,6 @@ interface IProjectService {
   getProjects: () => Promise<IProjectModel[]>;
   createProject: (input: IProjectModel) => Promise<IProjectModel>;
   updateProject: (input: IProjectModel) => Promise<IProjectModel>;
-  invalidateCache: (id: string) => any;
 }
 
 interface IProjectServiceDI {
@@ -25,7 +24,6 @@ const makeProjectService = ({ projectRepo }: IProjectServiceDI): IProjectService
   const getProjects = () => projectRepo.getProjects();
   const createProject = (input: IProjectModel) => projectRepo.createProject(input);
   const updateProject = (input: IProjectModel) => projectRepo.updateProject(input);
-  const invalidateCache = id => projectRepo.invalidateCache(id);
 
   return {
     getProjectById,
@@ -35,8 +33,7 @@ const makeProjectService = ({ projectRepo }: IProjectServiceDI): IProjectService
     getProjectsByPositionId,
     getProjects,
     createProject,
-    updateProject,
-    invalidateCache
+    updateProject
   };
 };
 
