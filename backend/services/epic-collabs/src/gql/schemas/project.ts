@@ -82,6 +82,7 @@ const typeDefs = gql`
 
   type Query {
     projectById(id: String!): Project
+    projectBySlug(slug: String!): Project
     projectsByIds(ids: [String!]!): [Project]
     projects: [Project]
   }

@@ -1,10 +1,10 @@
 import { makeUserRepository } from '../../repositories/user';
-import { makeUserService, IUserService, IUserRepositoryDI } from '../../services/user';
+import { makeUserService, IUserService } from '../../services/user';
 
-const makeUserContext = ({ userDb, projectService }: IUserRepositoryDI): IUserService => {
-  const userRepo = makeUserRepository({ userDb, projectService });
+const makeUserContext = ({ userDb, projectService }): IUserService => {
+  const userRepo = makeUserRepository({ userDb });
 
-  return makeUserService({ userRepo });
+  return makeUserService({ userRepo, projectService });
 };
 
 export { makeUserContext, IUserService };

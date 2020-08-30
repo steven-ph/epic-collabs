@@ -1,20 +1,8 @@
 import Dataloader from 'dataloader';
 import { logger } from '@sp-tools/kloud-logger';
-import { get, find, isEmpty, values, uniq } from 'lodash';
+import { get } from 'lodash';
 import { makeLoader } from '../utils/dataloader';
-import { IProjectService, IProjectModel } from '../services/project';
-import { newProjectValidationSchema, updateProjectValidationSchema } from '../models/project';
-import {
-  IUserModel,
-  upsertUserValidationSchema,
-  joinProjectValidationSchema,
-  followProjectValidationSchema,
-  unfollowProjectValidationSchema,
-  leaveProjectValidationSchema,
-  removeUserFromProjectValidationSchema,
-  removePositionFromProjectValidationSchema,
-  changeOwnershipValidationSchema
-} from '../models/user';
+import { IUserModel, upsertUserValidationSchema } from '../models/user';
 
 interface IJoinProjectInput {
   userId: string;
@@ -58,29 +46,20 @@ interface IChangeProjectOwnershipInput {
 
 interface IUserRepository {
   handleLogin: (input: IUserModel) => Promise<IUserModel>;
+  upsertUser: (input: IUserModel) => Promise<IUserModel>;
   getUserById: (userId: string) => Promise<IUserModel>;
   getUsersByIds: (userIds: string[]) => Promise<IUserModel[]>;
   getUserByEmail: (email: string) => Promise<IUserModel>;
   getUsersByEmails: (emails: string[]) => Promise<IUserModel[]>;
-  joinProject: (input: IJoinProjectInput) => Promise<boolean>;
-  followProject: (input: IFollowProjectInput) => Promise<boolean>;
-  unfollowProject: (input: IUnfollowProjectInput) => Promise<boolean>;
-  leaveProject: (input: ILeaveProjectInput) => Promise<boolean>;
-  removeUserFromProject: (input: IRemoveUserFromProjectInput) => Promise<boolean>;
-  removePositionFromProject: (input: IRemovePositionFromProjectInput) => Promise<boolean>;
-  changeProjectOwnership: (input: IChangeProjectOwnershipInput) => Promise<boolean>;
-  createProject: (input: IProjectModel) => Promise<IProjectModel>;
-  updateProject: (input: IProjectModel) => Promise<boolean>;
 }
 
 interface IUserRepositoryDI {
   userDb: any;
-  projectService: IProjectService;
 }
 
 const updateOptions = { new: true, lean: true, upsert: true, omitUndefined: true };
 
-const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUserRepository => {
+const makeUserRepository = ({ userDb }: IUserRepositoryDI): IUserRepository => {
   const userByIdLoader = new Dataloader((userIds: string[]) => makeLoader({ db: userDb, key: '_id', ids: userIds }), {
     cacheKeyFn: key => JSON.stringify(key)
   });
@@ -89,9 +68,19 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
     cacheKeyFn: key => JSON.stringify(key)
   });
 
-  const handleLogin = async (input: IUserModel) => _upsertUser(input);
+  const invalidateCache = ({ id, email }) => {
+    if (id) {
+      userByIdLoader.clear(id);
+    }
 
-  const _upsertUser = async (input: IUserModel) => {
+    if (email) {
+      userByEmailLoader.clear(email);
+    }
+  };
+
+  const handleLogin = async (input: IUserModel) => upsertUser(input);
+
+  const upsertUser = async (input: IUserModel) => {
     const validated = upsertUserValidationSchema.validate(input);
 
     if (validated.error) {
@@ -100,9 +89,12 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       throw new Error('upsertUser error: ' + validated.error.message);
     }
 
-    const _id = get(input, '_id');
+    const id = get(input, '_id');
+    const email = get(input, 'email');
 
-    return userDb.findOneAndUpdate({ _id }, input, updateOptions);
+    invalidateCache({ id, email });
+
+    return userDb.findOneAndUpdate({ _id: id }, input, updateOptions);
   };
 
   const getUserById = async (id): Promise<IUserModel> => {
@@ -137,435 +129,13 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
     return userByEmailLoader.loadMany(emails);
   };
 
-  const joinProject = async (input: IJoinProjectInput) => {
-    try {
-      const validated = joinProjectValidationSchema.validate(input);
-
-      if (validated.error) {
-        logger.error('joinProject error', { error: validated.error.message }, { input });
-
-        throw new Error(`joinProject error: ${validated.error.message}`);
-      }
-
-      const { userId, projectId, positionId } = input;
-
-      const [user, project] = await Promise.all([getUserById(userId), projectService.getProjectById(projectId)]);
-
-      if (isEmpty(user) || isEmpty(project)) {
-        const errMsg = 'joinProject error: user or project not found';
-        logger.error(errMsg, null, { input });
-
-        throw new Error(errMsg);
-      }
-
-      const contributingProjects = values(get(user, 'contributingProjects'));
-
-      const collaborators = values(get(project, 'collaborators'));
-
-      const editedCollaborators = collaborators.map(c =>
-        c && c.positionId === positionId
-          ? {
-              positionId,
-              userId
-            }
-          : c
-      );
-
-      await Promise.all([
-        _upsertUser({ ...user, contributingProjects: uniq([projectId, ...contributingProjects]) }),
-        updateProject({ ...project, collaborators: editedCollaborators, updatedBy: userId, isInternalUpdate: true })
-      ]);
-
-      return true;
-    } catch (error) {
-      logger.error('joinProject error', error, { input });
-      throw error;
-    }
-  };
-
-  const followProject = async (input: IFollowProjectInput) => {
-    try {
-      const validated = followProjectValidationSchema.validate(input);
-
-      if (validated.error) {
-        logger.error('followProject error', { error: validated.error.message }, { input });
-
-        throw new Error(`followProject error: ${validated.error.message}`);
-      }
-
-      const { userId, projectId } = input;
-
-      const [user, project] = await Promise.all([getUserById(userId), projectService.getProjectById(projectId)]);
-
-      if (isEmpty(user) || isEmpty(project)) {
-        const errMsg = 'followProject error: user or project not found';
-        logger.error(errMsg, null, { input });
-
-        throw new Error(errMsg);
-      }
-
-      const followingProjects = values(get(user, 'followingProjects'));
-
-      const followers = values(get(project, 'followers'));
-
-      const userToUpdate = { ...user, followingProjects: uniq([projectId, ...followingProjects]) };
-
-      await Promise.all([
-        _upsertUser(userToUpdate),
-        updateProject({
-          ...project,
-          followers: uniq([userId, ...followers]),
-          updatedBy: userId,
-          isInternalUpdate: true
-        })
-      ]);
-
-      return true;
-    } catch (error) {
-      logger.error('followProject error', error, { input });
-
-      throw error;
-    }
-  };
-
-  const unfollowProject = async (input: IFollowProjectInput) => {
-    try {
-      const validated = unfollowProjectValidationSchema.validate(input);
-
-      if (validated.error) {
-        logger.error('unfollowProject error', { error: validated.error.message }, { input });
-
-        throw new Error(`unfollowProject error: ${validated.error.message}`);
-      }
-
-      const { userId, projectId } = input;
-
-      const [user, project] = await Promise.all([getUserById(userId), projectService.getProjectById(projectId)]);
-
-      if (isEmpty(user) || isEmpty(project)) {
-        const errMsg = 'unfollowProject error: user or project not found';
-        logger.error(errMsg, null, { input });
-
-        throw new Error(errMsg);
-      }
-
-      const followingProjects = values(get(user, 'followingProjects'));
-      const followers = values(get(project, 'followers'));
-
-      await Promise.all([
-        _upsertUser({ ...user, followingProjects: [...followingProjects.filter(p => p !== projectId)] }),
-        updateProject({
-          ...project,
-          followers: [...followers.filter(f => f !== userId)],
-          updatedBy: userId,
-          isInternalUpdate: true
-        })
-      ]);
-
-      return true;
-    } catch (error) {
-      logger.error('unfollowProject error', error, { input });
-      throw error;
-    }
-  };
-
-  const leaveProject = async (input: ILeaveProjectInput) => {
-    try {
-      const validated = leaveProjectValidationSchema.validate(input);
-
-      if (validated.error) {
-        logger.error('leaveProject error', { error: validated.error.message }, { input });
-
-        throw new Error(`leaveProject error: ${validated.error.message}`);
-      }
-
-      const { projectId, userId } = input;
-
-      const [user, project] = await Promise.all([getUserById(userId), projectService.getProjectById(projectId)]);
-
-      if (isEmpty(user) || isEmpty(project)) {
-        const errMsg = 'joinProject error: user or project not found';
-        logger.error(errMsg, null, { input });
-
-        throw new Error(errMsg);
-      }
-
-      if (isEmpty(project)) {
-        const errMsg = 'leaveProject error: project not found';
-        logger.error(errMsg, null, { input });
-
-        throw new Error(errMsg);
-      }
-
-      if (project.createdBy === userId) {
-        const errMsg = 'leaveProject error: user is still the owner of the project';
-        logger.error(errMsg, null, { input });
-
-        throw new Error(errMsg);
-      }
-
-      const collaborators = values(get(project, 'collaborators'));
-
-      const editedCollaborators = collaborators.map(c =>
-        c && c.userId === userId
-          ? {
-              positionId: c.positionId,
-              userId: null
-            }
-          : c
-      );
-
-      const contributingProjects = values(get(user, 'contributingProjects'));
-
-      await Promise.all([
-        _upsertUser({ ...user, contributingProjects: [...contributingProjects.filter(p => p !== projectId)] }),
-        updateProject({ ...project, collaborators: editedCollaborators, updatedBy: userId, isInternalUpdate: true })
-      ]);
-
-      return true;
-    } catch (error) {
-      logger.error('leaveProject error', error, { input });
-      throw error;
-    }
-  };
-
-  const removeUserFromProject = async (input: IRemoveUserFromProjectInput) => {
-    try {
-      const validated = removeUserFromProjectValidationSchema.validate(input);
-
-      if (validated.error) {
-        logger.error('removeUserFromProject error', { error: validated.error.message }, { input });
-
-        throw new Error(`removeUserFromProject error: ${validated.error.message}`);
-      }
-
-      const { ownerId, userId, projectId, positionId } = input;
-
-      const [user, project] = await Promise.all([getUserById(userId), projectService.getProjectById(projectId)]);
-
-      if (isEmpty(user) || isEmpty(project)) {
-        const errMsg = 'removeUserFromProject error: user or project not found';
-        logger.error(errMsg, null, { input });
-
-        throw new Error(errMsg);
-      }
-
-      if (project.createdBy === userId) {
-        const errMsg = 'leaveProject error: user is still the owner of the project';
-        logger.error(errMsg, null, { input });
-
-        throw new Error(errMsg);
-      }
-
-      if (project.createdBy !== ownerId) {
-        const errMsg = 'removeUserFromProject error: user is not the project owner';
-        logger.error(errMsg, null, { input });
-
-        throw new Error(errMsg);
-      }
-
-      const collaborators = values(get(project, 'collaborators'));
-
-      const editedCollaborators = collaborators.map(c =>
-        c && c.positionId === positionId
-          ? {
-              positionId,
-              userId: null
-            }
-          : c
-      );
-
-      const contributingProjects = values(get(user, 'contributingProjects'));
-
-      await Promise.all([
-        _upsertUser({ ...user, contributingProjects: [...contributingProjects.filter(p => p !== projectId)] }),
-        updateProject({ ...project, collaborators: editedCollaborators, updatedBy: userId, isInternalUpdate: true })
-      ]);
-
-      return true;
-    } catch (error) {
-      logger.error('removeUserFromProject error', error, { input });
-      throw error;
-    }
-  };
-
-  const removePositionFromProject = async (input: IRemovePositionFromProjectInput) => {
-    try {
-      const validated = removePositionFromProjectValidationSchema.validate(input);
-
-      if (validated.error) {
-        logger.error('removePositionFromProject error', { error: validated.error.message }, { input });
-
-        throw new Error(`removePositionFromProject error: ${validated.error.message}`);
-      }
-
-      const { userId, projectId, positionId } = input;
-
-      const project = await projectService.getProjectById(projectId);
-
-      if (isEmpty(project)) {
-        const errMsg = 'removePositionFromProject error: project not found';
-        logger.error(errMsg, null, { input });
-
-        throw new Error(errMsg);
-      }
-
-      if (project.createdBy !== userId) {
-        const errMsg = 'removeUserFromProject error: user is not the project owner';
-        logger.error(errMsg, null, { input });
-
-        throw new Error(errMsg);
-      }
-
-      const collaborators = values(get(project, 'collaborators'));
-
-      const collabUserId = get(find(collaborators, { positionId }), 'userId');
-
-      if (collabUserId && project.createdBy === collabUserId) {
-        const errMsg = 'removePositionFromProject error: user is still the owner of the project';
-        logger.error(errMsg, null, { input });
-
-        throw new Error(errMsg);
-      }
-
-      const editedCollaborators = collaborators.filter(c => c && c.positionId !== positionId);
-      const updateProjectPromise = updateProject({
-        ...project,
-        collaborators: editedCollaborators,
-        updatedBy: userId,
-        isInternalUpdate: true
-      });
-
-      if (collabUserId) {
-        const collabUser = await getUserById(collabUserId);
-        const contributingProjects = values(get(collabUser, 'contributingProjects'));
-
-        await Promise.all([
-          _upsertUser({ ...collabUser, contributingProjects: [...contributingProjects.filter(p => p !== projectId)] }),
-          updateProjectPromise
-        ]);
-
-        return true;
-      }
-
-      await Promise.all([updateProjectPromise]);
-
-      return true;
-    } catch (error) {
-      logger.error('removePositionFromProject error', error, { input });
-      throw error;
-    }
-  };
-
-  const changeProjectOwnership = async (input: IChangeProjectOwnershipInput) => {
-    const validated = changeOwnershipValidationSchema.validate(input);
-
-    if (validated.error) {
-      logger.error('changeProjectOwnership error', { error: validated.error.message }, { input });
-
-      throw new Error('changeProjectOwnership error:' + validated.error.message);
-    }
-
-    try {
-      const { projectId, fromUserId, toUserId } = input;
-
-      const [fromUser, toUser, existingProject] = await Promise.all([
-        getUserById(fromUserId),
-        getUserById(toUserId),
-        projectService.getProjectById(projectId)
-      ]);
-
-      if (isEmpty(existingProject)) {
-        const errMsg = 'changeProjectOwnership error: project not found';
-        logger.error(errMsg, null, { input });
-
-        throw new Error(errMsg);
-      }
-
-      if (existingProject.createdBy !== fromUserId) {
-        const errMsg = 'changeProjectOwnership error: user is not the project owner';
-        logger.error(errMsg, null, { input });
-
-        throw new Error(errMsg);
-      }
-
-      const updateFromUserPromise = _upsertUser({ ...fromUser, createdProjects: (fromUser.createdProjects || []).filter(p => p !== projectId) });
-
-      const updateToUserPromise = _upsertUser({ ...toUser, createdProjects: uniq([projectId, ...(toUser.createdProjects || [])]) });
-
-      const updateProjectPromise = updateProject({
-        ...existingProject,
-        createdBy: toUserId,
-        updatedBy: fromUserId,
-        isInternalUpdate: true
-      });
-
-      await Promise.all([updateFromUserPromise, updateToUserPromise, updateProjectPromise]);
-      return true;
-    } catch (error) {
-      logger.error('changeProjectOwnership error', error, { input });
-
-      throw error;
-    }
-  };
-
-  const createProject = async (input: IProjectModel) => {
-    const validated = newProjectValidationSchema.validate(input);
-
-    if (validated.error) {
-      logger.error('createProject error', { error: validated.error.message }, { input });
-
-      throw new Error('createProject error: ' + validated.error.message);
-    }
-
-    try {
-      const [user, created] = await Promise.all([getUserById(input.createdBy), projectService.createProject(input)]);
-
-      await _upsertUser({ ...user, createdProjects: uniq([`${created._id}`, ...(user.createdProjects || [])]) });
-
-      return created;
-    } catch (error) {
-      logger.error('createProject error', error, { input });
-
-      throw error;
-    }
-  };
-
-  const updateProject = async (input: IProjectModel) => {
-    const validated = updateProjectValidationSchema.validate(input);
-
-    if (validated.error) {
-      logger.error('updateProject error', { error: validated.error.message }, { input });
-
-      throw new Error('updateProject error:' + validated.error.message);
-    }
-
-    try {
-      await projectService.updateProject(input);
-
-      return true;
-    } catch (error) {
-      logger.error('updateProject error', error, { input });
-
-      throw error;
-    }
-  };
-
   return {
     handleLogin,
+    upsertUser,
     getUserById,
     getUsersByIds,
     getUserByEmail,
-    getUsersByEmails,
-    joinProject,
-    followProject,
-    unfollowProject,
-    leaveProject,
-    removeUserFromProject,
-    removePositionFromProject,
-    changeProjectOwnership,
-    createProject,
-    updateProject
+    getUsersByEmails
   };
 };
 

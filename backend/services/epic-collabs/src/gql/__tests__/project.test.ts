@@ -33,6 +33,7 @@ const mockExpectedProject = {
 
 const projectContext = {
   getProjectById: jest.fn(),
+  getProjectBySlug: jest.fn(),
   getProjectsByIds: jest.fn(),
   getProjects: jest.fn()
 };
@@ -102,6 +103,32 @@ describe('Project schema', () => {
       const { data } = await graphql(schema, query, null, context, { id: 'mock-id' });
 
       expect(data.projectById).toEqual(mockExpectedProject);
+    });
+  });
+
+  describe('Query.projectBySlug', () => {
+    const query = `
+      query projectBySlug($slug: String!) {
+        projectBySlug(slug: $slug) {
+          ${FIELDS}
+        }
+      }
+    `;
+
+    it('should throw an error when there is no slugs', async () => {
+      const { errors } = await graphql(schema, query, null, context);
+
+      return expect(errors[0].message).toEqual('Variable "$slug" of required type "String!" was not provided.');
+    });
+
+    it('should return a project when a rpoject slug is provided', async () => {
+      userContext.getUserById.mockResolvedValue({ _id: 'mock-userId' });
+      categoryContext.getCategoriesByIds.mockResolvedValue([mockCategory]);
+      projectContext.getProjectBySlug.mockResolvedValue(mockProject);
+
+      const { data } = await graphql(schema, query, null, context, { slug: 'mock-slug' });
+
+      expect(data.projectBySlug).toEqual(mockExpectedProject);
     });
   });
 

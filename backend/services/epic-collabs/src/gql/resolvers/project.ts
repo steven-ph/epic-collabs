@@ -4,6 +4,7 @@ import { IContext } from '../make-context';
 export const resolvers = {
   Query: {
     projectById: (_, { id }, ctx: IContext) => ctx.Project.getProjectById(id),
+    projectBySlug: (_, { slug }, ctx: IContext) => ctx.Project.getProjectBySlug(slug),
     projectsByIds: (_, { ids }, ctx: IContext) => ctx.Project.getProjectsByIds(ids),
     projects: (_, __, ctx: IContext) => ctx.Project.getProjects()
   },

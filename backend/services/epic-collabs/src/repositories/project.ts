@@ -1,6 +1,5 @@
 import Dataloader from 'dataloader';
-import { generate } from 'shortid';
-import { kebabCase, get, isEmpty, memoize, omit, values } from 'lodash';
+import { get, memoize, omit } from 'lodash';
 import { logger } from '@sp-tools/kloud-logger';
 import { makeLoader, findMany } from '../utils/dataloader';
 import { IProjectModel, newProjectValidationSchema, updateProjectValidationSchema } from '../models/project';
@@ -9,6 +8,7 @@ const updateOptions = { new: true, lean: true, upsert: true, omitUndefined: true
 
 interface IProjectRepository {
   getProjectById: (id: string) => Promise<IProjectModel>;
+  getProjectBySlug: (slug: string) => Promise<IProjectModel>;
   getProjectsByIds: (ids: string[]) => Promise<IProjectModel[]>;
   getProjectsByUserId: (id: string) => Promise<IProjectModel[]>;
   getProjectsByCategoryId: (id: string) => Promise<IProjectModel[]>;
@@ -23,7 +23,27 @@ const makeProjectRepository = ({ projectDb }): IProjectRepository => {
     cacheKeyFn: key => JSON.stringify(key)
   });
 
-  const invalidateCache = id => projectByIdLoader.clear(id);
+  const projectBySlugLoader = new Dataloader((slugs: string[]) => makeLoader({ db: projectDb, key: 'slug', ids: slugs }), {
+    cacheKeyFn: key => JSON.stringify(key)
+  });
+
+  const invalidateCache = ({ id, slug }) => {
+    if (id) {
+      projectByIdLoader.clear(id);
+    }
+
+    if (slug) {
+      projectBySlugLoader.clear(slug);
+    }
+  };
+
+  const getProjectBySlug = async slug => {
+    if (!slug) {
+      return null;
+    }
+
+    return projectBySlugLoader.load(slug);
+  };
 
   const getProjectById = async id => {
     if (!id) {
@@ -67,11 +87,7 @@ const makeProjectRepository = ({ projectDb }): IProjectRepository => {
       throw new Error('createProject error: ' + validated.error.message);
     }
 
-    const { name } = input;
-
-    const slug = `${kebabCase(name)}-${generate()}-${generate()}`.toLowerCase();
-
-    return projectDb.create({ ...input, slug });
+    return projectDb.create({ ...input });
   };
 
   const updateProject = async (input: IProjectModel) => {
@@ -84,42 +100,16 @@ const makeProjectRepository = ({ projectDb }): IProjectRepository => {
     }
 
     const _id = get(input, '_id');
+    const slug = get(input, 'slug');
 
-    const existingProject = await getProjectById(_id);
-
-    if (isEmpty(existingProject)) {
-      const errMsg = 'updateProject error: project not found';
-      logger.error(errMsg, null, { input });
-
-      throw new Error(errMsg);
-    }
-
-    const updatedBy = get(input, 'updatedBy');
-    const createdBy = get(existingProject, 'createdBy');
-    const collaborators = values(get(existingProject, 'collaborators'));
-    const collabIds = [createdBy, ...collaborators.map(c => c.userId)].filter(Boolean);
-
-    if (!collabIds.includes(updatedBy) && !input.isInternalUpdate) {
-      const errMsg = 'updateProject error: user is not the project owner or collaborator';
-      logger.error(errMsg, null, { input });
-
-      throw new Error(errMsg);
-    }
-
-    if (input.createdBy && input.createdBy !== createdBy && updatedBy !== createdBy) {
-      const errMsg = 'updateProject error: user is not the project owner';
-      logger.error(errMsg, null, { input });
-
-      throw new Error(errMsg);
-    }
-
-    invalidateCache(_id);
+    invalidateCache({ id: _id, slug });
 
     return projectDb.findOneAndUpdate({ _id }, { ...omit(input, ['updatedBy', 'isInternalUpdate']), updatedAt: Date.now() }, updateOptions);
   };
 
   return {
     getProjectById,
+    getProjectBySlug,
     getProjectsByIds,
     getProjectsByUserId,
     getProjectsByCategoryId,

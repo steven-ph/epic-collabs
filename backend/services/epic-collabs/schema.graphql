@@ -42,6 +42,7 @@ type Query {
   positionsByIds(ids: [String!]!): [Position]
   positions: [Position]
   projectById(id: String!): Project
+  projectBySlug(slug: String!): Project
   projectsByIds(ids: [String!]!): [Project]
   projects: [Project]
 }

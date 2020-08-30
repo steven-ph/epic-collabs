@@ -11,10 +11,6 @@ jest.mock('dataloader', () =>
   }))
 );
 
-jest.mock('shortid', () => ({
-  generate: jest.fn().mockReturnValue('random-string')
-}));
-
 const mockFindMany = jest.fn();
 jest.mock('../../utils/dataloader', () => ({
   findMany: mockFindMany
@@ -64,6 +60,7 @@ describe('ProjectRepository', () => {
 
       const res = await projectRepo.createProject({
         name: 'Project name',
+        slug: 'project-name-random-string-random-string',
         description: 'description',
         categories: ['mock-cat'],
         createdBy: 'blah'
@@ -96,43 +93,7 @@ describe('ProjectRepository', () => {
       return expect(() => projectRepo.updateProject({ name: 'project name', slug: 'slug', description: 'description' })).rejects.toThrow();
     });
 
-    it('should not update the project in the db if it does not exist', () => {
-      mockLoad.mockResolvedValue(null);
-      return expect(() => projectRepo.updateProject({ ...mockProject, updatedBy: 'blah' })).rejects.toThrow('updateProject error: project not found');
-    });
-
-    it('should not update the project in the db if the user is not the project owner or collaborator', () => {
-      mockLoad.mockResolvedValue(mockProject);
-      return expect(() => projectRepo.updateProject({ ...mockProject, updatedBy: 'blah' })).rejects.toThrow(
-        'updateProject error: user is not the project owner or collaborator'
-      );
-    });
-
-    it('should not update the project in the db with change of ownership if the user is not the project owner', () => {
-      mockLoad.mockResolvedValue(mockProject);
-      return expect(() => projectRepo.updateProject({ ...mockProject, createdBy: 'mock-userId', updatedBy: 'mock-userId' })).rejects.toThrow(
-        'updateProject error: user is not the project owner'
-      );
-    });
-
-    it('should update the project ownership in the db if the user is the owner', async () => {
-      mockLoad.mockResolvedValue(mockProject);
-      mockFindOneAndUpdate.mockResolvedValue(mockProject);
-
-      const res = await projectRepo.updateProject({ ...mockProject, createdBy: 'mock-userId', updatedBy: 'some-user' });
-
-      expect(res).toEqual(mockProject);
-
-      expect(mockClear).toHaveBeenCalled();
-
-      expect(mockFindOneAndUpdate).toHaveBeenCalledWith(
-        { _id: mockProject._id },
-        { ...mockProject, createdBy: 'mock-userId', updatedAt: 12345 },
-        { new: true, lean: true, upsert: true, omitUndefined: true }
-      );
-    });
-
-    it('should update the project in the db if the user is the owner', async () => {
+    it('should update the project in the db', async () => {
       mockLoad.mockResolvedValue(mockProject);
       mockFindOneAndUpdate.mockResolvedValue(mockProject);
 
@@ -172,6 +133,16 @@ describe('ProjectRepository', () => {
       mockLoad.mockResolvedValue(mockProject);
 
       const response = await projectRepo.getProjectById('mock-id');
+
+      expect(response).toEqual(mockProject);
+    });
+  });
+
+  describe('#getProjectBySlug', () => {
+    it('should get project by project slug', async () => {
+      mockLoad.mockResolvedValue(mockProject);
+
+      const response = await projectRepo.getProjectBySlug('mock-slug');
 
       expect(response).toEqual(mockProject);
     });
