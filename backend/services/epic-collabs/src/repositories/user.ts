@@ -458,41 +458,47 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       throw new Error('changeProjectOwnership error:' + validated.error.message);
     }
 
-    const { projectId, fromUserId, toUserId } = input;
+    try {
+      const { projectId, fromUserId, toUserId } = input;
 
-    const [fromUser, toUser, existingProject] = await Promise.all([
-      getUserById(fromUserId),
-      getUserById(toUserId),
-      projectService.getProjectById(projectId)
-    ]);
+      const [fromUser, toUser, existingProject] = await Promise.all([
+        getUserById(fromUserId),
+        getUserById(toUserId),
+        projectService.getProjectById(projectId)
+      ]);
 
-    if (isEmpty(existingProject)) {
-      const errMsg = 'changeProjectOwnership error: project not found';
-      logger.error(errMsg, null, { input });
+      if (isEmpty(existingProject)) {
+        const errMsg = 'changeProjectOwnership error: project not found';
+        logger.error(errMsg, null, { input });
 
-      throw new Error(errMsg);
+        throw new Error(errMsg);
+      }
+
+      if (existingProject.createdBy !== fromUserId) {
+        const errMsg = 'changeProjectOwnership error: user is not the project owner';
+        logger.error(errMsg, null, { input });
+
+        throw new Error(errMsg);
+      }
+
+      const updateFromUserPromise = _upsertUser({ ...fromUser, createdProjects: (fromUser.createdProjects || []).filter(p => p !== projectId) });
+
+      const updateToUserPromise = _upsertUser({ ...toUser, createdProjects: uniq([projectId, ...(toUser.createdProjects || [])]) });
+
+      const updateProjectPromise = updateProject({
+        ...existingProject,
+        createdBy: toUserId,
+        updatedBy: fromUserId,
+        isInternalUpdate: true
+      });
+
+      await Promise.all([updateFromUserPromise, updateToUserPromise, updateProjectPromise]);
+      return true;
+    } catch (error) {
+      logger.error('changeProjectOwnership error', error, { input });
+
+      throw error;
     }
-
-    if (existingProject.createdBy !== fromUserId) {
-      const errMsg = 'changeProjectOwnership error: user is not the project owner';
-      logger.error(errMsg, null, { input });
-
-      throw new Error(errMsg);
-    }
-
-    const updateFromUserPromise = _upsertUser({ ...fromUser, createdProjects: (fromUser.createdProjects || []).filter(p => p !== projectId) });
-
-    const updateToUserPromise = _upsertUser({ ...toUser, createdProjects: uniq([projectId, ...(toUser.createdProjects || [])]) });
-
-    const updateProjectPromise = updateProject({
-      ...existingProject,
-      createdBy: toUserId,
-      updatedBy: fromUserId,
-      isInternalUpdate: true
-    });
-
-    await Promise.all([updateFromUserPromise, updateToUserPromise, updateProjectPromise]);
-    return true;
   };
 
   const createProject = async (input: IProjectModel) => {
@@ -526,39 +532,15 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       throw new Error('updateProject error:' + validated.error.message);
     }
 
-    const _id = get(input, '_id');
+    try {
+      await projectService.updateProject(input);
 
-    const existingProject = await projectService.getProjectById(_id);
+      return true;
+    } catch (error) {
+      logger.error('updateProject error', error, { input });
 
-    if (isEmpty(existingProject)) {
-      const errMsg = 'updateProject error: project not found';
-      logger.error(errMsg, null, { input });
-
-      throw new Error(errMsg);
+      throw error;
     }
-
-    const updatedBy = get(input, 'updatedBy');
-    const createdBy = get(existingProject, 'createdBy');
-    const collaborators = values(get(existingProject, 'collaborators'));
-    const collabIds = [createdBy, ...collaborators.map(c => c.userId)].filter(Boolean);
-
-    if (!collabIds.includes(updatedBy) && !input.isInternalUpdate) {
-      const errMsg = 'updateProject error: user is not the project owner or collaborator';
-      logger.error(errMsg, null, { input });
-
-      throw new Error(errMsg);
-    }
-
-    if (input.createdBy && input.createdBy !== createdBy && updatedBy !== createdBy) {
-      const errMsg = 'updateProject error: user is not the project owner';
-      logger.error(errMsg, null, { input });
-
-      throw new Error(errMsg);
-    }
-
-    await projectService.updateProject(input);
-
-    return true;
   };
 
   return {

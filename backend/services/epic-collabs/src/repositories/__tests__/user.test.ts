@@ -46,6 +46,7 @@ const mockUserDb = {
 
 const projectService = {
   getProjectById: jest.fn(),
+  createProject: jest.fn(),
   updateProject: jest.fn()
 };
 
@@ -121,6 +122,37 @@ describe('UserRepository', () => {
       const res = await userRepo.joinProject({ ...input });
 
       expect(res).toEqual(true);
+    });
+  });
+
+  describe('createProject', () => {
+    it('should create a project', async () => {
+      const input = {
+        name: 'Project name',
+        description: 'description',
+        categories: ['mock-cat'],
+        createdBy: 'blah'
+      };
+
+      projectService.createProject.mockResolvedValue({ ...mockProject });
+
+      const res = await userRepo.createProject({ ...input });
+
+      expect(res).toEqual(mockProject);
+
+      expect(projectService.createProject).toHaveBeenCalledWith({ ...input });
+    });
+  });
+
+  describe('updateProject', () => {
+    it('should update the project', async () => {
+      projectService.updateProject.mockResolvedValue({ ...mockProject });
+
+      const res = await projectService.updateProject({ ...mockProject, updatedBy: 'some-user' });
+
+      expect(res).toEqual(mockProject);
+
+      expect(projectService.updateProject).toHaveBeenCalledWith({ ...mockProject, updatedBy: 'some-user' });
     });
   });
 
