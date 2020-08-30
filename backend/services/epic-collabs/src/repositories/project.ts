@@ -3,15 +3,9 @@ import { generate } from 'shortid';
 import { kebabCase, get, isEmpty, memoize, omit, values } from 'lodash';
 import { logger } from '@sp-tools/kloud-logger';
 import { makeLoader, findMany } from '../utils/dataloader';
-import { IProjectModel, newProjectValidationSchema, updateProjectValidationSchema, changeOwnershipValidationSchema } from '../models/project';
+import { IProjectModel, newProjectValidationSchema, updateProjectValidationSchema } from '../models/project';
 
 const updateOptions = { new: true, lean: true, upsert: true, omitUndefined: true };
-
-interface IChangeProjectOwnershipInput {
-  projectId: string;
-  fromUserId: string;
-  toUserId: string;
-}
 
 interface IProjectRepository {
   getProjectById: (id: string) => Promise<IProjectModel>;
@@ -22,7 +16,6 @@ interface IProjectRepository {
   getProjects: () => Promise<IProjectModel[]>;
   createProject: (input: IProjectModel) => Promise<IProjectModel>;
   updateProject: (input: IProjectModel) => Promise<IProjectModel>;
-  changeProjectOwnership: (input: IChangeProjectOwnershipInput) => Promise<IProjectModel>;
 }
 
 const makeProjectRepository = ({ projectDb }): IProjectRepository => {
@@ -113,41 +106,16 @@ const makeProjectRepository = ({ projectDb }): IProjectRepository => {
       throw new Error(errMsg);
     }
 
+    if (input.createdBy && input.createdBy !== createdBy && updatedBy !== createdBy) {
+      const errMsg = 'updateProject error: user is not the project owner';
+      logger.error(errMsg, null, { input });
+
+      throw new Error(errMsg);
+    }
+
     invalidateCache(_id);
 
     return projectDb.findOneAndUpdate({ _id }, { ...omit(input, ['updatedBy', 'isInternalUpdate']), updatedAt: Date.now() }, updateOptions);
-  };
-
-  const changeProjectOwnership = async (input: IChangeProjectOwnershipInput) => {
-    const validated = changeOwnershipValidationSchema.validate(input);
-
-    if (validated.error) {
-      logger.error('changeProjectOwnership error', { error: validated.error.message }, { input });
-
-      throw new Error('changeProjectOwnership error:' + validated.error.message);
-    }
-
-    const { projectId, fromUserId, toUserId } = input;
-
-    const existingProject = (await getProjectById(projectId)) as IProjectModel;
-
-    if (isEmpty(existingProject)) {
-      const errMsg = 'changeProjectOwnership error: project not found';
-      logger.error(errMsg, null, { input });
-
-      throw new Error(errMsg);
-    }
-
-    if (existingProject.createdBy !== fromUserId) {
-      const errMsg = 'changeProjectOwnership error: user is not the project owner';
-      logger.error(errMsg, null, { input });
-
-      throw new Error(errMsg);
-    }
-
-    invalidateCache(projectId);
-
-    return projectDb.findOneAndUpdate({ _id: projectId }, { ...existingProject, createdBy: toUserId }, updateOptions);
   };
 
   return {
@@ -158,9 +126,8 @@ const makeProjectRepository = ({ projectDb }): IProjectRepository => {
     getProjectsByPositionId,
     getProjects,
     createProject,
-    updateProject,
-    changeProjectOwnership
+    updateProject
   };
 };
 
-export { makeProjectRepository, IProjectRepository, IProjectModel, IChangeProjectOwnershipInput };
+export { makeProjectRepository, IProjectRepository, IProjectModel };

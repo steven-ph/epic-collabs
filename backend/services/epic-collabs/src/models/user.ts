@@ -107,15 +107,6 @@ const joinProjectValidationSchema = Joi.object()
   })
   .required();
 
-const removeUserFromProjectValidationSchema = Joi.object()
-  .keys({
-    ownerId: Joi.string().required(),
-    userId: Joi.string().required(),
-    projectId: Joi.string().required(),
-    positionId: Joi.string().required()
-  })
-  .required();
-
 const followProjectValidationSchema = Joi.object()
   .keys({
     userId: Joi.string().required(),
@@ -126,6 +117,31 @@ const followProjectValidationSchema = Joi.object()
 const unfollowProjectValidationSchema = followProjectValidationSchema;
 const leaveProjectValidationSchema = followProjectValidationSchema;
 
+const removeUserFromProjectValidationSchema = Joi.object()
+  .keys({
+    ownerId: Joi.string().required(),
+    userId: Joi.string().required(),
+    projectId: Joi.string().required(),
+    positionId: Joi.string().required()
+  })
+  .required();
+
+const removePositionFromProjectValidationSchema = Joi.object()
+  .keys({
+    userId: Joi.string().required(),
+    projectId: Joi.string().required(),
+    positionId: Joi.string().required()
+  })
+  .required();
+
+const changeOwnershipValidationSchema = Joi.object()
+  .keys({
+    projectId: Joi.string().required(),
+    fromUserId: Joi.string().required(),
+    toUserId: Joi.string().required()
+  })
+  .required();
+
 export {
   UserDocument,
   IUserModel,
@@ -135,5 +151,7 @@ export {
   followProjectValidationSchema,
   unfollowProjectValidationSchema,
   leaveProjectValidationSchema,
-  removeUserFromProjectValidationSchema
+  removeUserFromProjectValidationSchema,
+  removePositionFromProjectValidationSchema,
+  changeOwnershipValidationSchema
 };

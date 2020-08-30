@@ -6,8 +6,11 @@ import {
   IUnfollowProjectInput,
   ILeaveProjectInput,
   IRemoveUserFromProjectInput,
+  IRemovePositionFromProjectInput,
+  IChangeProjectOwnershipInput,
   IUserRepositoryDI
 } from '../repositories/user';
+import { IProjectModel } from '../repositories/project';
 
 interface IUserService {
   handleLogin: (input: IUserModel) => Promise<IUserModel>;
@@ -20,6 +23,10 @@ interface IUserService {
   unfollowProject: (input: IUnfollowProjectInput) => Promise<boolean>;
   leaveProject: (input: ILeaveProjectInput) => Promise<boolean>;
   removeUserFromProject: (input: IRemoveUserFromProjectInput) => Promise<boolean>;
+  removePositionFromProject: (input: IRemovePositionFromProjectInput) => Promise<boolean>;
+  changeProjectOwnership: (input: IChangeProjectOwnershipInput) => Promise<boolean>;
+  createProject: (input: IProjectModel) => Promise<IProjectModel>;
+  updateProject: (input: IProjectModel) => Promise<boolean>;
 }
 
 interface IUserServiceDI {
@@ -37,6 +44,10 @@ const makeUserService = ({ userRepo }: IUserServiceDI): IUserService => {
   const unfollowProject = (input: IUnfollowProjectInput) => userRepo.unfollowProject(input);
   const leaveProject = (input: ILeaveProjectInput) => userRepo.leaveProject(input);
   const removeUserFromProject = (input: IRemoveUserFromProjectInput) => userRepo.removeUserFromProject(input);
+  const removePositionFromProject = (input: IRemovePositionFromProjectInput) => userRepo.removePositionFromProject(input);
+  const changeProjectOwnership = (input: IChangeProjectOwnershipInput) => userRepo.changeProjectOwnership(input);
+  const createProject = (input: IProjectModel) => userRepo.createProject(input);
+  const updateProject = (input: IProjectModel) => userRepo.updateProject(input);
 
   return {
     handleLogin,
@@ -48,7 +59,11 @@ const makeUserService = ({ userRepo }: IUserServiceDI): IUserService => {
     followProject,
     unfollowProject,
     leaveProject,
-    removeUserFromProject
+    createProject,
+    updateProject,
+    removeUserFromProject,
+    removePositionFromProject,
+    changeProjectOwnership
   };
 };
 

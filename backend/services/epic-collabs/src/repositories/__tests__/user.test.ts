@@ -286,7 +286,7 @@ describe('UserRepository', () => {
       expect(res).toEqual(false);
     });
 
-    it('should not leave the user if it does not exist', async () => {
+    it('should not remove the user if it does not exist', async () => {
       mockLoad.mockResolvedValue(null);
       projectService.getProjectById.mockResolvedValue(mockProject);
       const res = await userRepo.removeUserFromProject({ ...input });
@@ -333,6 +333,119 @@ describe('UserRepository', () => {
       const res = await userRepo.removeUserFromProject({ ...input });
 
       expect(res).toEqual(true);
+    });
+  });
+
+  describe('#removePositionFromProject', () => {
+    const input = { projectId: 'mock-projectId', positionId: 'mock-positionId', userId: 'random-userId' };
+    beforeEach(() => {
+      mockLoad.mockReset();
+    });
+
+    it('should not remove position from the project if the input is invalid', async () => {
+      // @ts-ignore
+      const res = await userRepo.removePositionFromProject({ foo: 'bar' });
+
+      expect(res).toEqual(false);
+    });
+
+    it('should not remove position from the project if it does not exist', async () => {
+      mockLoad.mockResolvedValue(mockUser);
+      projectService.getProjectById.mockResolvedValue(null);
+      const res = await userRepo.removePositionFromProject({ ...input });
+
+      expect(res).toEqual(false);
+    });
+
+    it('should not remove position from the project if the user is not the owner', async () => {
+      mockLoad.mockResolvedValue(mockUser);
+      projectService.getProjectById.mockResolvedValue({ ...mockProject, createdBy: 'user-blah' });
+      const res = await userRepo.removePositionFromProject({ ...input });
+
+      expect(res).toEqual(false);
+    });
+
+    it('should not remove the position from the project if the owner is still the collaborator of that position', async () => {
+      mockLoad.mockResolvedValue(mockUser);
+      projectService.getProjectById.mockResolvedValue({
+        ...mockProject,
+        createdBy: 'random-userId',
+        collaborators: [
+          {
+            userId: 'random-userId',
+            positionId: 'mock-positionId'
+          }
+        ]
+      });
+      const res = await userRepo.removePositionFromProject({ ...input });
+
+      expect(res).toEqual(false);
+    });
+
+    it('should handle an error', async () => {
+      mockLoad.mockResolvedValue(mockUser);
+      projectService.getProjectById.mockRejectedValue(new Error('some error'));
+      const res = await userRepo.removePositionFromProject({ ...input });
+
+      expect(res).toEqual(false);
+    });
+
+    it('should remove user from the project', async () => {
+      mockLoad.mockResolvedValue(mockUser);
+      projectService.getProjectById.mockResolvedValue({
+        ...mockProject,
+        createdBy: 'random-userId',
+        collaborators: [
+          {
+            userId: 'random-id',
+            positionId: 'mock-positionId'
+          }
+        ]
+      });
+      const res = await userRepo.removePositionFromProject({ ...input });
+
+      expect(res).toEqual(true);
+    });
+  });
+
+  describe('#changeProjectOwnership', () => {
+    const input = { projectId: mockProject._id, fromUserId: 'some-user', toUserId: 'new-userid' };
+    beforeEach(() => {
+      mockLoad.mockReset();
+    });
+
+    it('should not change the ownership of the project in the db if the input is invalid', () => {
+      // @ts-ignore
+      return expect(() => userRepo.changeProjectOwnership({ foo: 'bar' })).rejects.toThrow();
+    });
+
+    it('should not change the ownership of the project in the db if it does not exist', () => {
+      projectService.getProjectById.mockResolvedValue(null);
+      return expect(() => userRepo.changeProjectOwnership({ ...input })).rejects.toThrow('changeProjectOwnership error: project not found');
+    });
+
+    it('should not change the ownership of the project in the db if the user is not the project owner', () => {
+      projectService.getProjectById.mockResolvedValue({ ...mockProject, createdBy: 'blah-id' });
+      return expect(() => userRepo.changeProjectOwnership({ ...input })).rejects.toThrow(
+        'changeProjectOwnership error: user is not the project owner'
+      );
+    });
+
+    it('should change the ownership of the project in the db', async () => {
+      mockLoad.mockResolvedValue(mockUser);
+      projectService.getProjectById.mockResolvedValue(mockProject);
+      mockFindOneAndUpdate.mockResolvedValue({ ...mockProject, createdBy: 'new-userid' });
+
+      const res = await userRepo.changeProjectOwnership({ ...input });
+
+      expect(res).toEqual(true);
+
+      expect(projectService.updateProject).toHaveBeenCalledWith({
+        ...mockProject,
+        isInternalUpdate: true,
+        updatedBy: 'some-user',
+        createdBy: 'new-userid'
+      });
     });
   });
 

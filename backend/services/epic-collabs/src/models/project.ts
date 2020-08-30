@@ -140,8 +140,8 @@ const newProjectValidationSchema = Joi.object()
     followers: Joi.array().items(Joi.string()),
     resources: Joi.array().items(
       Joi.object().keys({
-        name: optionalEmptyString,
-        url: optionalEmptyString
+        name: Joi.string().required(),
+        url: Joi.string().required()
       })
     )
   })
@@ -174,19 +174,11 @@ const updateProjectValidationSchema = Joi.object()
     resources: Joi.array().items(
       Joi.object().keys({
         _id: optionalEmptyString,
-        name: optionalEmptyString,
-        url: optionalEmptyString
+        name: Joi.string().required(),
+        url: Joi.string().required()
       })
     )
   })
   .required();
 
-const changeOwnershipValidationSchema = Joi.object()
-  .keys({
-    projectId: Joi.string().required(),
-    fromUserId: Joi.string().required(),
-    toUserId: Joi.string().required()
-  })
-  .required();
-
-export { ProjectDocument, IProjectModel, ProjectSchema, newProjectValidationSchema, updateProjectValidationSchema, changeOwnershipValidationSchema };
+export { ProjectDocument, IProjectModel, ProjectSchema, newProjectValidationSchema, updateProjectValidationSchema };

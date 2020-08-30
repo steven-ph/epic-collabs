@@ -36,12 +36,6 @@ const typeDefs = gql`
     project: Project
   }
 
-  type ChangeProjectOwnershipResult {
-    _id: ID
-    success: Boolean
-    project: Project
-  }
-
   input NewProjectInput {
     _id: ID
     slug: String
@@ -86,11 +80,6 @@ const typeDefs = gql`
     url: String
   }
 
-  input ChangeProjectOwnershipInput {
-    projectId: String
-    toUserId: String
-  }
-
   type Query {
     projectById(id: String!): Project
     projectsByIds(ids: [String!]!): [Project]
@@ -100,7 +89,6 @@ const typeDefs = gql`
   type Mutation {
     newProject(input: NewProjectInput!): Project @auth(roles: [VIEWER], throwError: true)
     updateProject(input: UpdateProjectInput!): UpdateProjectResult @auth(roles: [VIEWER], throwError: true)
-    changeProjectOwnership(input: ChangeProjectOwnershipInput!): ChangeProjectOwnershipResult @auth(roles: [VIEWER], throwError: true)
   }
 `;
 

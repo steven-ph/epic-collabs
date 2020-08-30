@@ -11,13 +11,26 @@ const mockRepo = {
   followProject: jest.fn(),
   unfollowProject: jest.fn(),
   leaveProject: jest.fn(),
-  removeUserFromProject: jest.fn()
+  removeUserFromProject: jest.fn(),
+  removePositionFromProject: jest.fn(),
+  changeProjectOwnership: jest.fn()
 };
 
 const mockUser = {
   _id: 'mock-id',
   name: 'some-name',
   email: 'some-email'
+};
+
+const mockProject = {
+  _id: 'mock-id',
+  slug: 'mock-slug',
+  name: 'some-name',
+  description: 'mock-description',
+  createdBy: 'some-user',
+  categories: ['mock-cat'],
+  createdAt: 12345,
+  updatedAt: 12345
 };
 
 describe('UserService', () => {
@@ -130,6 +143,29 @@ describe('UserService', () => {
 
       expect(res).toBe(true);
       expect(mockRepo.removeUserFromProject).toHaveBeenCalledWith({ ...input });
+    });
+  });
+
+  describe('removePositionFromProject', () => {
+    it('should remove a position from the project', async () => {
+      mockRepo.removePositionFromProject.mockResolvedValue(true);
+      const input = { projectId: 'projectId', positionId: 'mock-pos-id', userId: 'some-userId' };
+      const res = await service.removePositionFromProject({ ...input });
+
+      expect(res).toBe(true);
+      expect(mockRepo.removePositionFromProject).toHaveBeenCalledWith({ ...input });
+    });
+  });
+
+  describe('changeProjectOwnership', () => {
+    it('should change ownership of a project', async () => {
+      mockRepo.changeProjectOwnership.mockResolvedValue(true);
+
+      const input = { projectId: mockProject._id, fromUserId: mockProject.createdBy, toUserId: 'new-userId' };
+      const res = await service.changeProjectOwnership({ ...input });
+
+      expect(res).toEqual(true);
+      expect(mockRepo.changeProjectOwnership).toHaveBeenCalledWith({ ...input });
     });
   });
 });

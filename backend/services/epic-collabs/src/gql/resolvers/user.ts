@@ -39,6 +39,18 @@ export const resolvers = {
       const success = await ctx.User.removeUserFromProject({ ...input, ownerId });
 
       return { ownerId, success: !!success, projectId: input.projectId };
+    },
+    removePositionFromProject: async (_, { input }, ctx: IContext) => {
+      const userId = ctx.viewer.id;
+      const success = await ctx.User.removePositionFromProject({ ...input, userId });
+
+      return { userId, success: !!success, projectId: input.projectId };
+    },
+    changeProjectOwnership: async (_, { input }, ctx: IContext) => {
+      const userId = ctx.viewer.id;
+      const result = await ctx.User.changeProjectOwnership({ ...input, fromUserId: userId });
+
+      return { userId, projectId: input.projectId, success: !!result };
     }
   },
   User: {
@@ -68,6 +80,16 @@ export const resolvers = {
   },
   RemoveUserFromProjectResult: {
     _id: property('ownerId'),
+    success: ({ success }) => !!success,
+    project: ({ projectId }, _, ctx: IContext) => ctx.Project.getProjectById(projectId)
+  },
+  RemovePositionFromProjectResult: {
+    _id: property('userId'),
+    success: ({ success }) => !!success,
+    project: ({ projectId }, _, ctx: IContext) => ctx.Project.getProjectById(projectId)
+  },
+  ChangeProjectOwnershipResult: {
+    _id: property('userId'),
     success: ({ success }) => !!success,
     project: ({ projectId }, _, ctx: IContext) => ctx.Project.getProjectById(projectId)
   }

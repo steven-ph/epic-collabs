@@ -123,16 +123,4 @@ describe('ProjectService', () => {
       });
     });
   });
-
-  describe('changeProjectOwnership', () => {
-    it('should change ownership of a project', async () => {
-      mockRepo.changeProjectOwnership.mockResolvedValue({ ...mockProject, createdBy: 'new-userId' });
-
-      const input = { projectId: mockProject._id, fromUserId: mockProject.createdBy, toUserId: 'new-userId' };
-      const res = await service.changeProjectOwnership({ ...input });
-
-      expect(res).toEqual({ ...mockProject, createdBy: 'new-userId' });
-      expect(mockRepo.changeProjectOwnership).toHaveBeenCalledWith({ ...input });
-    });
-  });
 });

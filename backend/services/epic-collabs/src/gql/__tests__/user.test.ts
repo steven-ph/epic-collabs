@@ -15,7 +15,9 @@ const userContext = {
   followProject: jest.fn(),
   unfollowProject: jest.fn(),
   leaveProject: jest.fn(),
-  removeUserFromProject: jest.fn()
+  removeUserFromProject: jest.fn(),
+  removePositionFromProject: jest.fn(),
+  changeProjectOwnership: jest.fn()
 };
 
 const viewer = {
@@ -247,6 +249,54 @@ describe('User schema', () => {
       });
 
       expect(data.removeUserFromProject).toEqual({
+        _id: 'mock-userId',
+        success: true
+      });
+    });
+  });
+
+  describe('Mutation.removePositionFromProject', () => {
+    const mutation = `
+      mutation removePositionFromProject($input: RemovePositionFromProjectInput!) {
+        removePositionFromProject(input: $input) {
+          _id
+          success
+        }
+      }
+    `;
+
+    it('should remove a position of a project', async () => {
+      userContext.removePositionFromProject.mockResolvedValue(true);
+
+      const { data } = await graphql(schema, mutation, null, context, {
+        input: { projectId: 'mock-id', positionId: 'pos-Id' }
+      });
+
+      expect(data.removePositionFromProject).toEqual({
+        _id: 'mock-userId',
+        success: true
+      });
+    });
+  });
+
+  describe('Mutation.changeProjectOwnership', () => {
+    const mutation = `
+      mutation changeProjectOwnership($input: ChangeProjectOwnershipInput!) {
+        changeProjectOwnership(input: $input) {
+          _id
+          success
+        }
+      }
+    `;
+
+    it('should change owner of a project', async () => {
+      userContext.changeProjectOwnership.mockResolvedValue(true);
+
+      const { data } = await graphql(schema, mutation, null, context, {
+        input: { projectId: 'mock-id', toUserId: 'new-userId' }
+      });
+
+      expect(data.changeProjectOwnership).toEqual({
         _id: 'mock-userId',
         success: true
       });

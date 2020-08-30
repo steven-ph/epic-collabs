@@ -8,16 +8,12 @@ export const resolvers = {
     projects: (_, __, ctx: IContext) => ctx.Project.getProjects()
   },
   Mutation: {
-    newProject: (_, { input }, ctx: IContext) => ctx.Project.createProject({ ...input, createdBy: ctx.viewer.id }),
+    newProject: (_, { input }, ctx: IContext) => ctx.User.createProject({ ...input, createdBy: ctx.viewer.id }),
     updateProject: async (_, { input }, ctx: IContext) => {
-      const result = await ctx.Project.updateProject({ ...input, updatedBy: ctx.viewer.id });
+      const userId = ctx.viewer.id;
+      const result = await ctx.User.updateProject({ ...input, updatedBy: userId });
 
-      return { _id: input._id, success: !!result };
-    },
-    changeProjectOwnership: async (_, { input }, ctx: IContext) => {
-      const result = await ctx.Project.changeProjectOwnership({ ...input, fromUserId: ctx.viewer.id });
-
-      return { _id: input.projectId, success: !!result };
+      return { userId, projectId: input._id, success: !!result };
     }
   },
   Project: {
@@ -30,11 +26,8 @@ export const resolvers = {
     position: ({ positionId }, _, ctx: IContext) => ctx.Position.getPositionById(positionId)
   },
   UpdateProjectResult: {
-    _id: property('_id'),
-    project: ({ _id }, _, ctx: IContext) => ctx.Project.getProjectById(_id)
-  },
-  ChangeProjectOwnershipResult: {
-    _id: property('_id'),
-    project: ({ _id }, _, ctx: IContext) => ctx.Project.getProjectById(_id)
+    _id: property('userId'),
+    success: ({ success }) => !!success,
+    project: ({ projectId }, _, ctx: IContext) => ctx.Project.getProjectById(projectId)
   }
 };

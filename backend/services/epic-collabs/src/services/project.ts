@@ -1,4 +1,4 @@
-import { IProjectRepository, IProjectModel, IChangeProjectOwnershipInput } from '../repositories/project';
+import { IProjectRepository, IProjectModel } from '../repositories/project';
 
 interface IProjectService {
   getProjectById: (id: string) => Promise<IProjectModel>;
@@ -9,7 +9,7 @@ interface IProjectService {
   getProjects: () => Promise<IProjectModel[]>;
   createProject: (input: IProjectModel) => Promise<IProjectModel>;
   updateProject: (input: IProjectModel) => Promise<IProjectModel>;
-  changeProjectOwnership: (input: IChangeProjectOwnershipInput) => Promise<IProjectModel>;
+  invalidateCache: (id: string) => any;
 }
 
 interface IProjectServiceDI {
@@ -25,7 +25,7 @@ const makeProjectService = ({ projectRepo }: IProjectServiceDI): IProjectService
   const getProjects = () => projectRepo.getProjects();
   const createProject = (input: IProjectModel) => projectRepo.createProject(input);
   const updateProject = (input: IProjectModel) => projectRepo.updateProject(input);
-  const changeProjectOwnership = (input: IChangeProjectOwnershipInput) => projectRepo.changeProjectOwnership(input);
+  const invalidateCache = id => projectRepo.invalidateCache(id);
 
   return {
     getProjectById,
@@ -36,7 +36,7 @@ const makeProjectService = ({ projectRepo }: IProjectServiceDI): IProjectService
     getProjects,
     createProject,
     updateProject,
-    changeProjectOwnership
+    invalidateCache
   };
 };
 
