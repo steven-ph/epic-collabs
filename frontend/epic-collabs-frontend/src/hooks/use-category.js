@@ -8,7 +8,7 @@ const useGetCategories = () => {
   return {
     loading,
     error,
-    allCategories: get(data, 'allCategories')
+    categories: get(data, 'categories')
   };
 };
 

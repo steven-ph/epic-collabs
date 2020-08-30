@@ -3,11 +3,11 @@ import { values } from 'lodash';
 import styled from 'styled-components';
 import { breakpoints, easing } from 'styles';
 import { Flexbox, Headline, Title, Subtitle } from 'components/common';
-import { useGetCategories } from 'hooks/use-category';
+import { useGetProjects } from 'hooks/use-project';
 
 const LandingPage = () => {
-  const { categories } = useGetCategories();
-  console.log(values(categories).length);
+  const { projects } = useGetProjects();
+  console.log(values(projects).length);
 
   return (
     <Flexbox flexDirection="column" justifyContent="center">
