@@ -3,7 +3,7 @@ import { makePositionService } from '../position';
 const mockRepo = {
   getPositionById: jest.fn(),
   getPositionByIds: jest.fn(),
-  getAllPosition: jest.fn(),
+  getPositions: jest.fn(),
   createPosition: jest.fn()
 };
 
@@ -38,14 +38,14 @@ describe('PositionService', () => {
     });
   });
 
-  describe('getAllPosition', () => {
-    it('should get all positions', async () => {
-      mockRepo.getAllPosition.mockResolvedValue([mockCategory]);
+  describe('getPositions', () => {
+    it('should get positions', async () => {
+      mockRepo.getPositions.mockResolvedValue([mockCategory]);
 
-      const res = await service.getAllPosition();
+      const res = await service.getPositions();
 
       expect(res).toEqual([mockCategory]);
-      expect(mockRepo.getAllPosition).toHaveBeenCalled();
+      expect(mockRepo.getPositions).toHaveBeenCalled();
     });
   });
 

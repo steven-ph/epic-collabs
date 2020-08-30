@@ -34,7 +34,7 @@ const mockExpectedProject = {
 const projectContext = {
   getProjectById: jest.fn(),
   getProjectsByIds: jest.fn(),
-  getAllProjects: jest.fn(),
+  getProjects: jest.fn(),
   createProject: jest.fn(),
   updateProject: jest.fn(),
   changeProjectOwnership: jest.fn()
@@ -131,23 +131,23 @@ describe('Project schema', () => {
     });
   });
 
-  describe('Query.allProjects', () => {
+  describe('Query.projects', () => {
     const query = `
-      query allProjects {
-        allProjects {
+      query projects {
+        projects {
           ${FIELDS}
         }
       }
     `;
 
-    it('should return all projects', async () => {
+    it('should return projects', async () => {
       userContext.getUserById.mockResolvedValue({ _id: 'mock-userId' });
       categoryContext.getCategoriesByIds.mockResolvedValue([mockCategory]);
-      projectContext.getAllProjects.mockResolvedValue([mockProject]);
+      projectContext.getProjects.mockResolvedValue([mockProject]);
 
       const { data } = await graphql(schema, query, null, context);
 
-      expect(data.allProjects).toEqual([mockExpectedProject]);
+      expect(data.projects).toEqual([mockExpectedProject]);
     });
   });
 

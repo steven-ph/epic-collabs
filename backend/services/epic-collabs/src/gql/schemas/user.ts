@@ -66,11 +66,24 @@ const typeDefs = gql`
     project: Project
   }
 
+  input RemoveUserFromProjectInput {
+    userId: String!
+    projectId: String!
+    positionId: String!
+  }
+
+  type RemoveUserFromProjectResult {
+    _id: ID
+    success: Boolean
+    project: Project
+  }
+
   type Mutation {
     joinProject(input: JoinProjectInput!): JoinProjectResult @auth(roles: [VIEWER], throwError: true)
     followProject(input: FollowProjectInput!): FollowProjectResult @auth(roles: [VIEWER], throwError: true)
     unfollowProject(input: UnfollowProjectInput!): UnfollowProjectResult @auth(roles: [VIEWER], throwError: true)
     leaveProject(input: LeaveProjectInput!): LeaveProjectResult @auth(roles: [VIEWER], throwError: true)
+    removeUserFromProject(input: RemoveUserFromProjectInput!): RemoveUserFromProjectResult @auth(roles: [VIEWER], throwError: true)
   }
 `;
 

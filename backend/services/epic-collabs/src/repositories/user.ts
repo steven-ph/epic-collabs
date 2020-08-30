@@ -9,7 +9,8 @@ import {
   joinProjectValidationSchema,
   followProjectValidationSchema,
   unfollowProjectValidationSchema,
-  leaveProjectValidationSchema
+  leaveProjectValidationSchema,
+  removeUserFromProjectValidationSchema
 } from '../models/user';
 
 interface IJoinProjectInput {
@@ -33,6 +34,13 @@ interface ILeaveProjectInput {
   projectId: string;
 }
 
+interface IRemoveUserFromProjectInput {
+  ownerId: string;
+  userId: string;
+  projectId: string;
+  positionId: string;
+}
+
 interface IUserRepository {
   handleLogin: (input: IUserModel) => Promise<IUserModel>;
   getUserById: (userId: string) => Promise<IUserModel>;
@@ -43,6 +51,7 @@ interface IUserRepository {
   followProject: (input: IFollowProjectInput) => Promise<boolean>;
   unfollowProject: (input: IUnfollowProjectInput) => Promise<boolean>;
   leaveProject: (input: ILeaveProjectInput) => Promise<boolean>;
+  removeUserFromProject: (input: IRemoveUserFromProjectInput) => Promise<boolean>;
 }
 
 interface IUserRepositoryDI {
@@ -144,7 +153,7 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
 
       await Promise.all([
         _upsertUser({ ...user, _id: userId, contributingProjects: uniq([projectId, ...contributingProjects]) }),
-        projectService.updateProject({ ...project, updatedBy: userId, collaborators: editedCollaborators })
+        projectService.updateProject({ ...project, collaborators: editedCollaborators, updatedBy: userId, isInternalUpdate: true })
       ]);
 
       return true;
@@ -182,7 +191,7 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
 
       await Promise.all([
         _upsertUser(userToUpdate),
-        projectService.updateProject({ ...project, updatedBy: userId, followers: uniq([userId, ...followers]) })
+        projectService.updateProject({ ...project, followers: uniq([userId, ...followers]), updatedBy: userId, isInternalUpdate: true })
       ]);
 
       return true;
@@ -218,7 +227,7 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
 
       await Promise.all([
         _upsertUser({ ...user, _id: userId, followingProjects: [...followingProjects.filter(p => p !== projectId)] }),
-        projectService.updateProject({ ...project, updatedBy: userId, followers: [...followers.filter(f => f !== userId)] })
+        projectService.updateProject({ ...project, followers: [...followers.filter(f => f !== userId)], updatedBy: userId, isInternalUpdate: true })
       ]);
 
       return true;
@@ -277,12 +286,70 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
 
       await Promise.all([
         _upsertUser({ ...user, _id: userId, contributingProjects: [...contributingProjects.filter(p => p !== projectId)] }),
-        projectService.updateProject({ ...project, updatedBy: userId, collaborators: editedCollaborators })
+        projectService.updateProject({ ...project, collaborators: editedCollaborators, updatedBy: userId, isInternalUpdate: true })
       ]);
 
       return true;
     } catch (error) {
       logger.error('leaveProject error', error, { input });
+      return false;
+    }
+  };
+
+  const removeUserFromProject = async (input: IRemoveUserFromProjectInput) => {
+    try {
+      const validated = removeUserFromProjectValidationSchema.validate(input);
+
+      if (validated.error) {
+        logger.error('removeUserFromProject error', { error: validated.error.message }, { input });
+
+        return false;
+      }
+
+      const { ownerId, userId, projectId, positionId } = input;
+
+      const [user, project] = await Promise.all([getUserById(userId), projectService.getProjectById(projectId)]);
+
+      if (isEmpty(user) || isEmpty(project)) {
+        logger.error('removeUserFromProject error: user or project not found', null, { input });
+
+        return false;
+      }
+
+      if (project.createdBy === userId) {
+        const errMsg = 'leaveProject error: user is still the owner of the project';
+        logger.error(errMsg, null, { input });
+
+        return false;
+      }
+
+      if (project.createdBy !== ownerId) {
+        logger.error('removeUserFromProject error: user is not the project owner', null, { input });
+
+        return false;
+      }
+
+      const collaborators = values(get(project, 'collaborators'));
+
+      const editedCollaborators = collaborators.map(c =>
+        c && c.positionId === positionId
+          ? {
+              ...c,
+              userId: null
+            }
+          : c
+      );
+
+      const contributingProjects = values(get(user, 'contributingProjects'));
+
+      await Promise.all([
+        _upsertUser({ ...user, _id: userId, contributingProjects: [...contributingProjects.filter(p => p !== projectId)] }),
+        projectService.updateProject({ ...project, collaborators: editedCollaborators, updatedBy: userId, isInternalUpdate: true })
+      ]);
+
+      return true;
+    } catch (error) {
+      console.error('removeUserFromProject error', error, { input });
       return false;
     }
   };
@@ -296,7 +363,8 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
     joinProject,
     followProject,
     unfollowProject,
-    leaveProject
+    leaveProject,
+    removeUserFromProject
   };
 };
 
@@ -308,5 +376,6 @@ export {
   IJoinProjectInput,
   IFollowProjectInput,
   IUnfollowProjectInput,
-  ILeaveProjectInput
+  ILeaveProjectInput,
+  IRemoveUserFromProjectInput
 };

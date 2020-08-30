@@ -26,13 +26,14 @@ interface IProjectModel {
   createdAt?: number;
   updatedAt?: number;
   createdBy?: string;
-  updatedBy?: string;
   collaborators?: ICollaboratorModel[];
   categories?: string[];
   resources?: IResourceModel[];
   followers?: string[];
   status?: Status;
   visibility?: Visibility;
+  updatedBy?: string;
+  isInternalUpdate?: boolean;
 }
 
 const ProjectSchema: Schema = new Schema(
@@ -150,6 +151,7 @@ const updateProjectValidationSchema = Joi.object()
   .keys({
     _id: Joi.string().required(),
     updatedBy: Joi.string().required(),
+    isInternalUpdate: Joi.boolean().optional(),
     name: optionalEmptyString,
     slug: optionalEmptyString,
     description: optionalEmptyString,

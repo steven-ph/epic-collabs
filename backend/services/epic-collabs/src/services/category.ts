@@ -3,7 +3,7 @@ import { ICategoryRepository, ICategoryModel } from '../repositories/category';
 interface ICategoryService {
   getCategoryById: (id: string) => Promise<ICategoryModel>;
   getCategoriesByIds: (ids: string[]) => Promise<ICategoryModel[]>;
-  getAllCategories: () => Promise<ICategoryModel[]>;
+  getCategories: () => Promise<ICategoryModel[]>;
   createCategory: (input: ICategoryModel) => Promise<ICategoryModel>;
 }
 
@@ -14,13 +14,13 @@ interface ICategoryServiceDI {
 const makeCategoryService = ({ categoryRepo }: ICategoryServiceDI): ICategoryService => {
   const getCategoryById = id => categoryRepo.getCategoryById(id);
   const getCategoriesByIds = ids => categoryRepo.getCategoriesByIds(ids);
-  const getAllCategories = () => categoryRepo.getAllCategories();
+  const getCategories = () => categoryRepo.getCategories();
   const createCategory = (input: ICategoryModel) => categoryRepo.createCategory(input);
 
   return {
     getCategoryById,
     getCategoriesByIds,
-    getAllCategories,
+    getCategories,
     createCategory
   };
 };

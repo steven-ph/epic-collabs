@@ -6,7 +6,7 @@ interface IProjectService {
   getProjectsByUserId: (id: string) => Promise<IProjectModel[]>;
   getProjectsByCategoryId: (id: string) => Promise<IProjectModel[]>;
   getProjectsByPositionId: (id: string) => Promise<IProjectModel[]>;
-  getAllProjects: () => Promise<IProjectModel[]>;
+  getProjects: () => Promise<IProjectModel[]>;
   createProject: (input: IProjectModel) => Promise<IProjectModel>;
   updateProject: (input: IProjectModel) => Promise<IProjectModel>;
   changeProjectOwnership: (input: IChangeProjectOwnershipInput) => Promise<IProjectModel>;
@@ -22,7 +22,7 @@ const makeProjectService = ({ projectRepo }: IProjectServiceDI): IProjectService
   const getProjectsByUserId = id => projectRepo.getProjectsByUserId(id);
   const getProjectsByCategoryId = id => projectRepo.getProjectsByCategoryId(id);
   const getProjectsByPositionId = id => projectRepo.getProjectsByPositionId(id);
-  const getAllProjects = () => projectRepo.getAllProjects();
+  const getProjects = () => projectRepo.getProjects();
   const createProject = (input: IProjectModel) => projectRepo.createProject(input);
   const updateProject = (input: IProjectModel) => projectRepo.updateProject(input);
   const changeProjectOwnership = (input: IChangeProjectOwnershipInput) => projectRepo.changeProjectOwnership(input);
@@ -33,7 +33,7 @@ const makeProjectService = ({ projectRepo }: IProjectServiceDI): IProjectService
     getProjectsByUserId,
     getProjectsByCategoryId,
     getProjectsByPositionId,
-    getAllProjects,
+    getProjects,
     createProject,
     updateProject,
     changeProjectOwnership

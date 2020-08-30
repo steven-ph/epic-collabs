@@ -9,7 +9,7 @@ const mockCategory = {
 const categoryContext = {
   getCategoryById: jest.fn(),
   getCategoriesByIds: jest.fn(),
-  getAllCategories: jest.fn(),
+  getCategories: jest.fn(),
   createCategory: jest.fn()
 };
 
@@ -79,22 +79,22 @@ describe('Category schema', () => {
     });
   });
 
-  describe('Query.allCategories', () => {
+  describe('Query.categories', () => {
     const query = `
-      query allCategories {
-        allCategories {
+      query categories {
+        categories {
           _id
           name
         }
       }
     `;
 
-    it('should return all categories', async () => {
-      categoryContext.getAllCategories.mockResolvedValue([mockCategory]);
+    it('should return categories', async () => {
+      categoryContext.getCategories.mockResolvedValue([mockCategory]);
 
       const { data } = await graphql(schema, query, null, context);
 
-      expect(data.allCategories).toEqual([mockCategory]);
+      expect(data.categories).toEqual([mockCategory]);
     });
   });
 

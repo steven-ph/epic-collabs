@@ -22,7 +22,7 @@ const typeDefs = gql`
   type Query {
     categoryById(id: String!): Category
     categoriesByIds(ids: [String!]!): [Category]
-    allCategories: [Category]
+    categories: [Category]
   }
 
   type Mutation {

@@ -4,7 +4,7 @@ export const resolvers = {
   Query: {
     positionById: (_, { id }, ctx: IContext) => ctx.Position.getPositionById(id),
     positionsByIds: (_, { ids }, ctx: IContext) => ctx.Position.getPositionByIds(ids),
-    allPositions: (_, __, ctx: IContext) => ctx.Position.getAllPosition()
+    positions: (_, __, ctx: IContext) => ctx.Position.getPositions()
   },
   Mutation: {
     newPosition: (_, { input }, ctx: IContext) => ctx.Position.createPosition({ ...input, createdBy: ctx.viewer.id })

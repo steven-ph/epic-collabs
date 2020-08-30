@@ -10,7 +10,8 @@ const mockRepo = {
   joinProject: jest.fn(),
   followProject: jest.fn(),
   unfollowProject: jest.fn(),
-  leaveProject: jest.fn()
+  leaveProject: jest.fn(),
+  removeUserFromProject: jest.fn()
 };
 
 const mockUser = {
@@ -118,6 +119,17 @@ describe('UserService', () => {
 
       expect(res).toBe(true);
       expect(mockRepo.leaveProject).toHaveBeenCalledWith({ ...input });
+    });
+  });
+
+  describe('removeUserFromProject', () => {
+    it('should remove a user from the project', async () => {
+      mockRepo.removeUserFromProject.mockResolvedValue(true);
+      const input = { ownerId: mockUser._id, projectId: 'projectId', positionId: 'mock-pos-id', userId: 'some-userId' };
+      const res = await service.removeUserFromProject({ ...input });
+
+      expect(res).toBe(true);
+      expect(mockRepo.removeUserFromProject).toHaveBeenCalledWith({ ...input });
     });
   });
 });

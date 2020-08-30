@@ -273,6 +273,69 @@ describe('UserRepository', () => {
     });
   });
 
+  describe('#removeUserFromProject', () => {
+    const input = { projectId: 'mock-projectId', positionId: 'mock-positionId', userId: 'random-userId', ownerId: 'johndoe' };
+    beforeEach(() => {
+      mockLoad.mockReset();
+    });
+
+    it('should not remove user from the project if the input is invalid', async () => {
+      // @ts-ignore
+      const res = await userRepo.removeUserFromProject({ foo: 'bar' });
+
+      expect(res).toEqual(false);
+    });
+
+    it('should not leave the user if it does not exist', async () => {
+      mockLoad.mockResolvedValue(null);
+      projectService.getProjectById.mockResolvedValue(mockProject);
+      const res = await userRepo.removeUserFromProject({ ...input });
+
+      expect(res).toEqual(false);
+    });
+
+    it('should not remove user from the project if it does not exist', async () => {
+      mockLoad.mockResolvedValue(mockUser);
+      projectService.getProjectById.mockResolvedValue(null);
+      const res = await userRepo.removeUserFromProject({ ...input });
+
+      expect(res).toEqual(false);
+    });
+
+    it('should not remove user from the project if the user is still the owner', async () => {
+      mockLoad.mockResolvedValue(mockUser);
+      projectService.getProjectById.mockResolvedValue({ ...mockProject, createdBy: 'johndoe' });
+      const res = await userRepo.removeUserFromProject({ ...input, userId: 'johndoe' });
+
+      expect(res).toEqual(false);
+    });
+
+    it('should not remove user from the project if the user is not the owner', async () => {
+      mockLoad.mockResolvedValue(mockUser);
+      projectService.getProjectById.mockResolvedValue({ ...mockProject, createdBy: 'user-blah' });
+      const res = await userRepo.removeUserFromProject({ ...input });
+
+      expect(res).toEqual(false);
+    });
+
+    it('should handle an error', async () => {
+      mockLoad.mockResolvedValue(mockUser);
+      projectService.getProjectById.mockRejectedValue(new Error('some error'));
+      const res = await userRepo.removeUserFromProject({ ...input });
+
+      expect(res).toEqual(false);
+    });
+
+    it('should remove user from the project', async () => {
+      mockLoad.mockResolvedValue(mockUser);
+      projectService.getProjectById.mockResolvedValue({ ...mockProject, createdBy: 'johndoe' });
+
+      const res = await userRepo.removeUserFromProject({ ...input });
+
+      expect(res).toEqual(true);
+    });
+  });
+
   describe('#getUserById', () => {
     it('should get user by id', async () => {
       mockLoad.mockResolvedValue(mockUser);

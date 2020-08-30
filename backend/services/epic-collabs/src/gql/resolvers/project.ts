@@ -5,7 +5,7 @@ export const resolvers = {
   Query: {
     projectById: (_, { id }, ctx: IContext) => ctx.Project.getProjectById(id),
     projectsByIds: (_, { ids }, ctx: IContext) => ctx.Project.getProjectsByIds(ids),
-    allProjects: (_, __, ctx: IContext) => ctx.Project.getAllProjects()
+    projects: (_, __, ctx: IContext) => ctx.Project.getProjects()
   },
   Mutation: {
     newProject: (_, { input }, ctx: IContext) => ctx.Project.createProject({ ...input, createdBy: ctx.viewer.id }),

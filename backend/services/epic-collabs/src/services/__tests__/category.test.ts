@@ -3,7 +3,7 @@ import { makeCategoryService } from '../category';
 const mockRepo = {
   getCategoryById: jest.fn(),
   getCategoriesByIds: jest.fn(),
-  getAllCategories: jest.fn(),
+  getCategories: jest.fn(),
   createCategory: jest.fn()
 };
 
@@ -38,14 +38,14 @@ describe('CategoryService', () => {
     });
   });
 
-  describe('getAllCategories', () => {
-    it('should get all categories', async () => {
-      mockRepo.getAllCategories.mockResolvedValue([mockCategory]);
+  describe('getCategories', () => {
+    it('should get categories', async () => {
+      mockRepo.getCategories.mockResolvedValue([mockCategory]);
 
-      const res = await service.getAllCategories();
+      const res = await service.getCategories();
 
       expect(res).toEqual([mockCategory]);
-      expect(mockRepo.getAllCategories).toHaveBeenCalled();
+      expect(mockRepo.getCategories).toHaveBeenCalled();
     });
   });
 

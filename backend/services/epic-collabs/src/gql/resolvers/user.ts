@@ -33,6 +33,12 @@ export const resolvers = {
       const success = await ctx.User.leaveProject({ ...input, userId });
 
       return { userId, success: !!success, projectId: input.projectId };
+    },
+    removeUserFromProject: async (_, { input }, ctx: IContext) => {
+      const ownerId = ctx.viewer.id;
+      const success = await ctx.User.removeUserFromProject({ ...input, ownerId });
+
+      return { ownerId, success: !!success, projectId: input.projectId };
     }
   },
   User: {
@@ -57,6 +63,11 @@ export const resolvers = {
   },
   LeaveProjectResult: {
     _id: property('userId'),
+    success: ({ success }) => !!success,
+    project: ({ projectId }, _, ctx: IContext) => ctx.Project.getProjectById(projectId)
+  },
+  RemoveUserFromProjectResult: {
+    _id: property('ownerId'),
     success: ({ success }) => !!success,
     project: ({ projectId }, _, ctx: IContext) => ctx.Project.getProjectById(projectId)
   }

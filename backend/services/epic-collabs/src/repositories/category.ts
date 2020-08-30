@@ -7,7 +7,7 @@ import { ICategoryModel, newCategoryValidationSchema } from '../models/category'
 interface ICategoryRepository {
   getCategoryById: (id: string) => Promise<ICategoryModel>;
   getCategoriesByIds: (ids: string[]) => Promise<ICategoryModel[]>;
-  getAllCategories: () => Promise<ICategoryModel[]>;
+  getCategories: () => Promise<ICategoryModel[]>;
   createCategory: (input: ICategoryModel) => Promise<ICategoryModel>;
 }
 
@@ -32,7 +32,7 @@ const makeCategoryRepository = ({ categoryDb }): ICategoryRepository => {
     return categoryByIdLoader.loadMany(ids.map(id => `${id}`));
   };
 
-  const getAllCategories = memoize(async () => categoryDb.find().lean());
+  const getCategories = memoize(async () => categoryDb.find().lean());
 
   const createCategory = (input: ICategoryModel) => {
     const validated = newCategoryValidationSchema.validate(input);
@@ -49,7 +49,7 @@ const makeCategoryRepository = ({ categoryDb }): ICategoryRepository => {
   return {
     getCategoryById,
     getCategoriesByIds,
-    getAllCategories,
+    getCategories,
     createCategory
   };
 };

@@ -24,7 +24,7 @@ const mockExpectedPosition = {
 const positionContext = {
   getPositionById: jest.fn(),
   getPositionByIds: jest.fn(),
-  getAllPosition: jest.fn(),
+  getPositions: jest.fn(),
   createPosition: jest.fn()
 };
 
@@ -108,22 +108,22 @@ describe('Position schema', () => {
     });
   });
 
-  describe('Query.allPositions', () => {
+  describe('Query.positions', () => {
     const query = `
-      query allPositions {
-        allPositions {
+      query positions {
+        positions {
           ${FIELDS}
         }
       }
     `;
 
-    it('should return all positions', async () => {
+    it('should return positions', async () => {
       userContext.getUserById.mockResolvedValue(mockUser);
-      positionContext.getAllPosition.mockResolvedValue([mockPosition]);
+      positionContext.getPositions.mockResolvedValue([mockPosition]);
 
       const { data } = await graphql(schema, query, null, context);
 
-      expect(data.allPositions).toEqual([mockExpectedPosition]);
+      expect(data.positions).toEqual([mockExpectedPosition]);
     });
   });
 

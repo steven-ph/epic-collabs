@@ -6,7 +6,7 @@ const mockRepo = {
   getProjectsByCategoryId: jest.fn(),
   getProjectsByPositionId: jest.fn(),
   getProjectsByUserId: jest.fn(),
-  getAllProjects: jest.fn(),
+  getProjects: jest.fn(),
   createProject: jest.fn(),
   updateProject: jest.fn(),
   changeProjectOwnership: jest.fn()
@@ -81,14 +81,14 @@ describe('ProjectService', () => {
     });
   });
 
-  describe('getAllProjects', () => {
-    it('should get all projects', async () => {
-      mockRepo.getAllProjects.mockResolvedValue([mockProject]);
+  describe('getProjects', () => {
+    it('should get projects', async () => {
+      mockRepo.getProjects.mockResolvedValue([mockProject]);
 
-      const res = await service.getAllProjects();
+      const res = await service.getProjects();
 
       expect(res).toEqual([mockProject]);
-      expect(mockRepo.getAllProjects).toHaveBeenCalled();
+      expect(mockRepo.getProjects).toHaveBeenCalled();
     });
   });
 

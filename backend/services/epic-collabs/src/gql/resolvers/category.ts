@@ -4,7 +4,7 @@ export const resolvers = {
   Query: {
     categoryById: (_, { id }, ctx: IContext) => ctx.Category.getCategoryById(id),
     categoriesByIds: (_, { ids }, ctx: IContext) => ctx.Category.getCategoriesByIds(ids),
-    allCategories: (_, __, ctx: IContext) => ctx.Category.getAllCategories()
+    categories: (_, __, ctx: IContext) => ctx.Category.getCategories()
   },
   Mutation: {
     newCategory: (_, { input }, ctx: IContext) => ctx.Category.createCategory({ ...input, createdBy: ctx.viewer.id })

@@ -19,7 +19,7 @@ const typeDefs = gql`
   type Query {
     positionById(id: String!): Position
     positionsByIds(ids: [String!]!): [Position]
-    allPositions: [Position]
+    positions: [Position]
   }
 
   type Mutation {

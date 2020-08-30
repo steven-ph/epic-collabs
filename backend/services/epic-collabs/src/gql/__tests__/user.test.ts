@@ -14,7 +14,8 @@ const userContext = {
   joinProject: jest.fn(),
   followProject: jest.fn(),
   unfollowProject: jest.fn(),
-  leaveProject: jest.fn()
+  leaveProject: jest.fn(),
+  removeUserFromProject: jest.fn()
 };
 
 const viewer = {
@@ -223,6 +224,29 @@ describe('User schema', () => {
       });
 
       expect(data.leaveProject).toEqual({
+        _id: 'mock-userId',
+        success: true
+      });
+    });
+  });
+
+  describe('Mutation.removeUserFromProject', () => {
+    const mutation = `
+      mutation removeUserFromProject($input: RemoveUserFromProjectInput!) {
+        removeUserFromProject(input: $input) {
+          _id
+          success
+        }
+      }
+    `;
+
+    it('should remove a user from the project', async () => {
+      userContext.removeUserFromProject.mockResolvedValue(true);
+      const { data } = await graphql(schema, mutation, null, context, {
+        input: { projectId: 'mock-id', positionId: 'mock-pos-id', userId: 'mock-user' }
+      });
+
+      expect(data.removeUserFromProject).toEqual({
         _id: 'mock-userId',
         success: true
       });

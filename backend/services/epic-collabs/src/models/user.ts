@@ -107,6 +107,15 @@ const joinProjectValidationSchema = Joi.object()
   })
   .required();
 
+const removeUserFromProjectValidationSchema = Joi.object()
+  .keys({
+    ownerId: Joi.string().required(),
+    userId: Joi.string().required(),
+    projectId: Joi.string().required(),
+    positionId: Joi.string().required()
+  })
+  .required();
+
 const followProjectValidationSchema = Joi.object()
   .keys({
     userId: Joi.string().required(),
@@ -125,5 +134,6 @@ export {
   joinProjectValidationSchema,
   followProjectValidationSchema,
   unfollowProjectValidationSchema,
-  leaveProjectValidationSchema
+  leaveProjectValidationSchema,
+  removeUserFromProjectValidationSchema
 };

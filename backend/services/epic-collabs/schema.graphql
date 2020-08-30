@@ -37,13 +37,13 @@ type Query {
   usersByEmails(emails: [String!]!): [User]
   categoryById(id: String!): Category
   categoriesByIds(ids: [String!]!): [Category]
-  allCategories: [Category]
+  categories: [Category]
   positionById(id: String!): Position
   positionsByIds(ids: [String!]!): [Position]
-  allPositions: [Position]
+  positions: [Position]
   projectById(id: String!): Project
   projectsByIds(ids: [String!]!): [Project]
-  allProjects: [Project]
+  projects: [Project]
 }
 
 input JoinProjectInput {
@@ -51,30 +51,69 @@ input JoinProjectInput {
   positionId: String!
 }
 
+type JoinProjectResult {
+  _id: ID
+  success: Boolean
+  project: Project
+}
+
 input FollowProjectInput {
   projectId: String!
+}
+
+type FollowProjectResult {
+  _id: ID
+  success: Boolean
+  project: Project
 }
 
 input UnfollowProjectInput {
   projectId: String!
 }
 
+type UnfollowProjectResult {
+  _id: ID
+  success: Boolean
+  project: Project
+}
+
 input LeaveProjectInput {
   projectId: String!
 }
 
+type LeaveProjectResult {
+  _id: ID
+  success: Boolean
+  project: Project
+}
+
+input RemoveUserFromProjectInput {
+  userId: String!
+  projectId: String!
+  positionId: String!
+}
+
+type RemoveUserFromProjectResult {
+  _id: ID
+  success: Boolean
+  project: Project
+}
+
 type Mutation {
   """restricted to: [VIEWER]"""
-  joinProject(input: JoinProjectInput!): Boolean
+  joinProject(input: JoinProjectInput!): JoinProjectResult
 
   """restricted to: [VIEWER]"""
-  followProject(input: FollowProjectInput!): Boolean
+  followProject(input: FollowProjectInput!): FollowProjectResult
 
   """restricted to: [VIEWER]"""
-  unfollowProject(input: UnfollowProjectInput!): Boolean
+  unfollowProject(input: UnfollowProjectInput!): UnfollowProjectResult
 
   """restricted to: [VIEWER]"""
-  leaveProject(input: LeaveProjectInput!): Boolean
+  leaveProject(input: LeaveProjectInput!): LeaveProjectResult
+
+  """restricted to: [VIEWER]"""
+  removeUserFromProject(input: RemoveUserFromProjectInput!): RemoveUserFromProjectResult
 
   """restricted to: [VIEWER]"""
   newCategory(input: CategoryInput!): Category
@@ -83,13 +122,13 @@ type Mutation {
   newPosition(input: PositionInput!): Position
 
   """restricted to: [VIEWER]"""
-  newProject(input: ProjectInput!): Project
+  newProject(input: NewProjectInput!): Project
 
   """restricted to: [VIEWER]"""
-  updateProject(input: ProjectInput!): Project
+  updateProject(input: UpdateProjectInput!): UpdateProjectResult
 
   """restricted to: [VIEWER]"""
-  changeProjectOwnership(input: ChangeProjectOwnershipInput!): Project
+  changeProjectOwnership(input: ChangeProjectOwnershipInput!): ChangeProjectOwnershipResult
 }
 
 type Category {
@@ -154,8 +193,37 @@ type Resource {
   url: String
 }
 
-input ProjectInput {
+type UpdateProjectResult {
   _id: ID
+  success: Boolean
+  project: Project
+}
+
+type ChangeProjectOwnershipResult {
+  _id: ID
+  success: Boolean
+  project: Project
+}
+
+input NewProjectInput {
+  _id: ID
+  slug: String
+  name: String!
+  description: String!
+  image: String
+  coverImage: String
+  createdAt: Float
+  updatedAt: Float
+  collaborators: [CollaboratorInput!]
+  categories: [String!]!
+  resources: [ResourceInput!]
+  followers: [String!]
+  status: Status
+  visibility: Visibility
+}
+
+input UpdateProjectInput {
+  _id: ID!
   slug: String!
   name: String!
   description: String!

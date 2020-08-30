@@ -5,6 +5,7 @@ import {
   IFollowProjectInput,
   IUnfollowProjectInput,
   ILeaveProjectInput,
+  IRemoveUserFromProjectInput,
   IUserRepositoryDI
 } from '../repositories/user';
 
@@ -18,6 +19,7 @@ interface IUserService {
   followProject: (input: IFollowProjectInput) => Promise<boolean>;
   unfollowProject: (input: IUnfollowProjectInput) => Promise<boolean>;
   leaveProject: (input: ILeaveProjectInput) => Promise<boolean>;
+  removeUserFromProject: (input: IRemoveUserFromProjectInput) => Promise<boolean>;
 }
 
 interface IUserServiceDI {
@@ -34,6 +36,7 @@ const makeUserService = ({ userRepo }: IUserServiceDI): IUserService => {
   const followProject = (input: IFollowProjectInput) => userRepo.followProject(input);
   const unfollowProject = (input: IUnfollowProjectInput) => userRepo.unfollowProject(input);
   const leaveProject = (input: ILeaveProjectInput) => userRepo.leaveProject(input);
+  const removeUserFromProject = (input: IRemoveUserFromProjectInput) => userRepo.removeUserFromProject(input);
 
   return {
     handleLogin,
@@ -44,7 +47,8 @@ const makeUserService = ({ userRepo }: IUserServiceDI): IUserService => {
     joinProject,
     followProject,
     unfollowProject,
-    leaveProject
+    leaveProject,
+    removeUserFromProject
   };
 };
 

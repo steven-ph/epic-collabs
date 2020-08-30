@@ -61,7 +61,7 @@ describe('ProjectRepository', () => {
       mockCreate.mockResolvedValue(mockProject);
 
       const res = await projectRepo.createProject({
-        name: 'project name',
+        name: 'Project name',
         description: 'description',
         categories: ['mock-cat'],
         createdBy: 'blah'
@@ -70,7 +70,7 @@ describe('ProjectRepository', () => {
       expect(res).toEqual(mockProject);
 
       expect(mockCreate).toHaveBeenCalledWith({
-        name: 'project name',
+        name: 'Project name',
         slug: 'project-name-random-string-random-string',
         description: 'description',
         categories: ['mock-cat'],
@@ -232,11 +232,11 @@ describe('ProjectRepository', () => {
     });
   });
 
-  describe('#getAllProjects', () => {
-    it('should get all', async () => {
+  describe('#getProjects', () => {
+    it('should get projects', async () => {
       mockFind.mockResolvedValue([mockProject]);
 
-      const response = await projectRepo.getAllProjects();
+      const response = await projectRepo.getProjects();
 
       expect(response).toEqual([mockProject]);
     });

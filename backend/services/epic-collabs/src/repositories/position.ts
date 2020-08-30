@@ -7,7 +7,7 @@ import { IPositionModel, newPositionValidationSchema } from '../models/position'
 interface IPositionRepository {
   getPositionById: (id: string) => Promise<IPositionModel>;
   getPositionByIds: (ids: string[]) => Promise<IPositionModel[]>;
-  getAllPosition: () => Promise<IPositionModel[]>;
+  getPositions: () => Promise<IPositionModel[]>;
   createPosition: (input: IPositionModel) => Promise<IPositionModel>;
 }
 
@@ -32,7 +32,7 @@ const makePositionRepository = ({ positionDb }): IPositionRepository => {
     return positionByIdLoader.loadMany(ids.map(id => `${id}`));
   };
 
-  const getAllPosition = memoize(async () => positionDb.find().lean());
+  const getPositions = memoize(async () => positionDb.find().lean());
 
   const createPosition = (input: IPositionModel) => {
     const validated = newPositionValidationSchema.validate(input);
@@ -49,7 +49,7 @@ const makePositionRepository = ({ positionDb }): IPositionRepository => {
   return {
     getPositionById,
     getPositionByIds,
-    getAllPosition,
+    getPositions,
     createPosition
   };
 };

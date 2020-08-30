@@ -73,11 +73,11 @@ describe('PositionRepository', () => {
     });
   });
 
-  describe('#getAllPosition', () => {
-    it('should get all', async () => {
+  describe('#getPositions', () => {
+    it('should get positions', async () => {
       mockFind.mockResolvedValue([mockPosition]);
 
-      const response = await positionRepo.getAllPosition();
+      const response = await positionRepo.getPositions();
 
       expect(response).toEqual([mockPosition]);
     });

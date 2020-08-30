@@ -19,7 +19,7 @@ interface IProjectRepository {
   getProjectsByUserId: (id: string) => Promise<IProjectModel[]>;
   getProjectsByCategoryId: (id: string) => Promise<IProjectModel[]>;
   getProjectsByPositionId: (id: string) => Promise<IProjectModel[]>;
-  getAllProjects: () => Promise<IProjectModel[]>;
+  getProjects: () => Promise<IProjectModel[]>;
   createProject: (input: IProjectModel) => Promise<IProjectModel>;
   updateProject: (input: IProjectModel) => Promise<IProjectModel>;
   changeProjectOwnership: (input: IChangeProjectOwnershipInput) => Promise<IProjectModel>;
@@ -63,7 +63,7 @@ const makeProjectRepository = ({ projectDb }): IProjectRepository => {
     (...args) => JSON.stringify(args)
   );
 
-  const getAllProjects = memoize(async () => projectDb.find().lean());
+  const getProjects = memoize(async () => projectDb.find().lean());
 
   const createProject = (input: IProjectModel) => {
     const validated = newProjectValidationSchema.validate(input);
@@ -76,7 +76,7 @@ const makeProjectRepository = ({ projectDb }): IProjectRepository => {
 
     const { name } = input;
 
-    const slug = `${kebabCase(name)}-${generate()}-${generate()}`;
+    const slug = `${kebabCase(name)}-${generate()}-${generate()}`.toLowerCase();
 
     return projectDb.create({ ...input, slug });
   };
@@ -106,7 +106,7 @@ const makeProjectRepository = ({ projectDb }): IProjectRepository => {
     const collaborators = values(get(existingProject, 'collaborators'));
     const collabIds = [createdBy, ...collaborators.map(c => c.userId)].filter(Boolean);
 
-    if (!collabIds.includes(updatedBy)) {
+    if (!collabIds.includes(updatedBy) && !input.isInternalUpdate) {
       const errMsg = 'updateProject error: user is not the project owner or collaborator';
       logger.error(errMsg, null, { input });
 
@@ -115,7 +115,7 @@ const makeProjectRepository = ({ projectDb }): IProjectRepository => {
 
     invalidateCache(_id);
 
-    return projectDb.findOneAndUpdate({ _id }, omit(input, 'updatedBy'), updateOptions);
+    return projectDb.findOneAndUpdate({ _id }, omit(input, ['updatedBy', 'isInternalUpdate']), updateOptions);
   };
 
   const changeProjectOwnership = async (input: IChangeProjectOwnershipInput) => {
@@ -156,7 +156,7 @@ const makeProjectRepository = ({ projectDb }): IProjectRepository => {
     getProjectsByUserId,
     getProjectsByCategoryId,
     getProjectsByPositionId,
-    getAllProjects,
+    getProjects,
     createProject,
     updateProject,
     changeProjectOwnership

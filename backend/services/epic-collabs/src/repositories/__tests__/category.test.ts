@@ -75,11 +75,11 @@ describe('CategoryRepository', () => {
     });
   });
 
-  describe('#getAllCategories', () => {
-    it('should get all', async () => {
+  describe('#getCategories', () => {
+    it('should get categories', async () => {
       mockFind.mockResolvedValue([mockCategory]);
 
-      const response = await categoryRepo.getAllCategories();
+      const response = await categoryRepo.getCategories();
 
       expect(response).toEqual([mockCategory]);
     });
