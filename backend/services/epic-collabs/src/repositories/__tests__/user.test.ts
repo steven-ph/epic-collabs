@@ -86,33 +86,28 @@ describe('UserRepository', () => {
 
     it('should not join the project if the input is invalid', async () => {
       // @ts-ignore
-      const res = await userRepo.joinProject({ foo: 'bar' });
-
-      expect(res).toEqual(false);
+      return expect(() => userRepo.joinProject({ foo: 'bar' })).rejects.toThrow();
     });
 
     it('should not join the user if it does not exist', async () => {
       mockLoad.mockResolvedValue(null);
       projectService.getProjectById.mockResolvedValue(mockProject);
-      const res = await userRepo.joinProject({ ...input });
 
-      expect(res).toEqual(false);
+      return expect(() => userRepo.joinProject({ ...input })).rejects.toThrow();
     });
 
     it('should not join the project if it does not exist', async () => {
       mockLoad.mockResolvedValue(mockUser);
       projectService.getProjectById.mockResolvedValue(null);
-      const res = await userRepo.joinProject({ ...input });
 
-      expect(res).toEqual(false);
+      return expect(() => userRepo.joinProject({ ...input })).rejects.toThrow();
     });
 
     it('should handle an error', async () => {
       mockLoad.mockResolvedValue(mockUser);
       projectService.getProjectById.mockRejectedValue(new Error('some error'));
-      const res = await userRepo.joinProject({ ...input });
 
-      expect(res).toEqual(false);
+      return expect(() => userRepo.joinProject({ ...input })).rejects.toThrow();
     });
 
     it('should join the project', async () => {
@@ -164,33 +159,28 @@ describe('UserRepository', () => {
 
     it('should not follow the project if the input is invalid', async () => {
       // @ts-ignore
-      const res = await userRepo.followProject({ foo: 'bar' });
-
-      expect(res).toEqual(false);
+      return expect(() => userRepo.followProject({ foo: 'bar' })).rejects.toThrow();
     });
 
     it('should not follow the user if it does not exist', async () => {
       mockLoad.mockResolvedValue(null);
       projectService.getProjectById.mockResolvedValue(mockProject);
-      const res = await userRepo.followProject({ ...input });
 
-      expect(res).toEqual(false);
+      return expect(() => userRepo.followProject({ ...input })).rejects.toThrow();
     });
 
     it('should not follow the project if it does not exist', async () => {
       mockLoad.mockResolvedValue(mockUser);
       projectService.getProjectById.mockResolvedValue(null);
-      const res = await userRepo.followProject({ ...input });
 
-      expect(res).toEqual(false);
+      return expect(() => userRepo.followProject({ ...input })).rejects.toThrow();
     });
 
     it('should handle an error', async () => {
       mockLoad.mockResolvedValue(mockUser);
       projectService.getProjectById.mockRejectedValue(new Error('some error'));
-      const res = await userRepo.followProject({ ...input });
 
-      expect(res).toEqual(false);
+      return expect(() => userRepo.followProject({ ...input })).rejects.toThrow();
     });
 
     it('should follow the project', async () => {
@@ -211,33 +201,28 @@ describe('UserRepository', () => {
 
     it('should not unfollow the project if the input is invalid', async () => {
       // @ts-ignore
-      const res = await userRepo.unfollowProject({ foo: 'bar' });
-
-      expect(res).toEqual(false);
+      return expect(() => userRepo.unfollowProject({ foo: 'bar' })).rejects.toThrow();
     });
 
     it('should not unfollow the user if it does not exist', async () => {
       mockLoad.mockResolvedValue(null);
       projectService.getProjectById.mockResolvedValue(mockProject);
-      const res = await userRepo.unfollowProject({ ...input });
 
-      expect(res).toEqual(false);
+      return expect(() => userRepo.unfollowProject({ ...input })).rejects.toThrow();
     });
 
     it('should not unfollow the project if it does not exist', async () => {
       mockLoad.mockResolvedValue(mockUser);
       projectService.getProjectById.mockResolvedValue(null);
-      const res = await userRepo.unfollowProject({ ...input });
 
-      expect(res).toEqual(false);
+      return expect(() => userRepo.unfollowProject({ ...input })).rejects.toThrow();
     });
 
     it('should handle an error', async () => {
       mockLoad.mockResolvedValue(mockUser);
       projectService.getProjectById.mockRejectedValue(new Error('some error'));
-      const res = await userRepo.unfollowProject({ ...input });
 
-      expect(res).toEqual(false);
+      return expect(() => userRepo.unfollowProject({ ...input })).rejects.toThrow();
     });
 
     it('should unfollow the project', async () => {
@@ -258,41 +243,35 @@ describe('UserRepository', () => {
 
     it('should not leave the project if the input is invalid', async () => {
       // @ts-ignore
-      const res = await userRepo.leaveProject({ foo: 'bar' });
-
-      expect(res).toEqual(false);
+      return expect(() => userRepo.leaveProject({ foo: 'bar' })).rejects.toThrow();
     });
 
     it('should not leave the user if it does not exist', async () => {
       mockLoad.mockResolvedValue(null);
       projectService.getProjectById.mockResolvedValue(mockProject);
-      const res = await userRepo.leaveProject({ ...input });
 
-      expect(res).toEqual(false);
+      return expect(() => userRepo.leaveProject({ ...input })).rejects.toThrow();
     });
 
     it('should not leave the project if it does not exist', async () => {
       mockLoad.mockResolvedValue(mockUser);
       projectService.getProjectById.mockResolvedValue(null);
-      const res = await userRepo.leaveProject({ ...input });
 
-      expect(res).toEqual(false);
+      return expect(() => userRepo.leaveProject({ ...input })).rejects.toThrow();
     });
 
     it('should not leave the project if the user is still the owner', async () => {
       mockLoad.mockResolvedValue(mockUser);
       projectService.getProjectById.mockResolvedValue({ ...mockProject, createdBy: 'johndoe' });
-      const res = await userRepo.leaveProject({ ...input });
 
-      expect(res).toEqual(false);
+      return expect(() => userRepo.leaveProject({ ...input })).rejects.toThrow();
     });
 
     it('should handle an error', async () => {
       mockLoad.mockResolvedValue(mockUser);
       projectService.getProjectById.mockRejectedValue(new Error('some error'));
-      const res = await userRepo.leaveProject({ ...input });
 
-      expect(res).toEqual(false);
+      return expect(() => userRepo.leaveProject({ ...input })).rejects.toThrow();
     });
 
     it('should leave the project', async () => {
@@ -313,49 +292,42 @@ describe('UserRepository', () => {
 
     it('should not remove user from the project if the input is invalid', async () => {
       // @ts-ignore
-      const res = await userRepo.removeUserFromProject({ foo: 'bar' });
-
-      expect(res).toEqual(false);
+      return expect(() => userRepo.removeUserFromProject({ foo: 'bar' })).rejects.toThrow();
     });
 
     it('should not remove the user if it does not exist', async () => {
       mockLoad.mockResolvedValue(null);
       projectService.getProjectById.mockResolvedValue(mockProject);
-      const res = await userRepo.removeUserFromProject({ ...input });
 
-      expect(res).toEqual(false);
+      return expect(() => userRepo.removeUserFromProject({ ...input })).rejects.toThrow();
     });
 
     it('should not remove user from the project if it does not exist', async () => {
       mockLoad.mockResolvedValue(mockUser);
       projectService.getProjectById.mockResolvedValue(null);
-      const res = await userRepo.removeUserFromProject({ ...input });
 
-      expect(res).toEqual(false);
+      return expect(() => userRepo.removeUserFromProject({ ...input })).rejects.toThrow();
     });
 
     it('should not remove user from the project if the user is still the owner', async () => {
       mockLoad.mockResolvedValue(mockUser);
       projectService.getProjectById.mockResolvedValue({ ...mockProject, createdBy: 'johndoe' });
-      const res = await userRepo.removeUserFromProject({ ...input, userId: 'johndoe' });
 
-      expect(res).toEqual(false);
+      return expect(() => userRepo.removeUserFromProject({ ...input, userId: 'johndoe' })).rejects.toThrow();
     });
 
     it('should not remove user from the project if the user is not the owner', async () => {
       mockLoad.mockResolvedValue(mockUser);
       projectService.getProjectById.mockResolvedValue({ ...mockProject, createdBy: 'user-blah' });
-      const res = await userRepo.removeUserFromProject({ ...input });
 
-      expect(res).toEqual(false);
+      return expect(() => userRepo.removeUserFromProject({ ...input })).rejects.toThrow();
     });
 
     it('should handle an error', async () => {
       mockLoad.mockResolvedValue(mockUser);
       projectService.getProjectById.mockRejectedValue(new Error('some error'));
-      const res = await userRepo.removeUserFromProject({ ...input });
 
-      expect(res).toEqual(false);
+      return expect(() => userRepo.removeUserFromProject({ ...input })).rejects.toThrow();
     });
 
     it('should remove user from the project', async () => {
@@ -376,25 +348,21 @@ describe('UserRepository', () => {
 
     it('should not remove position from the project if the input is invalid', async () => {
       // @ts-ignore
-      const res = await userRepo.removePositionFromProject({ foo: 'bar' });
-
-      expect(res).toEqual(false);
+      return expect(() => userRepo.removePositionFromProject({ foo: 'bar' })).rejects.toThrow();
     });
 
     it('should not remove position from the project if it does not exist', async () => {
       mockLoad.mockResolvedValue(mockUser);
       projectService.getProjectById.mockResolvedValue(null);
-      const res = await userRepo.removePositionFromProject({ ...input });
 
-      expect(res).toEqual(false);
+      return expect(() => userRepo.removePositionFromProject({ ...input })).rejects.toThrow();
     });
 
     it('should not remove position from the project if the user is not the owner', async () => {
       mockLoad.mockResolvedValue(mockUser);
       projectService.getProjectById.mockResolvedValue({ ...mockProject, createdBy: 'user-blah' });
-      const res = await userRepo.removePositionFromProject({ ...input });
 
-      expect(res).toEqual(false);
+      return expect(() => userRepo.removePositionFromProject({ ...input })).rejects.toThrow();
     });
 
     it('should not remove the position from the project if the owner is still the collaborator of that position', async () => {
@@ -409,17 +377,15 @@ describe('UserRepository', () => {
           }
         ]
       });
-      const res = await userRepo.removePositionFromProject({ ...input });
 
-      expect(res).toEqual(false);
+      return expect(() => userRepo.removePositionFromProject({ ...input })).rejects.toThrow();
     });
 
     it('should handle an error', async () => {
       mockLoad.mockResolvedValue(mockUser);
       projectService.getProjectById.mockRejectedValue(new Error('some error'));
-      const res = await userRepo.removePositionFromProject({ ...input });
 
-      expect(res).toEqual(false);
+      return expect(() => userRepo.removePositionFromProject({ ...input })).rejects.toThrow();
     });
 
     it('should remove user from the project', async () => {

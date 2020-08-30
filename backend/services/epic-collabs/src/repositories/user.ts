@@ -144,7 +144,7 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       if (validated.error) {
         logger.error('joinProject error', { error: validated.error.message }, { input });
 
-        return false;
+        throw new Error(`joinProject error: ${validated.error.message}`);
       }
 
       const { userId, projectId, positionId } = input;
@@ -152,9 +152,10 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       const [user, project] = await Promise.all([getUserById(userId), projectService.getProjectById(projectId)]);
 
       if (isEmpty(user) || isEmpty(project)) {
-        logger.error('joinProject error: user or project not found', null, { input });
+        const errMsg = 'joinProject error: user or project not found';
+        logger.error(errMsg, null, { input });
 
-        return false;
+        throw new Error(errMsg);
       }
 
       const contributingProjects = values(get(user, 'contributingProjects'));
@@ -178,7 +179,7 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       return true;
     } catch (error) {
       logger.error('joinProject error', error, { input });
-      return false;
+      throw error;
     }
   };
 
@@ -189,7 +190,7 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       if (validated.error) {
         logger.error('followProject error', { error: validated.error.message }, { input });
 
-        return false;
+        throw new Error(`followProject error: ${validated.error.message}`);
       }
 
       const { userId, projectId } = input;
@@ -197,9 +198,10 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       const [user, project] = await Promise.all([getUserById(userId), projectService.getProjectById(projectId)]);
 
       if (isEmpty(user) || isEmpty(project)) {
-        logger.error('followProject error: user or project not found', null, { input });
+        const errMsg = 'followProject error: user or project not found';
+        logger.error(errMsg, null, { input });
 
-        return false;
+        throw new Error(errMsg);
       }
 
       const followingProjects = values(get(user, 'followingProjects'));
@@ -222,7 +224,7 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
     } catch (error) {
       logger.error('followProject error', error, { input });
 
-      return false;
+      throw error;
     }
   };
 
@@ -233,7 +235,7 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       if (validated.error) {
         logger.error('unfollowProject error', { error: validated.error.message }, { input });
 
-        return false;
+        throw new Error(`unfollowProject error: ${validated.error.message}`);
       }
 
       const { userId, projectId } = input;
@@ -241,9 +243,10 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       const [user, project] = await Promise.all([getUserById(userId), projectService.getProjectById(projectId)]);
 
       if (isEmpty(user) || isEmpty(project)) {
-        logger.error('unfollowProject error: user or project not found', null, { input });
+        const errMsg = 'unfollowProject error: user or project not found';
+        logger.error(errMsg, null, { input });
 
-        return false;
+        throw new Error(errMsg);
       }
 
       const followingProjects = values(get(user, 'followingProjects'));
@@ -262,7 +265,7 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       return true;
     } catch (error) {
       logger.error('unfollowProject error', error, { input });
-      return false;
+      throw error;
     }
   };
 
@@ -273,7 +276,7 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       if (validated.error) {
         logger.error('leaveProject error', { error: validated.error.message }, { input });
 
-        return false;
+        throw new Error(`leaveProject error: ${validated.error.message}`);
       }
 
       const { projectId, userId } = input;
@@ -281,23 +284,24 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       const [user, project] = await Promise.all([getUserById(userId), projectService.getProjectById(projectId)]);
 
       if (isEmpty(user) || isEmpty(project)) {
-        logger.error('joinProject error: user or project not found', null, { input });
+        const errMsg = 'joinProject error: user or project not found';
+        logger.error(errMsg, null, { input });
 
-        return false;
+        throw new Error(errMsg);
       }
 
       if (isEmpty(project)) {
         const errMsg = 'leaveProject error: project not found';
         logger.error(errMsg, null, { input });
 
-        return false;
+        throw new Error(errMsg);
       }
 
       if (project.createdBy === userId) {
         const errMsg = 'leaveProject error: user is still the owner of the project';
         logger.error(errMsg, null, { input });
 
-        return false;
+        throw new Error(errMsg);
       }
 
       const collaborators = values(get(project, 'collaborators'));
@@ -321,7 +325,7 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       return true;
     } catch (error) {
       logger.error('leaveProject error', error, { input });
-      return false;
+      throw error;
     }
   };
 
@@ -332,7 +336,7 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       if (validated.error) {
         logger.error('removeUserFromProject error', { error: validated.error.message }, { input });
 
-        return false;
+        throw new Error(`removeUserFromProject error: ${validated.error.message}`);
       }
 
       const { ownerId, userId, projectId, positionId } = input;
@@ -340,22 +344,24 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       const [user, project] = await Promise.all([getUserById(userId), projectService.getProjectById(projectId)]);
 
       if (isEmpty(user) || isEmpty(project)) {
-        logger.error('removeUserFromProject error: user or project not found', null, { input });
+        const errMsg = 'removeUserFromProject error: user or project not found';
+        logger.error(errMsg, null, { input });
 
-        return false;
+        throw new Error(errMsg);
       }
 
       if (project.createdBy === userId) {
         const errMsg = 'leaveProject error: user is still the owner of the project';
         logger.error(errMsg, null, { input });
 
-        return false;
+        throw new Error(errMsg);
       }
 
       if (project.createdBy !== ownerId) {
-        logger.error('removeUserFromProject error: user is not the project owner', null, { input });
+        const errMsg = 'removeUserFromProject error: user is not the project owner';
+        logger.error(errMsg, null, { input });
 
-        return false;
+        throw new Error(errMsg);
       }
 
       const collaborators = values(get(project, 'collaborators'));
@@ -379,7 +385,7 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       return true;
     } catch (error) {
       logger.error('removeUserFromProject error', error, { input });
-      return false;
+      throw error;
     }
   };
 
@@ -390,7 +396,7 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       if (validated.error) {
         logger.error('removePositionFromProject error', { error: validated.error.message }, { input });
 
-        return false;
+        throw new Error(`removePositionFromProject error: ${validated.error.message}`);
       }
 
       const { userId, projectId, positionId } = input;
@@ -398,15 +404,17 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       const project = await projectService.getProjectById(projectId);
 
       if (isEmpty(project)) {
-        logger.error('removePositionFromProject error: project not found', null, { input });
+        const errMsg = 'removePositionFromProject error: project not found';
+        logger.error(errMsg, null, { input });
 
-        return false;
+        throw new Error(errMsg);
       }
 
       if (project.createdBy !== userId) {
-        logger.error('removeUserFromProject error: user is not the project owner', null, { input });
+        const errMsg = 'removeUserFromProject error: user is not the project owner';
+        logger.error(errMsg, null, { input });
 
-        return false;
+        throw new Error(errMsg);
       }
 
       const collaborators = values(get(project, 'collaborators'));
@@ -417,7 +425,7 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
         const errMsg = 'removePositionFromProject error: user is still the owner of the project';
         logger.error(errMsg, null, { input });
 
-        return false;
+        throw new Error(errMsg);
       }
 
       const editedCollaborators = collaborators.filter(c => c && c.positionId !== positionId);
@@ -445,7 +453,7 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       return true;
     } catch (error) {
       logger.error('removePositionFromProject error', error, { input });
-      return false;
+      throw error;
     }
   };
 

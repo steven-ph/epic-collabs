@@ -99,6 +99,28 @@ type RemoveUserFromProjectResult {
   project: Project
 }
 
+input RemovePositionFromProjectInput {
+  projectId: String!
+  positionId: String!
+}
+
+type RemovePositionFromProjectResult {
+  _id: ID
+  success: Boolean
+  project: Project
+}
+
+input ChangeProjectOwnershipInput {
+  projectId: String
+  toUserId: String
+}
+
+type ChangeProjectOwnershipResult {
+  _id: ID
+  success: Boolean
+  project: Project
+}
+
 type Mutation {
   """restricted to: [VIEWER]"""
   joinProject(input: JoinProjectInput!): JoinProjectResult
@@ -116,6 +138,12 @@ type Mutation {
   removeUserFromProject(input: RemoveUserFromProjectInput!): RemoveUserFromProjectResult
 
   """restricted to: [VIEWER]"""
+  removePositionFromProject(input: RemovePositionFromProjectInput!): RemovePositionFromProjectResult
+
+  """restricted to: [VIEWER]"""
+  changeProjectOwnership(input: ChangeProjectOwnershipInput!): ChangeProjectOwnershipResult
+
+  """restricted to: [VIEWER]"""
   newCategory(input: CategoryInput!): Category
 
   """restricted to: [VIEWER]"""
@@ -126,9 +154,6 @@ type Mutation {
 
   """restricted to: [VIEWER]"""
   updateProject(input: UpdateProjectInput!): UpdateProjectResult
-
-  """restricted to: [VIEWER]"""
-  changeProjectOwnership(input: ChangeProjectOwnershipInput!): ChangeProjectOwnershipResult
 }
 
 type Category {
@@ -199,12 +224,6 @@ type UpdateProjectResult {
   project: Project
 }
 
-type ChangeProjectOwnershipResult {
-  _id: ID
-  success: Boolean
-  project: Project
-}
-
 input NewProjectInput {
   _id: ID
   slug: String
@@ -224,15 +243,15 @@ input NewProjectInput {
 
 input UpdateProjectInput {
   _id: ID!
-  slug: String!
-  name: String!
-  description: String!
+  slug: String
+  name: String
+  description: String
   image: String
   coverImage: String
   createdAt: Float
   updatedAt: Float
   collaborators: [CollaboratorInput!]
-  categories: [String!]!
+  categories: [String!]
   resources: [ResourceInput!]
   followers: [String!]
   status: Status
@@ -247,11 +266,6 @@ input CollaboratorInput {
 input ResourceInput {
   name: String
   url: String
-}
-
-input ChangeProjectOwnershipInput {
-  projectId: String
-  toUserId: String
 }
 
 enum Role {
