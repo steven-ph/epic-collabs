@@ -2,7 +2,7 @@ import { get } from 'lodash';
 import { makeUserContext, IUserService } from './context/user';
 import { makeCategoryContext, ICategoryService } from './context/category';
 import { makePositionContext, IPositionService } from './context/position';
-import { makeProjectContext, IProjectService } from './context/Project';
+import { makeProjectContext, IProjectService } from './context/project';
 
 interface IViewer {
   id: string;
