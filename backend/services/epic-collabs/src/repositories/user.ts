@@ -513,7 +513,7 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
     try {
       const [user, created] = await Promise.all([getUserById(input.createdBy), projectService.createProject(input)]);
 
-      await _upsertUser({ ...user, createdProjects: [created._id, ...(user.createdProjects || [])] });
+      await _upsertUser({ ...user, createdProjects: uniq([`${created._id}`, ...(user.createdProjects || [])]) });
 
       return created;
     } catch (error) {
