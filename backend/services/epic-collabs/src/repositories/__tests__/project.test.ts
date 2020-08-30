@@ -9,9 +9,13 @@ jest.mock('dataloader', () =>
   }))
 );
 
+jest.mock('shortid', () => ({
+  generate: jest.fn().mockReturnValue('random-string')
+}));
+
 const mockFindMany = jest.fn();
 jest.mock('../../utils/dataloader', () => ({
-  mongoFindMany: mockFindMany
+  findMany: mockFindMany
 }));
 
 import { makeProjectRepository, IProjectRepository } from '../project';
@@ -35,16 +39,13 @@ const mockProject = {
 
 const mockCreate = jest.fn();
 const mockFind = jest.fn().mockReturnThis();
-const mockExec = jest.fn();
 const mockFindOneAndUpdate = jest.fn();
 
 const mockProjectDb = {
   create: mockCreate,
   findOneAndUpdate: mockFindOneAndUpdate,
-  find: mockFind,
-  where: jest.fn().mockReturnThis(),
-  in: jest.fn().mockReturnThis(),
-  exec: mockExec
+  find: jest.fn().mockReturnThis(),
+  lean: mockFind
 };
 
 describe('ProjectRepository', () => {
@@ -61,7 +62,6 @@ describe('ProjectRepository', () => {
 
       const res = await projectRepo.createProject({
         name: 'project name',
-        slug: 'slug',
         description: 'description',
         categories: ['mock-cat'],
         createdBy: 'blah'
@@ -71,7 +71,7 @@ describe('ProjectRepository', () => {
 
       expect(mockCreate).toHaveBeenCalledWith({
         name: 'project name',
-        slug: 'slug',
+        slug: 'project-name-random-string-random-string',
         description: 'description',
         categories: ['mock-cat'],
         createdBy: 'blah'
@@ -119,7 +119,7 @@ describe('ProjectRepository', () => {
       expect(mockFindOneAndUpdate).toHaveBeenCalledWith(
         { _id: mockProject._id },
         { ...mockProject },
-        { new: true, upsert: true, omitUndefined: true }
+        { new: true, lean: true, upsert: true, omitUndefined: true }
       );
     });
 
@@ -136,7 +136,7 @@ describe('ProjectRepository', () => {
       expect(mockFindOneAndUpdate).toHaveBeenCalledWith(
         { _id: mockProject._id },
         { ...mockProject },
-        { new: true, upsert: true, omitUndefined: true }
+        { new: true, lean: true, upsert: true, omitUndefined: true }
       );
     });
   });
@@ -177,7 +177,7 @@ describe('ProjectRepository', () => {
       expect(mockFindOneAndUpdate).toHaveBeenCalledWith(
         { _id: mockProject._id },
         { ...mockProject, createdBy: 'new-userid' },
-        { new: true, upsert: true, omitUndefined: true }
+        { new: true, lean: true, upsert: true, omitUndefined: true }
       );
     });
   });

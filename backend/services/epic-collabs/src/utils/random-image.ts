@@ -1,6 +1,6 @@
-import { v4 as uuidv4 } from 'uuid';
+import { generate } from 'shortid';
 
-const generateAvatar = () => `https://gravatar.com/avatar/${uuidv4()}?d=identicon`;
+const generateAvatar = () => `https://gravatar.com/avatar/${generate()}?d=identicon`;
 
 const generateImage = ({ width, height }) => `https://picsum.photos/${width}/${height}`;
 

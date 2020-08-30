@@ -16,17 +16,29 @@ const makeCategoryRepository = ({ categoryDb }): ICategoryRepository => {
     cacheKeyFn: key => JSON.stringify(key)
   });
 
-  const getCategoryById = async id => categoryByIdLoader.load(`${id}`);
+  const getCategoryById = async id => {
+    if (!id) {
+      return null;
+    }
 
-  const getCategoriesByIds = async ids => categoryByIdLoader.loadMany(ids.map(id => `${id}`));
+    return categoryByIdLoader.load(`${id}`);
+  };
 
-  const getAllCategories = memoize(async () => categoryDb.find());
+  const getCategoriesByIds = async ids => {
+    if (!ids) {
+      return null;
+    }
+
+    return categoryByIdLoader.loadMany(ids.map(id => `${id}`));
+  };
+
+  const getAllCategories = memoize(async () => categoryDb.find().lean());
 
   const createCategory = (input: ICategoryModel) => {
     const validated = newCategoryValidationSchema.validate(input);
 
     if (validated.error) {
-      logger.error('createCategory error', validated.error, { input });
+      logger.error('createCategory error', { error: validated.error.message }, { input });
 
       throw new Error('createCategory error:' + validated.error.message);
     }

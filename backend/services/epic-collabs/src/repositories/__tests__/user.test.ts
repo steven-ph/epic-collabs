@@ -65,7 +65,11 @@ describe('UserRepository', () => {
       const res = await userRepo.handleLogin({ ...mockUser });
 
       expect(res).toEqual(mockUser);
-      expect(mockFindOneAndUpdate).toHaveBeenCalledWith({ _id: mockUser._id }, { ...mockUser }, { new: true, upsert: true, omitUndefined: true });
+      expect(mockFindOneAndUpdate).toHaveBeenCalledWith(
+        { _id: mockUser._id },
+        { ...mockUser },
+        { new: true, lean: true, upsert: true, omitUndefined: true }
+      );
     });
 
     it('should not upsert user in the db if the input is invalid', () => {

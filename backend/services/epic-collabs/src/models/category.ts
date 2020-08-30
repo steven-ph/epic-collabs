@@ -18,42 +18,45 @@ interface ICategoryModel {
 
 type CategoryDocument = ICategoryModel & Document;
 
-const CategorySchema: Schema = new Schema({
-  name: {
-    type: String,
-    required: true,
-    trim: true
+const CategorySchema: Schema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    description: {
+      type: String,
+      trim: true
+    },
+    picture: {
+      type: String,
+      default: generateAvatar
+    },
+    visibility: {
+      type: String,
+      default: Visibility.VISIBLE
+    },
+    createdAt: {
+      type: Number,
+      default: Date.now
+    },
+    updatedAt: {
+      type: Number,
+      default: Date.now
+    },
+    createdBy: {
+      type: String,
+      ref: 'User'
+    },
+    projects: {
+      type: [String],
+      ref: 'Project',
+      default: []
+    }
   },
-  description: {
-    type: String,
-    trim: true
-  },
-  picture: {
-    type: String,
-    default: generateAvatar
-  },
-  visibility: {
-    type: String,
-    default: Visibility.VISIBLE
-  },
-  createdAt: {
-    type: Number,
-    default: Date.now
-  },
-  updatedAt: {
-    type: Number,
-    default: Date.now
-  },
-  createdBy: {
-    type: String,
-    ref: 'User'
-  },
-  projects: {
-    type: [String],
-    ref: 'Project',
-    default: []
-  }
-});
+  { versionKey: false }
+);
 
 const newCategoryValidationSchema = Joi.object()
   .keys({

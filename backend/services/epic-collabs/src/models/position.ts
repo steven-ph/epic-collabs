@@ -16,38 +16,41 @@ interface IPositionModel {
 
 type PositionDocument = IPositionModel & Document;
 
-const PositionSchema: Schema = new Schema({
-  name: {
-    type: String,
-    required: true,
-    trim: true
+const PositionSchema: Schema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    description: {
+      type: String,
+      trim: true
+    },
+    visibility: {
+      type: String,
+      default: Visibility.VISIBLE
+    },
+    createdAt: {
+      type: Number,
+      default: Date.now
+    },
+    updatedAt: {
+      type: Number,
+      default: Date.now
+    },
+    createdBy: {
+      type: String,
+      ref: 'User'
+    },
+    projects: {
+      type: [String],
+      ref: 'Project',
+      default: []
+    }
   },
-  description: {
-    type: String,
-    trim: true
-  },
-  visibility: {
-    type: String,
-    default: Visibility.VISIBLE
-  },
-  createdAt: {
-    type: Number,
-    default: Date.now
-  },
-  updatedAt: {
-    type: Number,
-    default: Date.now
-  },
-  createdBy: {
-    type: String,
-    ref: 'User'
-  },
-  projects: {
-    type: [String],
-    ref: 'Project',
-    default: []
-  }
-});
+  { versionKey: false }
+);
 
 const newPositionValidationSchema = Joi.object()
   .keys({

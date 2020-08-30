@@ -16,17 +16,29 @@ const makePositionRepository = ({ positionDb }): IPositionRepository => {
     cacheKeyFn: key => JSON.stringify(key)
   });
 
-  const getPositionById = async id => positionByIdLoader.load(`${id}`);
+  const getPositionById = async id => {
+    if (!id) {
+      return null;
+    }
 
-  const getPositionByIds = async ids => positionByIdLoader.loadMany(ids.map(id => `${id}`));
+    return positionByIdLoader.load(`${id}`);
+  };
 
-  const getAllPosition = memoize(async () => positionDb.find());
+  const getPositionByIds = async ids => {
+    if (!ids) {
+      return null;
+    }
+
+    return positionByIdLoader.loadMany(ids.map(id => `${id}`));
+  };
+
+  const getAllPosition = memoize(async () => positionDb.find().lean());
 
   const createPosition = (input: IPositionModel) => {
     const validated = newPositionValidationSchema.validate(input);
 
     if (validated.error) {
-      logger.error('createPosition error', validated.error, { input });
+      logger.error('createPosition error', { error: validated.error.message }, { input });
 
       throw new Error('createPosition error:' + validated.error.message);
     }

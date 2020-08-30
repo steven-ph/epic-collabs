@@ -44,7 +44,7 @@ const typeDefs = gql`
 
   input NewProjectInput {
     _id: ID
-    slug: String!
+    slug: String
     name: String!
     description: String!
     image: String

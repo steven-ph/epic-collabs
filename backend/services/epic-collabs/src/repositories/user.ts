@@ -1,5 +1,5 @@
 import Dataloader from 'dataloader';
-import { get, isEmpty, values } from 'lodash';
+import { get, isEmpty, values, uniq } from 'lodash';
 import { logger } from '@sp-tools/kloud-logger';
 import { makeLoader } from '../utils/dataloader';
 import { IProjectService } from '../services/project';
@@ -65,32 +65,56 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
     const validated = upsertUserValidationSchema.validate(input);
 
     if (validated.error) {
-      logger.error('upsertUser error', validated.error, { input });
+      logger.error('upsertUser error', { error: validated.error.message }, { input });
 
       throw new Error('upsertUser error: ' + validated.error.message);
     }
 
     const _id = get(input, '_id');
 
-    const options = { new: true, upsert: true, omitUndefined: true };
+    const options = { new: true, lean: true, upsert: true, omitUndefined: true };
 
     return userDb.findOneAndUpdate({ _id }, input, options);
   };
 
-  const getUserById = async id => userByIdLoader.load(`${id}`);
+  const getUserById = async id => {
+    if (!id) {
+      return null;
+    }
 
-  const getUsersByIds = async ids => userByIdLoader.loadMany(ids.map(id => `${id}`));
+    return userByIdLoader.load(`${id}`);
+  };
 
-  const getUserByEmail = async email => userByEmailLoader.load(`${email}`);
+  const getUsersByIds = async ids => {
+    if (!ids) {
+      return null;
+    }
 
-  const getUsersByEmails = async emails => userByEmailLoader.loadMany(emails.map(email => `${email}`));
+    return userByIdLoader.loadMany(ids.map(id => `${id}`));
+  };
+
+  const getUserByEmail = async email => {
+    if (!email) {
+      return null;
+    }
+
+    return userByEmailLoader.load(`${email}`);
+  };
+
+  const getUsersByEmails = async emails => {
+    if (!emails) {
+      return null;
+    }
+
+    return userByEmailLoader.loadMany(emails.map(email => `${email}`));
+  };
 
   const joinProject = async (input: IJoinProjectInput) => {
     try {
       const validated = joinProjectValidationSchema.validate(input);
 
       if (validated.error) {
-        logger.error('joinProject error', validated.error, { input });
+        logger.error('joinProject error', { error: validated.error.message }, { input });
 
         return false;
       }
@@ -119,8 +143,8 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       );
 
       await Promise.all([
-        _upsertUser({ ...user, contributingProjects: [projectId, ...contributingProjects] }),
-        projectService.updateProject({ ...project, collaborators: editedCollaborators })
+        _upsertUser({ ...user, _id: userId, contributingProjects: uniq([projectId, ...contributingProjects]) }),
+        projectService.updateProject({ ...project, updatedBy: userId, collaborators: editedCollaborators })
       ]);
 
       return true;
@@ -135,7 +159,7 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       const validated = followProjectValidationSchema.validate(input);
 
       if (validated.error) {
-        logger.error('followProject error', validated.error, { input });
+        logger.error('followProject error', { error: validated.error.message }, { input });
 
         return false;
       }
@@ -151,16 +175,20 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       }
 
       const followingProjects = values(get(user, 'followingProjects'));
+
       const followers = values(get(project, 'followers'));
 
+      const userToUpdate = { ...user, followingProjects: uniq([projectId, ...followingProjects]) };
+
       await Promise.all([
-        _upsertUser({ ...user, followingProjects: [projectId, ...followingProjects] }),
-        projectService.updateProject({ ...project, followers: [userId, ...followers] })
+        _upsertUser(userToUpdate),
+        projectService.updateProject({ ...project, updatedBy: userId, followers: uniq([userId, ...followers]) })
       ]);
 
       return true;
     } catch (error) {
       logger.error('followProject error', error, { input });
+
       return false;
     }
   };
@@ -170,7 +198,7 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       const validated = unfollowProjectValidationSchema.validate(input);
 
       if (validated.error) {
-        logger.error('unfollowProject error', validated.error, { input });
+        logger.error('unfollowProject error', { error: validated.error.message }, { input });
 
         return false;
       }
@@ -189,8 +217,8 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       const followers = values(get(project, 'followers'));
 
       await Promise.all([
-        _upsertUser({ ...user, followingProjects: [...followingProjects.filter(p => p !== projectId)] }),
-        projectService.updateProject({ ...project, followers: [...followers.filter(f => f !== userId)] })
+        _upsertUser({ ...user, _id: userId, followingProjects: [...followingProjects.filter(p => p !== projectId)] }),
+        projectService.updateProject({ ...project, updatedBy: userId, followers: [...followers.filter(f => f !== userId)] })
       ]);
 
       return true;
@@ -205,7 +233,7 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       const validated = leaveProjectValidationSchema.validate(input);
 
       if (validated.error) {
-        logger.error('leaveProject error', validated.error, { input });
+        logger.error('leaveProject error', { error: validated.error.message }, { input });
 
         return false;
       }
@@ -248,8 +276,8 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       const contributingProjects = values(get(user, 'contributingProjects'));
 
       await Promise.all([
-        _upsertUser({ ...user, contributingProjects: [...contributingProjects.filter(p => p !== projectId)] }),
-        projectService.updateProject({ ...project, collaborators: editedCollaborators })
+        _upsertUser({ ...user, _id: userId, contributingProjects: [...contributingProjects.filter(p => p !== projectId)] }),
+        projectService.updateProject({ ...project, updatedBy: userId, collaborators: editedCollaborators })
       ]);
 
       return true;

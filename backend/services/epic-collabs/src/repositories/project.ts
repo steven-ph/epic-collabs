@@ -1,10 +1,11 @@
 import Dataloader from 'dataloader';
-import { get, isEmpty, memoize, omit, values } from 'lodash';
+import { generate } from 'shortid';
+import { kebabCase, get, isEmpty, memoize, omit, values } from 'lodash';
 import { logger } from '@sp-tools/kloud-logger';
-import { makeLoader, mongoFindMany } from '../utils/dataloader';
+import { makeLoader, findMany } from '../utils/dataloader';
 import { IProjectModel, newProjectValidationSchema, updateProjectValidationSchema, changeOwnershipValidationSchema } from '../models/project';
 
-const updateOptions = { new: true, upsert: true, omitUndefined: true };
+const updateOptions = { new: true, lean: true, upsert: true, omitUndefined: true };
 
 interface IChangeProjectOwnershipInput {
   projectId: string;
@@ -31,44 +32,60 @@ const makeProjectRepository = ({ projectDb }): IProjectRepository => {
 
   const invalidateCache = id => projectByIdLoader.clear(id);
 
-  const getProjectById = async id => projectByIdLoader.load(`${id}`);
+  const getProjectById = async id => {
+    if (!id) {
+      return null;
+    }
 
-  const getProjectsByIds = async ids => projectByIdLoader.loadMany(ids.map(id => `${id}`));
+    return projectByIdLoader.load(`${id}`);
+  };
+
+  const getProjectsByIds = async ids => {
+    if (!ids) {
+      return null;
+    }
+
+    return projectByIdLoader.loadMany(ids.map(id => `${id}`));
+  };
 
   const getProjectsByUserId = memoize(
-    async id => projectDb.find({ createdBy: id }),
+    async id => projectDb.find({ createdBy: id }).lean(),
     (...args) => JSON.stringify(args)
   );
 
   const getProjectsByCategoryId = memoize(
-    async id => mongoFindMany({ db: projectDb, key: 'categories', values: [id] }),
+    async id => findMany({ db: projectDb, key: 'categories', values: [id] }),
     (...args) => JSON.stringify(args)
   );
 
   const getProjectsByPositionId = memoize(
-    async id => projectDb.find({ 'collaborators.positionId': id }),
+    async id => projectDb.find({ 'collaborators.positionId': id }).lean(),
     (...args) => JSON.stringify(args)
   );
 
-  const getAllProjects = memoize(async () => projectDb.find());
+  const getAllProjects = memoize(async () => projectDb.find().lean());
 
   const createProject = (input: IProjectModel) => {
     const validated = newProjectValidationSchema.validate(input);
 
     if (validated.error) {
-      logger.error('createProject error', validated.error, { input });
+      logger.error('createProject error', { error: validated.error.message }, { input });
 
       throw new Error('createProject error: ' + validated.error.message);
     }
 
-    return projectDb.create(input);
+    const { name } = input;
+
+    const slug = `${kebabCase(name)}-${generate()}-${generate()}`;
+
+    return projectDb.create({ ...input, slug });
   };
 
   const updateProject = async (input: IProjectModel) => {
     const validated = updateProjectValidationSchema.validate(input);
 
     if (validated.error) {
-      logger.error('updateProject error', validated.error, { input });
+      logger.error('updateProject error', { error: validated.error.message }, { input });
 
       throw new Error('updateProject error:' + validated.error.message);
     }
@@ -105,7 +122,7 @@ const makeProjectRepository = ({ projectDb }): IProjectRepository => {
     const validated = changeOwnershipValidationSchema.validate(input);
 
     if (validated.error) {
-      logger.error('changeProjectOwnership error', validated.error, { input });
+      logger.error('changeProjectOwnership error', { error: validated.error.message }, { input });
 
       throw new Error('changeProjectOwnership error:' + validated.error.message);
     }

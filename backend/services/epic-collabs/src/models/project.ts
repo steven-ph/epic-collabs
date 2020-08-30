@@ -35,89 +35,92 @@ interface IProjectModel {
   visibility?: Visibility;
 }
 
-const ProjectSchema: Schema = new Schema({
-  name: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  slug: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  description: {
-    type: String,
-    trim: true
-  },
-  image: {
-    type: String,
-    default: () => generateImage({ width: 200, height: 200 })
-  },
-  coverImage: {
-    type: String,
-    default: () => generateImage({ width: 1280, height: 200 })
-  },
-  createdAt: {
-    type: Number,
-    default: Date.now
-  },
-  updatedAt: {
-    type: Number,
-    default: Date.now
-  },
-  status: {
-    type: String,
-    default: Status.OPEN
-  },
-  visibility: {
-    type: String,
-    default: Visibility.VISIBLE
-  },
-  collaborators: [
-    {
-      userId: {
-        type: String,
-        ref: 'User'
-      },
-      positionId: {
-        type: String,
-        ref: 'Position'
+const ProjectSchema: Schema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    slug: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    description: {
+      type: String,
+      trim: true
+    },
+    image: {
+      type: String,
+      default: () => generateImage({ width: 200, height: 200 })
+    },
+    coverImage: {
+      type: String,
+      default: () => generateImage({ width: 1280, height: 200 })
+    },
+    createdAt: {
+      type: Number,
+      default: Date.now
+    },
+    updatedAt: {
+      type: Number,
+      default: Date.now
+    },
+    status: {
+      type: String,
+      default: Status.OPEN
+    },
+    visibility: {
+      type: String,
+      default: Visibility.VISIBLE
+    },
+    collaborators: [
+      {
+        userId: {
+          type: String,
+          ref: 'User'
+        },
+        positionId: {
+          type: String,
+          ref: 'Position'
+        }
       }
-    }
-  ],
-  categories: {
-    type: [String],
-    ref: 'Category',
-    default: []
-  },
-  followers: {
-    type: [String],
-    ref: 'User',
-    default: []
-  },
-  resources: [
-    {
-      name: {
-        type: String,
-        trim: true
-      },
-      url: {
-        type: String,
-        trim: true
+    ],
+    categories: {
+      type: [String],
+      ref: 'Category',
+      default: []
+    },
+    followers: {
+      type: [String],
+      ref: 'User',
+      default: []
+    },
+    resources: [
+      {
+        name: {
+          type: String,
+          trim: true
+        },
+        url: {
+          type: String,
+          trim: true
+        }
       }
+    ],
+    createdBy: {
+      type: String,
+      ref: 'User'
     }
-  ],
-  createdBy: {
-    type: String,
-    ref: 'User'
-  }
-});
+  },
+  { versionKey: false }
+);
 
 const newProjectValidationSchema = Joi.object()
   .keys({
     name: Joi.string().required(),
-    slug: Joi.string().required(),
+    slug: optionalEmptyString,
     description: Joi.string().required(),
     image: optionalEmptyString,
     coverImage: optionalEmptyString,

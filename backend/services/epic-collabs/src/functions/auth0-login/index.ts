@@ -42,6 +42,7 @@ const handler = async event => {
 
     const dbConnection = await makeMongoDbConnection(MONGO_DB_URL);
 
+    // @ts-ignore
     const userService = makeUserContext({ userDb: dbConnection.models.User });
 
     await userService.handleLogin(user);

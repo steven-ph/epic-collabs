@@ -19,14 +19,11 @@ const mockPosition = {
 
 const mockCreate = jest.fn();
 const mockFind = jest.fn().mockReturnThis();
-const mockExec = jest.fn();
 
 const mockPositionDb = {
   create: mockCreate,
-  find: mockFind,
-  where: jest.fn().mockReturnThis(),
-  in: jest.fn().mockReturnThis(),
-  exec: mockExec
+  find: jest.fn().mockReturnThis(),
+  lean: mockFind
 };
 
 describe('PositionRepository', () => {

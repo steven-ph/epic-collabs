@@ -21,62 +21,65 @@ interface IUserModel {
 
 type UserDocument = IUserModel & Document;
 
-const UserSchema: Schema = new Schema({
-  _id: {
-    type: String,
-    trim: true
+const UserSchema: Schema = new Schema(
+  {
+    _id: {
+      type: String,
+      trim: true
+    },
+    username: {
+      type: String,
+      trim: true
+    },
+    email: {
+      type: String,
+      trim: true
+    },
+    name: {
+      type: String,
+      trim: true
+    },
+    firstName: {
+      type: String,
+      trim: true
+    },
+    lastName: {
+      type: String,
+      trim: true
+    },
+    bio: {
+      type: String,
+      trim: true
+    },
+    picture: {
+      type: String,
+      default: generateAvatar
+    },
+    createdAt: {
+      type: Number,
+      default: Date.now
+    },
+    emailVerified: {
+      type: Boolean
+    },
+    createdProjects: {
+      type: [String],
+      ref: 'Project',
+      default: []
+    },
+    followingProjects: {
+      type: [String],
+      ref: 'Project',
+      default: []
+    },
+    contributingProjects: {
+      type: [String],
+      ref: 'Project',
+      default: []
+    }
   },
-  username: {
-    type: String,
-    trim: true
-  },
-  email: {
-    type: String,
-    trim: true
-  },
-  name: {
-    type: String,
-    trim: true
-  },
-  firstName: {
-    type: String,
-    trim: true
-  },
-  lastName: {
-    type: String,
-    trim: true
-  },
-  bio: {
-    type: String,
-    trim: true
-  },
-  picture: {
-    type: String,
-    default: generateAvatar
-  },
-  createdAt: {
-    type: Number,
-    default: Date.now
-  },
-  emailVerified: {
-    type: Boolean
-  },
-  createdProjects: {
-    type: [String],
-    ref: 'Project',
-    default: []
-  },
-  followingProjects: {
-    type: [String],
-    ref: 'Project',
-    default: []
-  },
-  contributingProjects: {
-    type: [String],
-    ref: 'Project',
-    default: []
-  }
-});
+  { versionKey: false }
+);
 
 const upsertUserValidationSchema = Joi.object()
   .keys({
