@@ -164,6 +164,7 @@ const updateProjectValidationSchema = Joi.object()
     visibility: Joi.any().allow(Visibility.HIDDEN, Visibility.VISIBLE),
     collaborators: Joi.array().items(
       Joi.object().keys({
+        _id: optionalEmptyString,
         userId: optionalEmptyString,
         positionId: optionalEmptyString
       })
@@ -172,6 +173,7 @@ const updateProjectValidationSchema = Joi.object()
     followers: Joi.array().items(Joi.string()),
     resources: Joi.array().items(
       Joi.object().keys({
+        _id: optionalEmptyString,
         name: optionalEmptyString,
         url: optionalEmptyString
       })

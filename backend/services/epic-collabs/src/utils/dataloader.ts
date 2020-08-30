@@ -1,4 +1,4 @@
-import { get, find, isEqual, map, reduce } from 'lodash';
+import { get, find, isEqual, isObject, map, reduce } from 'lodash';
 
 interface IFindManyInput {
   db: any;
@@ -26,7 +26,18 @@ const buildDataMapForLoader = ({ key, ids, values }: IBuildDataMapForLoaderInput
   return reduce(
     ids,
     (obj, id) => {
-      obj[id] = find(values, val => isEqual(get(val, key), id));
+      const found = find(values, val => {
+        const valueforKey = get(val, key);
+
+        if (key === '_id' && isObject(valueforKey)) {
+          return isEqual(valueforKey.toString(), id);
+        }
+
+        return isEqual(valueforKey, id);
+      });
+
+      obj[id] = found ? { ...found, _id: found._id && isObject(found._id) ? found._id.toString() : found._id } : null;
+
       return obj;
     },
     {}
@@ -35,6 +46,7 @@ const buildDataMapForLoader = ({ key, ids, values }: IBuildDataMapForLoaderInput
 
 const makeLoader = async ({ db, key, ids }: ILoaderInput): Promise<any[]> => {
   const results = await findMany({ db, key, values: ids });
+
   const resultsMap = buildDataMapForLoader({ key, ids, values: results });
 
   return map(ids, id => resultsMap[id] || null);

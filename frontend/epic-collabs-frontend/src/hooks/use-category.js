@@ -1,9 +1,9 @@
 import { get } from 'lodash';
 import { useQuery } from '@apollo/client';
-import { GET_ALL_CATEGORIES_QUERY } from 'gql/category';
+import { GET_CATEGORIES_QUERY } from 'gql/category';
 
-const useGetAllCategories = () => {
-  const { loading, data, error } = useQuery(GET_ALL_CATEGORIES_QUERY);
+const useGetCategories = () => {
+  const { loading, data, error } = useQuery(GET_CATEGORIES_QUERY);
 
   return {
     loading,
@@ -12,4 +12,4 @@ const useGetAllCategories = () => {
   };
 };
 
-export { useGetAllCategories };
+export { useGetCategories };

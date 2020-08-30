@@ -1,14 +1,13 @@
 import { gql } from '@apollo/client';
 
-const GET_ALL_CATEGORIES_QUERY = gql`
-  query allCategories {
-    allCategories {
+const GET_CATEGORIES_QUERY = gql`
+  query categories {
+    categories {
       _id
       name
       description
-      picture
     }
   }
 `;
 
-export { GET_ALL_CATEGORIES_QUERY };
+export { GET_CATEGORIES_QUERY };

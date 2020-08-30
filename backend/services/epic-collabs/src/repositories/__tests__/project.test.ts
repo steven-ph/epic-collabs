@@ -1,3 +1,5 @@
+Date.now = jest.fn().mockReturnValue(12345);
+
 const mockClear = jest.fn();
 const mockLoad = jest.fn();
 const mockLoadMany = jest.fn();
@@ -118,7 +120,7 @@ describe('ProjectRepository', () => {
 
       expect(mockFindOneAndUpdate).toHaveBeenCalledWith(
         { _id: mockProject._id },
-        { ...mockProject },
+        { ...mockProject, updatedAt: 12345 },
         { new: true, lean: true, upsert: true, omitUndefined: true }
       );
     });
@@ -135,7 +137,7 @@ describe('ProjectRepository', () => {
 
       expect(mockFindOneAndUpdate).toHaveBeenCalledWith(
         { _id: mockProject._id },
-        { ...mockProject },
+        { ...mockProject, updatedAt: 12345 },
         { new: true, lean: true, upsert: true, omitUndefined: true }
       );
     });

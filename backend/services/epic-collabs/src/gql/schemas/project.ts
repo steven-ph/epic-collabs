@@ -61,15 +61,15 @@ const typeDefs = gql`
 
   input UpdateProjectInput {
     _id: ID!
-    slug: String!
-    name: String!
-    description: String!
+    slug: String
+    name: String
+    description: String
     image: String
     coverImage: String
     createdAt: Float
     updatedAt: Float
     collaborators: [CollaboratorInput!]
-    categories: [String!]!
+    categories: [String!]
     resources: [ResourceInput!]
     followers: [String!]
     status: Status

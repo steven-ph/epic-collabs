@@ -37,7 +37,7 @@ const makeProjectRepository = ({ projectDb }): IProjectRepository => {
       return null;
     }
 
-    return projectByIdLoader.load(`${id}`);
+    return projectByIdLoader.load(id);
   };
 
   const getProjectsByIds = async ids => {
@@ -45,7 +45,7 @@ const makeProjectRepository = ({ projectDb }): IProjectRepository => {
       return null;
     }
 
-    return projectByIdLoader.loadMany(ids.map(id => `${id}`));
+    return projectByIdLoader.loadMany(ids);
   };
 
   const getProjectsByUserId = memoize(
@@ -115,7 +115,7 @@ const makeProjectRepository = ({ projectDb }): IProjectRepository => {
 
     invalidateCache(_id);
 
-    return projectDb.findOneAndUpdate({ _id }, omit(input, ['updatedBy', 'isInternalUpdate']), updateOptions);
+    return projectDb.findOneAndUpdate({ _id }, { ...omit(input, ['updatedBy', 'isInternalUpdate']), updatedAt: Date.now() }, updateOptions);
   };
 
   const changeProjectOwnership = async (input: IChangeProjectOwnershipInput) => {

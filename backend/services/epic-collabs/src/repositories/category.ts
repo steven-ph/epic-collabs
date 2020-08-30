@@ -21,7 +21,7 @@ const makeCategoryRepository = ({ categoryDb }): ICategoryRepository => {
       return null;
     }
 
-    return categoryByIdLoader.load(`${id}`);
+    return categoryByIdLoader.load(id);
   };
 
   const getCategoriesByIds = async ids => {
@@ -29,7 +29,7 @@ const makeCategoryRepository = ({ categoryDb }): ICategoryRepository => {
       return null;
     }
 
-    return categoryByIdLoader.loadMany(ids.map(id => `${id}`));
+    return categoryByIdLoader.loadMany(ids);
   };
 
   const getCategories = memoize(async () => categoryDb.find().lean());

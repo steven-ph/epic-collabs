@@ -86,36 +86,36 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
     return userDb.findOneAndUpdate({ _id }, input, options);
   };
 
-  const getUserById = async id => {
+  const getUserById = async (id): Promise<IUserModel> => {
     if (!id) {
       return null;
     }
 
-    return userByIdLoader.load(`${id}`);
+    return userByIdLoader.load(id);
   };
 
-  const getUsersByIds = async ids => {
+  const getUsersByIds = async (ids): Promise<IUserModel[]> => {
     if (!ids) {
       return null;
     }
 
-    return userByIdLoader.loadMany(ids.map(id => `${id}`));
+    return userByIdLoader.loadMany(ids);
   };
 
-  const getUserByEmail = async email => {
+  const getUserByEmail = async (email): Promise<IUserModel> => {
     if (!email) {
       return null;
     }
 
-    return userByEmailLoader.load(`${email}`);
+    return userByEmailLoader.load(email);
   };
 
-  const getUsersByEmails = async emails => {
+  const getUsersByEmails = async (emails): Promise<IUserModel[]> => {
     if (!emails) {
       return null;
     }
 
-    return userByEmailLoader.loadMany(emails.map(email => `${email}`));
+    return userByEmailLoader.loadMany(emails);
   };
 
   const joinProject = async (input: IJoinProjectInput) => {
@@ -145,14 +145,14 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       const editedCollaborators = collaborators.map(c =>
         c && c.positionId === positionId
           ? {
-              ...c,
+              positionId,
               userId
             }
           : c
       );
 
       await Promise.all([
-        _upsertUser({ ...user, _id: userId, contributingProjects: uniq([projectId, ...contributingProjects]) }),
+        _upsertUser({ ...user, contributingProjects: uniq([projectId, ...contributingProjects]) }),
         projectService.updateProject({ ...project, collaborators: editedCollaborators, updatedBy: userId, isInternalUpdate: true })
       ]);
 
@@ -191,7 +191,12 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
 
       await Promise.all([
         _upsertUser(userToUpdate),
-        projectService.updateProject({ ...project, followers: uniq([userId, ...followers]), updatedBy: userId, isInternalUpdate: true })
+        projectService.updateProject({
+          ...project,
+          followers: uniq([userId, ...followers]),
+          updatedBy: userId,
+          isInternalUpdate: true
+        })
       ]);
 
       return true;
@@ -226,8 +231,13 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       const followers = values(get(project, 'followers'));
 
       await Promise.all([
-        _upsertUser({ ...user, _id: userId, followingProjects: [...followingProjects.filter(p => p !== projectId)] }),
-        projectService.updateProject({ ...project, followers: [...followers.filter(f => f !== userId)], updatedBy: userId, isInternalUpdate: true })
+        _upsertUser({ ...user, followingProjects: [...followingProjects.filter(p => p !== projectId)] }),
+        projectService.updateProject({
+          ...project,
+          followers: [...followers.filter(f => f !== userId)],
+          updatedBy: userId,
+          isInternalUpdate: true
+        })
       ]);
 
       return true;
@@ -276,7 +286,7 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       const editedCollaborators = collaborators.map(c =>
         c && c.userId === userId
           ? {
-              ...c,
+              positionId: c.positionId,
               userId: null
             }
           : c
@@ -285,7 +295,7 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       const contributingProjects = values(get(user, 'contributingProjects'));
 
       await Promise.all([
-        _upsertUser({ ...user, _id: userId, contributingProjects: [...contributingProjects.filter(p => p !== projectId)] }),
+        _upsertUser({ ...user, contributingProjects: [...contributingProjects.filter(p => p !== projectId)] }),
         projectService.updateProject({ ...project, collaborators: editedCollaborators, updatedBy: userId, isInternalUpdate: true })
       ]);
 
@@ -334,7 +344,7 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       const editedCollaborators = collaborators.map(c =>
         c && c.positionId === positionId
           ? {
-              ...c,
+              positionId,
               userId: null
             }
           : c
@@ -343,13 +353,13 @@ const makeUserRepository = ({ userDb, projectService }: IUserRepositoryDI): IUse
       const contributingProjects = values(get(user, 'contributingProjects'));
 
       await Promise.all([
-        _upsertUser({ ...user, _id: userId, contributingProjects: [...contributingProjects.filter(p => p !== projectId)] }),
+        _upsertUser({ ...user, contributingProjects: [...contributingProjects.filter(p => p !== projectId)] }),
         projectService.updateProject({ ...project, collaborators: editedCollaborators, updatedBy: userId, isInternalUpdate: true })
       ]);
 
       return true;
     } catch (error) {
-      console.error('removeUserFromProject error', error, { input });
+      logger.error('removeUserFromProject error', error, { input });
       return false;
     }
   };

@@ -21,7 +21,7 @@ const makePositionRepository = ({ positionDb }): IPositionRepository => {
       return null;
     }
 
-    return positionByIdLoader.load(`${id}`);
+    return positionByIdLoader.load(id);
   };
 
   const getPositionByIds = async ids => {
@@ -29,7 +29,7 @@ const makePositionRepository = ({ positionDb }): IPositionRepository => {
       return null;
     }
 
-    return positionByIdLoader.loadMany(ids.map(id => `${id}`));
+    return positionByIdLoader.loadMany(ids);
   };
 
   const getPositions = memoize(async () => positionDb.find().lean());
