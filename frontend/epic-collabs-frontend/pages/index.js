@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import { withAuth } from 'components/hoc/with-auth';
+import { LandingLayout } from 'layouts';
 import { LandingPage } from 'components/landing-page';
 
 const Index = props => {
@@ -9,7 +10,9 @@ const Index = props => {
         <title>Epic Collabs</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <LandingPage {...props} />
+      <LandingLayout>
+        <LandingPage {...props} />
+      </LandingLayout>
     </>
   );
 };

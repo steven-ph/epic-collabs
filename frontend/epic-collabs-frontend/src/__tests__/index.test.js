@@ -2,6 +2,11 @@ import React from 'react';
 import { render, screen } from 'testUtils';
 import Index from '../../pages';
 
+jest.mock('react-spring/renderprops-addons', () => ({
+  Parallax: ({ children }) => <div>{children}</div>,
+  ParallaxLayer: ({ children }) => <div>{children}</div>
+}));
+
 jest.mock('../hooks/use-project.js', () => ({
   useGetProjects: jest.fn().mockResolvedValue({
     projects: []

@@ -1,10 +1,25 @@
 import 'styles/index.less';
-import { Layout } from 'layouts';
+import NProgress from 'nprogress';
+import { Router } from 'next/router';
 import { getConfig } from 'config';
 import { withApollo } from 'components/hoc/with-apollo';
 import { useGetUser, UserProvider } from 'context/user';
 import { defaultTheme, GlobalStyle } from 'styles';
 import { ConfigProvider } from 'components/common';
+
+NProgress.configure({ parent: 'body', showSpinner: false });
+
+Router.onRouteChangeStart = () => {
+  NProgress.start();
+};
+
+Router.onRouteChangeComplete = () => {
+  NProgress.done();
+};
+
+Router.onRouteChangeError = () => {
+  NProgress.done();
+};
 
 const { SSR_ENABLED } = getConfig();
 
@@ -14,9 +29,7 @@ const EpicApp = ({ Component, pageProps }) => {
   return (
     <UserProvider value={{ user, loading }}>
       <ConfigProvider theme={defaultTheme}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <Component {...pageProps} />
         <GlobalStyle />
       </ConfigProvider>
     </UserProvider>

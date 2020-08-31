@@ -3,6 +3,7 @@ const { getConfig } = require('./src/config');
 const { withAlias } = require('./src/plugins/withAlias');
 const { withTheme } = require('./src/plugins/withTheme');
 const { withPolyfills } = require('./src/plugins/withPolyfills');
+const { withTranspileModules } = require('./src/plugins/withTranspileModules');
 // const { withSourceMaps } = require('./src/plugins/withSourceMaps');
 
 // fix: prevents error when .css files are required by node
@@ -18,7 +19,7 @@ if (!env) {
 
 const config = getConfig(env);
 
-module.exports = withPlugins([withAlias, withTheme, withPolyfills], {
+module.exports = withPlugins([withTranspileModules, withAlias, withTheme, withPolyfills], {
   env: config,
   target: 'serverless'
 });

@@ -8,14 +8,14 @@ import { UserNav } from './user-nav';
 import { Link } from 'components/link';
 import { Flexbox } from 'components/common';
 
-const Navigation = () => {
+const Navigation = ({ textColor = colours.darkGrey900 }) => {
   return (
     <Container>
       <Flexbox>
         <Link href="/" sx={{ alignSelf: 'center' }}>
           <LogoContainer alignItems="center">
             <ReactSVG src={'/images/svg/rocket.svg'} />
-            <Title>EpicCollabs</Title>
+            <Title textColor={textColor}>EpicCollabs</Title>
           </LogoContainer>
         </Link>
       </Flexbox>
@@ -25,7 +25,7 @@ const Navigation = () => {
         </Flexbox>
       </Flexbox>
       <Flexbox alignItems="center">
-        <UserNav />
+        <UserNav downArrowColor={textColor} />
       </Flexbox>
     </Container>
   );
@@ -48,7 +48,7 @@ const Container = styled(Flexbox)`
 const Title = styled(Styled.h4)`
   font-weight: 500 !important;
   text-align: center;
-  color: ${colours.darkGrey900};
+  color: ${({ textColor }) => textColor};
 
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -65,6 +65,7 @@ const LogoContainer = styled(Flexbox)`
 
   svg {
     width: 48px;
+    margin-left: 16px;
     margin-right: 16px;
     transition: all 0.2s ${easing.default};
   }

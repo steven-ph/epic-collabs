@@ -30,7 +30,7 @@ const getDropdownMenu = ({ name }) => (
   </StyledMenu>
 );
 
-const UserNav = () => {
+const UserNav = ({ downArrowColor = colours.darkGrey900 }) => {
   const { user, loading } = useUserContext();
 
   if (!user && !loading) {
@@ -50,7 +50,7 @@ const UserNav = () => {
       <Dropdown trigger={['click']} overlay={getDropdownMenu({ name })} placement="bottomRight">
         <ProfileButton alignItems="center">
           <StyledAvatar src={picture} alt={name} />
-          <Icon icon={faSortDown} />
+          <ArrowDownIcon icon={faSortDown} color={downArrowColor} />
         </ProfileButton>
       </Dropdown>
     );
@@ -85,7 +85,6 @@ const ProfileButton = styled(Flexbox)`
   svg {
     width: 14px;
     margin-top: -3px;
-    color: ${colours.navyDark};
     transition: transform 0.2s ease-in-out;
   }
 
@@ -107,6 +106,14 @@ const StyledAvatar = styled(Avatar)`
 
 const Icon = styled(FontAwesomeIcon)`
   margin-left: 6px;
+`;
+
+const ArrowDownIcon = styled(FontAwesomeIcon)`
+  margin-left: 6px;
+
+  @media screen and (max-width: ${breakpoints.sm}) {
+    display: none;
+  }
 `;
 
 const DropdownLabelSmall = styled.small`

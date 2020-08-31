@@ -4,8 +4,8 @@ import { colours } from 'styles';
 import { Box } from 'components/common';
 import { Navigation } from 'components/navigation';
 
-const Header = () => (
-  <StyledHeader>
+const Header = ({ bgColor = colours.white }) => (
+  <StyledHeader bgColor={bgColor}>
     <Box sx={{ margin: '0 auto', height: '100%' }}>
       <Navigation />
     </Box>
@@ -19,9 +19,9 @@ const StyledHeader = styled.header`
   position: fixed;
   height: 80px;
   width: 100%;
-  padding: 5px 10px;
+  padding-right: 32px;
   border-radius: 0 0 12px 12px;
-  background-color: ${colours.white};
+  background-color: ${({ bgColor }) => bgColor};
   border-bottom: 1px solid ${colours.navy100};
 `;
 
