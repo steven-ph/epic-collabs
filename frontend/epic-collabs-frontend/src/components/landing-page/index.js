@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Parallax, ParallaxLayer } from 'react-spring/renderprops-addons';
 import { breakpoints, colours, easing } from 'styles';
@@ -7,10 +7,8 @@ import { Flexbox } from 'components/common';
 const url = (name, wrap = false) => `${wrap ? 'url(' : ''}/images/svg/${name}.svg${wrap ? ')' : ''}`;
 
 const LandingPage = () => {
-  const parallaxRef = useRef();
-
   return (
-    <Parallax ref={ref => (parallaxRef.current = ref)} pages={3}>
+    <Parallax pages={3}>
       <ParallaxLayer offset={2} speed={1} sx={{ backgroundColor: colours.blue400 }} />
 
       <ParallaxLayer
@@ -49,7 +47,7 @@ const LandingPage = () => {
         }}
       />
 
-      <ParallaxLayer offset={1.3} speed={-0.3} sx={{ pointerEvents: 'none' }}>
+      <ParallaxLayer offset={1.3} speed={-0.3}>
         <img src={url('satellite4')} sx={{ width: '15%', marginLeft: '75%' }} />
       </ParallaxLayer>
 
@@ -82,28 +80,26 @@ const LandingPage = () => {
       </ParallaxLayer>
 
       <ParallaxLayer
-        offset={2.5}
+        offset={2.2}
         speed={-0.4}
-        sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none', zIndex: 2 }}
+        sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2 }}
       >
-        <img src={url('earth')} sx={{ width: '30%' }} />
+        <img src={url('earth')} sx={{ width: '25%' }} />
       </ParallaxLayer>
 
       <ParallaxLayer
         offset={2}
         speed={-0.3}
         sx={{
-          zIndex: 1,
-          backgroundSize: '80%',
-          backgroundPosition: 'center',
-          backgroundImage: url('clients', true)
+          zIndex: 1
         }}
-      />
+      >
+        <img src={url('satellite2')} sx={{ width: '15%', marginTop: '15%', marginLeft: '15%' }} />
+      </ParallaxLayer>
 
       <ParallaxLayer
         offset={0}
         speed={0.1}
-        onClick={() => parallaxRef.current.scrollTo(1)}
         sx={{
           display: 'flex',
           alignItems: 'center',
@@ -120,7 +116,6 @@ const LandingPage = () => {
       <ParallaxLayer
         offset={1}
         speed={0.1}
-        onClick={() => parallaxRef.current.scrollTo(2)}
         sx={{
           display: 'flex',
           alignItems: 'center',
@@ -131,7 +126,7 @@ const LandingPage = () => {
       </ParallaxLayer>
 
       <ParallaxLayer
-        offset={2}
+        offset={1.9}
         speed={0.1}
         sx={{
           display: 'flex',
@@ -139,9 +134,8 @@ const LandingPage = () => {
           justifyContent: 'center',
           backgroundImage: `linear-gradient(to bottom, ${colours.navy900} 0%, ${colours.blue400} 100%)`
         }}
-        onClick={() => parallaxRef.current.scrollTo(0)}
       >
-        <img src={url('clients-main')} sx={{ width: '30%' }} />
+        <img src={url('clients-main')} sx={{ width: '25%' }} />
       </ParallaxLayer>
     </Parallax>
   );
