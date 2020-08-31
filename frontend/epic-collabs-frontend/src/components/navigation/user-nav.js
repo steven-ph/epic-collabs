@@ -30,15 +30,15 @@ const getDropdownMenu = ({ name }) => (
   </StyledMenu>
 );
 
-const UserNav = ({ downArrowColor = colours.darkGrey900 }) => {
+const UserNav = ({ downArrowColor = colours.navy }) => {
   const { user, loading } = useUserContext();
 
   if (!user && !loading) {
     return (
       <a href="/api/login">
         <LoginLogout>
-          <DropdownLabel>Login</DropdownLabel>
-          <Icon icon={faSignInAlt} />
+          <DropdownLabel color={downArrowColor}>Login</DropdownLabel>
+          <Icon icon={faSignInAlt} color={downArrowColor} />
         </LoginLogout>
       </a>
     );
@@ -64,7 +64,6 @@ const LoginLogout = styled(Flexbox)`
   justify-items: center;
 
   svg {
-    color: ${colours.navy};
     width: 20px;
     transition: transform 0.2s ease-in-out;
   }
@@ -129,7 +128,7 @@ const DropdownLabelSmall = styled.small`
 const DropdownLabel = styled.span`
   display: block;
   width: 100%;
-  color: ${colours.navy};
+  color: ${({ color }) => color || colours.navy};
   font-weight: 500;
   font-size: 14px;
   line-height: 1.428;
