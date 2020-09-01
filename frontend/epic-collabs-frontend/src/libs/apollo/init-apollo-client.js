@@ -52,7 +52,7 @@ const getAccessToken = async ctx => {
       const res = get(ctx, 'ctx.res');
 
       const tokenCache = auth0.tokenCache(req, res);
-      const data = await tokenCache.getAccessToken();
+      const data = await tokenCache.getAccessToken({ refresh: true });
 
       return get(data, 'accessToken') || '';
     } catch (error) {

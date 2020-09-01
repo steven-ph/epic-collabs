@@ -6,7 +6,7 @@ export default async function session(req, res) {
   try {
     const tokenCache = auth0.tokenCache(req, res);
 
-    const data = await tokenCache.getAccessToken();
+    const data = await tokenCache.getAccessToken({ refresh: true });
 
     res.send(data);
   } catch (error) {
