@@ -54,7 +54,11 @@ const Item = styled(Flexbox)`
   will-change: transform;
   border: 5px solid white;
 
-  transition: 0.15s opacity ${easing.default};
+  transition: all 0.25s ${easing.default};
+
+  :hover {
+    transform: scale(1.05);
+  }
 
   img {
     border-radius: 5px;
