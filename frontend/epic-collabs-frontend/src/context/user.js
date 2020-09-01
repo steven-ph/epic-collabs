@@ -1,6 +1,6 @@
 import { isNil } from 'lodash';
-import fetch from 'cross-fetch';
-import { createContext, useContext, useEffect } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { fetcher } from 'functions/fetcher';
 
 // Use a global to save the user, so we don't have to fetch it again after page navigations
 let userState;
@@ -28,11 +28,7 @@ const getUser = async () => {
   }
 
   try {
-    const res = await fetch('/api/me');
-
-    if (res.ok) {
-      userState = await res.json();
-    }
+    userState = await fetcher('/api/me');
   } catch (error) {
     userState = null;
   }
@@ -41,13 +37,13 @@ const getUser = async () => {
 };
 
 const useGetUser = () => {
-  const [user, setUser] = React.useState({
+  const [user, setUser] = useState({
     user: userState || null,
-    loading: userState === undefined
+    loading: isNil(userState)
   });
 
-  React.useEffect(() => {
-    if (userState !== undefined) {
+  useEffect(() => {
+    if (!isNil(userState)) {
       return;
     }
 

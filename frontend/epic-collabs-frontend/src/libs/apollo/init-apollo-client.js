@@ -7,6 +7,7 @@ import { getAuth0Client } from 'libs/auth0';
 import { onError } from '@apollo/client/link/error';
 import { setContext } from '@apollo/client/link/context';
 import { ApolloClient, ApolloLink, HttpLink, InMemoryCache } from '@apollo/client';
+import { fetcher } from 'functions/fetcher';
 
 let accessToken = '';
 let cachedClient = null;
@@ -30,14 +31,8 @@ const isTokenValid = token => {
 
 const fetchToken = async () => {
   try {
-    const res = await fetch('/api/session');
-
-    if (res.ok) {
-      const json = await res.json();
-      const token = get(json, 'accessToken');
-
-      return token || '';
-    }
+    const res = await fetcher('/api/session');
+    return get(res, 'accessToken') || '';
   } catch (error) {
     return '';
   }

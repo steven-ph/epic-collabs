@@ -1,25 +1,17 @@
 import 'styles/index.less';
 import NProgress from 'nprogress';
-import { Router } from 'next/router';
-import { getConfig } from 'config';
+import Router from 'next/router';
 import { withApollo } from 'components/hoc/with-apollo';
 import { useGetUser, UserProvider } from 'context/user';
 import { defaultTheme, GlobalStyle } from 'styles';
 import { ConfigProvider } from 'components/common';
+import { getConfig } from 'config';
 
-NProgress.configure({ parent: 'body', showSpinner: false });
+Router.events.on('routeChangeStart', () => NProgress.start());
 
-Router.onRouteChangeStart = () => {
-  NProgress.start();
-};
+Router.events.on('routeChangeComplete', () => NProgress.done());
 
-Router.onRouteChangeComplete = () => {
-  NProgress.done();
-};
-
-Router.onRouteChangeError = () => {
-  NProgress.done();
-};
+Router.events.on('routeChangeError', () => NProgress.done());
 
 const { SSR_ENABLED } = getConfig();
 

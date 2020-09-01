@@ -18,7 +18,7 @@ const getBabelPlugins = () => [
     'import',
     {
       libraryName: 'antd',
-      style: false
+      style: true
     },
     'antd'
   ],

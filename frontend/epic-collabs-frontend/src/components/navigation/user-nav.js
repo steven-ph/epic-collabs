@@ -19,6 +19,12 @@ const getDropdownMenu = ({ name }) => (
       </Link>
     </Menu.Item>
     <Menu.Divider />
+    <Menu.Item key="1">
+      <Link href="/projects">
+        <DropdownLabel>Projects</DropdownLabel>
+      </Link>
+    </Menu.Item>
+    <Menu.Divider />
     <Menu.Item key="2">
       <a href="/api/logout">
         <LoginLogout>
