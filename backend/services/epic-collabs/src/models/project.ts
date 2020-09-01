@@ -54,11 +54,11 @@ const ProjectSchema: Schema = new Schema(
     },
     image: {
       type: String,
-      default: () => generateImage({ width: 200, height: 200 })
+      default: () => generateImage({ width: 250, height: 250 })
     },
     coverImage: {
       type: String,
-      default: () => generateImage({ width: 1280, height: 200 })
+      default: () => generateImage({ width: 1280, height: 250 })
     },
     createdAt: {
       type: Number,

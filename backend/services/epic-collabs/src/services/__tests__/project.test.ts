@@ -2,6 +2,10 @@ jest.mock('shortid', () => ({
   generate: jest.fn().mockReturnValue('random-string')
 }));
 
+jest.mock('../../utils/random-image', () => ({
+  getRandomImage: jest.fn().mockResolvedValue('random-image')
+}));
+
 import { makeProjectService } from '../project';
 
 const mockRepo = {
@@ -25,6 +29,8 @@ const mockProject = {
   createdBy: 'some-user',
   createdAt: 12345,
   updatedAt: 12345,
+  image: 'random-image',
+  coverImage: 'random-image',
   collaborators: [
     {
       positionId: 'mock-positionId',
@@ -54,14 +60,14 @@ describe('ProjectService', () => {
         slug: 'project-name-random-string-random-string',
         description: 'description',
         categories: ['mock-cat'],
+        image: 'random-image',
+        coverImage: 'random-image',
         createdBy: 'blah'
       });
     });
 
     it('should not create a project in the db if the input is invalid', () => {
-      return expect(() =>
-        service.createProject({ name: 'project name', slug: 'slug', categories: ['mock-cat'], description: 'description' })
-      ).toThrow();
+      return expect(() => service.createProject({ name: 'project name', categories: ['mock-cat'], description: 'description' })).rejects.toThrow();
     });
   });
 

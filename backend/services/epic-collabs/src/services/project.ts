@@ -2,6 +2,7 @@ import { generate } from 'shortid';
 import { logger } from '@sp-tools/kloud-logger';
 import { kebabCase, get, isEmpty, values } from 'lodash';
 import { IProjectRepository } from '../repositories/project';
+import { getRandomImage } from '../utils/random-image';
 import { IProjectModel, newProjectValidationSchema, updateProjectValidationSchema } from '../models/project';
 
 interface IProjectService {
@@ -29,7 +30,7 @@ const makeProjectService = ({ projectRepo }: IProjectServiceDI): IProjectService
   const getProjectsByPositionId = id => projectRepo.getProjectsByPositionId(id);
   const getProjects = () => projectRepo.getProjects();
 
-  const createProject = (input: IProjectModel) => {
+  const createProject = async (input: IProjectModel) => {
     const validated = newProjectValidationSchema.validate(input);
 
     if (validated.error) {
@@ -41,8 +42,9 @@ const makeProjectService = ({ projectRepo }: IProjectServiceDI): IProjectService
     const { name } = input;
 
     const slug = `${kebabCase(name)}-${generate()}-${generate()}`.toLowerCase();
+    const [image, coverImage] = await Promise.all([getRandomImage({ width: 250, height: 250 }), getRandomImage({ width: 1280, height: 250 })]);
 
-    return projectRepo.createProject({ ...input, slug });
+    return projectRepo.createProject({ ...input, slug, image, coverImage });
   };
 
   const updateProject = async (input: IProjectModel) => {
