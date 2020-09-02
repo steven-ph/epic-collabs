@@ -9,7 +9,7 @@ const LandingLayout = withRouter(({ children }) => {
   return (
     <PageLayout>
       <Header>
-        <Navigation textColor={colours.lightGrey400} />
+        <Navigation textColor={colours.lightGrey900} altColor={colours.lightGrey200} />
       </Header>
       <Body>{children}</Body>
     </PageLayout>

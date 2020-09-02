@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { withAuth } from 'components/hoc/with-auth';
+import { withAuth } from 'hoc/with-auth';
 import { LandingLayout } from 'layouts';
 import { LandingPage } from 'components/landing-page';
 

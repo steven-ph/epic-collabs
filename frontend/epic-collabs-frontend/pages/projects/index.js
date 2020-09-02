@@ -1,13 +1,13 @@
 import Head from 'next/head';
-import { withAuth } from 'components/hoc/with-auth';
+import { withAuth } from 'hoc/with-auth';
 import { CommonLayout } from 'layouts';
 import { Projects } from 'components/projects';
 
-const ProjectsPage = props => {
+const BrowseProjectsPage = props => {
   return (
     <>
       <Head>
-        <title>Epic Collabs | Projects</title>
+        <title>Epic Collabs | Browse Projects</title>
       </Head>
       <CommonLayout>
         <Projects {...props} />
@@ -16,4 +16,4 @@ const ProjectsPage = props => {
   );
 };
 
-export default withAuth(ProjectsPage, { isProtected: false });
+export default withAuth(BrowseProjectsPage, { isProtected: false });

@@ -5,13 +5,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSortDown, faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { breakpoints, colours, easing } from 'styles';
 import { useUserContext } from 'context/user';
-import { Link } from 'components/link';
-import { Flexbox } from 'components/common';
+import { Flexbox, Link } from 'components/common';
 
 const getDropdownMenu = ({ name }) => (
   <StyledMenu>
     <Menu.Item key="0">
-      <Link href="/">
+      <Link href="/profile">
         <div>
           <DropdownLabelSmall>Signed in as</DropdownLabelSmall>
           <DropdownLabel>{name}</DropdownLabel>
@@ -20,8 +19,8 @@ const getDropdownMenu = ({ name }) => (
     </Menu.Item>
     <Menu.Divider />
     <Menu.Item key="1">
-      <Link href="/projects">
-        <DropdownLabel>Projects</DropdownLabel>
+      <Link href="/dashboard">
+        <DropdownLabel>Dashboard</DropdownLabel>
       </Link>
     </Menu.Item>
     <Menu.Divider />

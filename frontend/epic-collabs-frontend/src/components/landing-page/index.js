@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Parallax, ParallaxLayer } from 'react-spring/renderprops-addons';
 import { breakpoints, colours, easing } from 'styles';
-import { Flexbox } from 'components/common';
+import { Flexbox, ImageContainer } from 'components/common';
 
 const url = (name, wrap = false) => `${wrap ? 'url(' : ''}/images/svg/${name}.svg${wrap ? ')' : ''}`;
 
@@ -109,7 +109,10 @@ const LandingPage = () => {
         <Flexbox flexDirection="column" justifyContent="center">
           <Headline>Find collaborators</Headline>
           <Headline>Build projects</Headline>
-          <Img src="/images/meeting.png" alt="Epic Collabs" />
+          <ImageContainer
+            src="https://res.cloudinary.com/ptviet/image/upload/v1599033365/epic-collabs/meeting.png"
+            alt="Epic Collabs"
+          />
         </Flexbox>
       </ParallaxLayer>
 

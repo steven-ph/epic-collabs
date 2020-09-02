@@ -3,12 +3,12 @@ import { values } from 'lodash';
 import styled from 'styled-components';
 import { easing } from 'styles';
 import { useGetProjects } from 'hooks/use-project';
-import { Flexbox } from 'components/common';
+import { Flexbox, ImageContainer } from 'components/common';
 
 const Project = ({ project }) => {
   return (
     <Item>
-      <img src={project.image} alt={project.name} />
+      <ImageContainer isFluid src={project.image} alt={project.name} />
     </Item>
   );
 };

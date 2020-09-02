@@ -1,7 +1,7 @@
 import 'styles/index.less';
 import Router from 'next/router';
 import NProgress from 'nprogress';
-import { withApollo } from 'components/hoc/with-apollo';
+import { withApollo } from 'hoc/with-apollo';
 import { useGetUser, UserProvider } from 'context/user';
 import { defaultTheme, GlobalStyle } from 'styles';
 import { ConfigProvider } from 'components/common';

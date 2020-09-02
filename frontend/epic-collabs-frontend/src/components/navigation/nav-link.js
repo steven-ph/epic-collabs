@@ -1,0 +1,116 @@
+import styled from 'styled-components';
+import { useRouter } from 'next/router';
+import { colours, easing } from 'styles';
+import { Flexbox, Box, Link, Icon } from 'components/common';
+import { NAV_CONFIGS } from './nav-config';
+
+const NavBottomBorder = () => (
+  <Box
+    className="nav-bottom-border"
+    sx={{
+      height: '2px',
+      width: '100%',
+      maxWidth: 60,
+      background: colours.green900,
+      boxShadow: `0px 0px 4px ${colours.green900}`
+    }}
+  />
+);
+
+const NavItem = ({ icon, label, isNew }) => (
+  <InnerLink>
+    <Box
+      sx={{
+        position: 'relative',
+        width: 24,
+        height: 24
+      }}
+    >
+      <Icon name={icon} />
+      {isNew && <New>New</New>}
+    </Box>
+    <Box
+      sx={{
+        fontSize: 'xs',
+        fontWeight: 600,
+        whiteSpace: 'nowrap',
+        mb: 11,
+        letterSpacing: '-.02em'
+      }}
+    >
+      {label}
+    </Box>
+    <NavBottomBorder />
+  </InnerLink>
+);
+
+const NavLink = ({ item, href, isNew, textColor = colours.navy, altColor = colours.navy }) => {
+  const { pathname = '' } = useRouter();
+  const { label, icon } = NAV_CONFIGS[item];
+
+  return (
+    <OuterBox
+      textColor={textColor}
+      altColor={altColor}
+      isCurrentPath={pathname === href}
+      sx={{
+        alignSelf: 'flex-end'
+      }}
+    >
+      <Link href={href}>
+        <NavItem icon={icon} label={label} isNew={isNew} textColor={textColor} altColor={altColor} />
+      </Link>
+    </OuterBox>
+  );
+};
+
+// Handle :hover and :focus states
+const OuterBox = styled(Box)`
+  a {
+    color: ${({ isCurrentPath, textColor, altColor }) => (isCurrentPath ? altColor : textColor)};
+    transition: color 0.1s ${easing.default};
+  }
+
+  svg path {
+    fill: ${({ isCurrentPath, textColor, altColor }) => (isCurrentPath ? altColor : textColor)};
+    transition: fill 0.1s ${easing.default};
+  }
+
+  .nav-bottom-border {
+    opacity: ${({ isCurrentPath }) => (isCurrentPath ? 1 : 0)};
+    transition: opacity 0.1s ${easing.default};
+  }
+
+  a:hover,
+  a:focus {
+    svg path {
+      fill: ${({ altColor }) => altColor};
+      transition: fill 0.1s ${easing.default};
+    }
+
+    .nav-bottom-border {
+      opacity: 1;
+    }
+  }
+`;
+
+const InnerLink = styled(Flexbox)`
+  cursor: pointer;
+  min-width: 48px;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 8px;
+`;
+
+const New = styled.div`
+  position: absolute;
+  font-size: 10px;
+  font-weight: 600;
+  color: ${colours.green900};
+  text-shadow: 0 0 4px rgba(2, 225, 136, 0.7);
+  text-transform: uppercase;
+  top: -4px;
+  right: -28px;
+`;
+
+export { NavLink };

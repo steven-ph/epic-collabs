@@ -4,11 +4,12 @@ import { ReactSVG } from 'react-svg';
 import styled from 'styled-components';
 import { Styled } from 'theme-ui';
 import { breakpoints, colours, easing } from 'styles';
+import { Flexbox, Link } from 'components/common';
 import { UserNav } from './user-nav';
-import { Link } from 'components/link';
-import { Flexbox } from 'components/common';
+import { NavLink } from './nav-link';
+import { MENU_ITEMS } from './nav-config';
 
-const Navigation = ({ textColor = colours.darkGrey900 }) => {
+const Navigation = ({ textColor = colours.darkGrey800, altColor = colours.navy900 }) => {
   return (
     <Container>
       <Flexbox>
@@ -20,9 +21,12 @@ const Navigation = ({ textColor = colours.darkGrey900 }) => {
         </Link>
       </Flexbox>
       <Flexbox flexGrow={1}>
-        <Flexbox alignItems="center">
-          <SearchInput placeholder="Search..." onSearch={value => console.log(value)} />
-        </Flexbox>
+        <SearchContainer>
+          <Input.Search placeholder="Search..." onSearch={value => console.log(value)} />
+        </SearchContainer>
+        {MENU_ITEMS.map(({ key, href, isNew }, index) => (
+          <NavLink key={index} item={key} href={href} isNew={!!isNew} textColor={textColor} altColor={altColor} />
+        ))}
       </Flexbox>
       <Flexbox alignItems="center">
         <UserNav downArrowColor={textColor} />
@@ -36,12 +40,6 @@ const Container = styled(Flexbox)`
 
   > * + * {
     margin-left: 28px;
-  }
-
-  @media screen and (max-width: ${breakpoints.sm}) {
-    > * + * {
-      margin-left: 8px;
-    }
   }
 `;
 
@@ -74,8 +72,14 @@ const LogoContainer = styled(Flexbox)`
   }
 `;
 
-const SearchInput = styled(Input.Search)`
-  min-width: 200px;
+const SearchContainer = styled(Flexbox)`
+  align-items: center;
+  margin-right: 8px;
+  width: 260px;
+
+  @media (${breakpoints.lg}) {
+    width: 300px;
+  }
 `;
 
 export { Navigation };
