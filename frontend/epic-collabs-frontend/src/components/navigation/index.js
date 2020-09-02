@@ -48,11 +48,7 @@ const Container = styled(Flexbox)`
 const Title = styled(Styled.h4)`
   font-weight: 500 !important;
   text-align: center;
-  color: ${({ textColor }) => textColor};
-
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
+  color: ${({ textColor }) => textColor} !important;
   user-select: none;
 
   @media screen and (max-width: ${breakpoints.md}) {

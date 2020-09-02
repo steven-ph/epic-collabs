@@ -68,6 +68,7 @@ const UserNav = ({ downArrowColor = colours.navy }) => {
 const LoginLogout = styled(Flexbox)`
   align-items: center;
   justify-items: center;
+  user-select: none;
 
   svg {
     width: 20px;

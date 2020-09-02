@@ -21,9 +21,6 @@ const StyledFooter = styled.footer`
 
 const Container = styled(Flexbox)`
   small {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
   }
 `;

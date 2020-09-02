@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Parallax, ParallaxLayer } from '@react-spring/parallax';
+import { Parallax, ParallaxLayer } from 'react-spring/renderprops-addons';
 import { breakpoints, colours, easing } from 'styles';
 import { Flexbox } from 'components/common';
 

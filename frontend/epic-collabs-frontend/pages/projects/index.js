@@ -8,7 +8,6 @@ const ProjectsPage = props => {
     <>
       <Head>
         <title>Epic Collabs | Projects</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <CommonLayout>
         <Projects {...props} />

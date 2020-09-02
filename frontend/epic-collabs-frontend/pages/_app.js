@@ -1,6 +1,6 @@
 import 'styles/index.less';
-import NProgress from 'nprogress';
 import Router from 'next/router';
+import NProgress from 'nprogress';
 import { withApollo } from 'components/hoc/with-apollo';
 import { useGetUser, UserProvider } from 'context/user';
 import { defaultTheme, GlobalStyle } from 'styles';
@@ -21,8 +21,8 @@ const EpicApp = ({ Component, pageProps }) => {
   return (
     <UserProvider value={{ user, loading }}>
       <ConfigProvider theme={defaultTheme}>
-        <Component {...pageProps} />
         <GlobalStyle />
+        <Component {...pageProps} />
       </ConfigProvider>
     </UserProvider>
   );
