@@ -35,7 +35,7 @@ const ImageComponent = props => {
           ...sxProps
         }}
       >
-        <ReactSVG src={src} crossOrigin="anonymous" />
+        <ReactSVG src={src} />
       </Box>
     );
   }
@@ -62,7 +62,7 @@ const ImageComponent = props => {
           backgroundColor: bgColorMode ? backgroundColor : 'transparent'
         }}
       >
-        <Img src={imgSrc} alt={alt || ''} crossOrigin="anonymous" />
+        <Img src={imgSrc} alt={alt || ''} />
       </Container>
     </ProgressiveImage>
   );

@@ -1,5 +1,7 @@
 import Router from 'next/router';
 import React, { Component } from 'react';
+import { CommonLayout } from 'layouts';
+import { Loading } from 'components/common';
 import { createLoginUrl } from 'functions/create-login-url';
 
 class RedirectToLogin extends Component {
@@ -8,7 +10,11 @@ class RedirectToLogin extends Component {
   }
 
   render() {
-    return <span>Signing you in...</span>;
+    return (
+      <CommonLayout>
+        <Loading />
+      </CommonLayout>
+    );
   }
 }
 

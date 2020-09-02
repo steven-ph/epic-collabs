@@ -8,6 +8,7 @@ export * from './icon';
 export * from './image';
 export * from './input';
 export * from './link';
+export * from './loading';
 export * from './radio';
 export * from './select';
 export * from './spacer';
