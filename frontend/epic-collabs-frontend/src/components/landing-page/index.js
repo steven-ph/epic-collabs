@@ -2,7 +2,7 @@ import { Flexbox, ImageContainer } from 'components/common';
 import React from 'react';
 import { Parallax, ParallaxLayer } from 'react-spring/renderprops-addons';
 import styled from 'styled-components';
-import { breakpoints, colours, easing } from 'styles';
+import { breakpoints, colours } from 'styles';
 
 const url = (name, wrap = false) => `${wrap ? 'url(' : ''}/images/svg/${name}.svg${wrap ? ')' : ''}`;
 
@@ -80,7 +80,7 @@ const LandingPage = () => {
       </ParallaxLayer>
 
       <ParallaxLayer
-        offset={2.2}
+        offset={2.25}
         speed={-0.4}
         sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2 }}
       >
@@ -88,23 +88,23 @@ const LandingPage = () => {
       </ParallaxLayer>
 
       <ParallaxLayer
-        offset={1.7}
-        speed={-0.3}
-        sx={{
-          zIndex: 1
-        }}
-      >
-        <img src={url('satellite4')} sx={{ width: '15%', marginLeft: '75%' }} />
-      </ParallaxLayer>
-
-      <ParallaxLayer
-        offset={2}
+        offset={1.9}
         speed={-0.3}
         sx={{
           zIndex: 1
         }}
       >
         <img src={url('satellite2')} sx={{ width: '15%', marginTop: '15%', marginLeft: '15%' }} />
+      </ParallaxLayer>
+
+      <ParallaxLayer
+        offset={2.1}
+        speed={-0.3}
+        sx={{
+          zIndex: 1
+        }}
+      >
+        <img src={url('satellite4')} sx={{ width: '15%', marginLeft: '75%' }} />
       </ParallaxLayer>
 
       <ParallaxLayer
@@ -162,26 +162,6 @@ const Headline = styled.span`
   @media screen and (min-width: ${breakpoints.md}) {
     font-size: 32px;
     font-weight: 700;
-  }
-`;
-
-const Img = styled.img`
-  align-self: center;
-  margin: 32px;
-  width: 500px;
-  height: 500px;
-  transition: all 0.2s ${easing.default};
-
-  @media screen and (max-width: ${breakpoints.sm}) {
-    margin: 16px;
-    width: 280px;
-    height: 280px;
-  }
-
-  @media screen and (max-width: ${breakpoints.md}) {
-    margin: 16px;
-    width: 380px;
-    height: 380px;
   }
 `;
 
