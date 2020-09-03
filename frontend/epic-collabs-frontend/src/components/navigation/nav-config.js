@@ -20,7 +20,7 @@ const MENU_ITEMS = [
 const NAV_CONFIGS = {
   browse: {
     label: 'Browse',
-    icon: 'project'
+    icon: 'projects'
   },
   dashboard: {
     label: 'Dashboard',

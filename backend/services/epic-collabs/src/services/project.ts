@@ -1,9 +1,9 @@
-import { generate } from 'shortid';
 import { logger } from '@sp-tools/kloud-logger';
-import { kebabCase, get, isEmpty, values } from 'lodash';
+import { get, isEmpty, kebabCase, values } from 'lodash';
+import { generate } from 'shortid';
+import { IProjectModel, newProjectValidationSchema, updateProjectValidationSchema } from '../models/project';
 import { IProjectRepository } from '../repositories/project';
 import { getRandomImage } from '../utils/random-image';
-import { IProjectModel, newProjectValidationSchema, updateProjectValidationSchema } from '../models/project';
 
 interface IProjectService {
   getProjectById: (id: string) => Promise<IProjectModel>;
@@ -42,7 +42,7 @@ const makeProjectService = ({ projectRepo }: IProjectServiceDI): IProjectService
     const { name } = input;
 
     const slug = `${kebabCase(name)}-${generate()}-${generate()}`.toLowerCase();
-    const [image, coverImage] = await Promise.all([getRandomImage({ width: 250, height: 250 }), getRandomImage({ width: 1280, height: 250 })]);
+    const [image, coverImage] = await Promise.all([getRandomImage({ width: 300, height: 300 }), getRandomImage({ width: 1280, height: 300 })]);
 
     return projectRepo.createProject({ ...input, slug, image, coverImage });
   };

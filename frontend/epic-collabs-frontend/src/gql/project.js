@@ -9,6 +9,19 @@ const GET_PROJECTS_QUERY = gql`
       description
       image
       coverImage
+
+      followers {
+        _id
+      }
+
+      collaborators {
+        user {
+          _id
+        }
+        position {
+          _id
+        }
+      }
     }
   }
 `;

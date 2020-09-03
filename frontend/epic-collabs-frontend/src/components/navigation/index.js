@@ -24,7 +24,6 @@ const Navigation = ({ textColor = colours.darkGrey800, altColor = colours.navy90
             >
               <Icon name="rocket" />
             </Box>
-
             <Title textColor={textColor}>EpicCollabs</Title>
           </LogoContainer>
         </Link>

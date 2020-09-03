@@ -1,11 +1,11 @@
-import 'styles/index.less';
-import Router from 'next/router';
-import NProgress from 'nprogress';
-import { withApollo } from 'hoc/with-apollo';
-import { useGetUser, UserProvider } from 'context/user';
-import { defaultTheme, GlobalStyle } from 'styles';
 import { ConfigProvider } from 'components/common';
 import { getConfig } from 'config';
+import { useGetUser, UserProvider } from 'context/user';
+import { withApollo } from 'hoc/with-apollo';
+import Router from 'next/router';
+import NProgress from 'nprogress';
+import { defaultTheme } from 'styles';
+import 'styles/index.less';
 
 Router.events.on('routeChangeStart', () => NProgress.start());
 
@@ -21,7 +21,6 @@ const EpicApp = ({ Component, pageProps }) => {
   return (
     <UserProvider value={{ user, loading }}>
       <ConfigProvider theme={defaultTheme}>
-        <GlobalStyle />
         <Component {...pageProps} />
       </ConfigProvider>
     </UserProvider>

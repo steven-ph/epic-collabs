@@ -3,6 +3,7 @@ const colours = {
   white: 'rgba(255,255,255,1.0)',
   tint: 'rgba(255,255,255,0.5)',
   shade: 'rgba(0,0,0,0.40)',
+  shadeDark: 'rgba(0,0,0,0.70)',
   // red
   red50: '#FFF3F8',
   red100: '#FFE3EE',
