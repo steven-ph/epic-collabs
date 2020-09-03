@@ -1,9 +1,8 @@
 import { Input } from 'antd';
-import { Flexbox, Link } from 'components/common';
+import { Box, Flexbox, Icon, Link } from 'components/common';
 import React from 'react';
-import { ReactSVG } from 'react-svg';
 import styled from 'styled-components';
-import { breakpoints, colours, easing } from 'styles';
+import { breakpoints, colours } from 'styles';
 import { Styled } from 'theme-ui';
 import { MENU_ITEMS } from './nav-config';
 import { NavLink } from './nav-link';
@@ -15,7 +14,17 @@ const Navigation = ({ textColor = colours.darkGrey800, altColor = colours.navy90
       <Flexbox>
         <Link href="/" sx={{ alignSelf: 'center' }}>
           <LogoContainer alignItems="center">
-            <ReactSVG src={'/images/svg/rocket.svg'} />
+            <Box
+              sx={{
+                width: 48,
+                height: 48,
+                ml: 8,
+                mr: 8
+              }}
+            >
+              <Icon name="rocket" />
+            </Box>
+
             <Title textColor={textColor}>EpicCollabs</Title>
           </LogoContainer>
         </Link>
@@ -63,23 +72,9 @@ const Title = styled(Styled.h4)`
 const LogoContainer = styled(Flexbox)`
   cursor: pointer;
 
-  svg {
-    width: 48px;
-    margin-left: 16px;
-    margin-right: 16px;
-    transition: all 0.2s ${easing.default};
-  }
-
   &:hover {
     svg {
       transform: scale(1.05);
-    }
-  }
-
-  @media screen and (max-width: ${breakpoints.sm}) {
-    svg {
-      width: 40px;
-      margin-right: 5px;
     }
   }
 `;

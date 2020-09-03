@@ -1,7 +1,7 @@
 import { ReactSVG } from 'react-svg';
 import styled from 'styled-components';
 
-const Icon = ({ name, width = 16, fill, hoverFill, ...props }) => (
+const Icon = ({ name, width, fill, hoverFill, ...props }) => (
   <IconContainer width={width} fill={fill} hoverFill={hoverFill} {...props}>
     <ReactSVG src={`/images/svg/${name}.svg`} />
   </IconContainer>
