@@ -1,8 +1,8 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Parallax, ParallaxLayer } from 'react-spring/renderprops-addons';
-import { breakpoints, colours, easing } from 'styles';
 import { Flexbox, ImageContainer } from 'components/common';
+import React from 'react';
+import { Parallax, ParallaxLayer } from 'react-spring/renderprops-addons';
+import styled from 'styled-components';
+import { breakpoints, colours, easing } from 'styles';
 
 const url = (name, wrap = false) => `${wrap ? 'url(' : ''}/images/svg/${name}.svg${wrap ? ')' : ''}`;
 
@@ -48,7 +48,7 @@ const LandingPage = () => {
       />
 
       <ParallaxLayer offset={1.3} speed={-0.3}>
-        <img src={url('satellite4')} sx={{ width: '15%', marginLeft: '75%' }} />
+        <img src={url('flying-rocket')} sx={{ width: '15%', marginLeft: '10%' }} />
       </ParallaxLayer>
 
       <ParallaxLayer offset={1} speed={0.8} sx={{ opacity: 0.1, zIndex: 1 }}>
@@ -85,6 +85,16 @@ const LandingPage = () => {
         sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2 }}
       >
         <img src={url('earth')} sx={{ width: '25%' }} />
+      </ParallaxLayer>
+
+      <ParallaxLayer
+        offset={1.7}
+        speed={-0.3}
+        sx={{
+          zIndex: 1
+        }}
+      >
+        <img src={url('satellite4')} sx={{ width: '15%', marginLeft: '75%' }} />
       </ParallaxLayer>
 
       <ParallaxLayer

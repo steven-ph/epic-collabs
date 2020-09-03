@@ -1,13 +1,13 @@
-import React from 'react';
 import { Input } from 'antd';
+import { Flexbox, Link } from 'components/common';
+import React from 'react';
 import { ReactSVG } from 'react-svg';
 import styled from 'styled-components';
-import { Styled } from 'theme-ui';
 import { breakpoints, colours, easing } from 'styles';
-import { Flexbox, Link } from 'components/common';
-import { UserNav } from './user-nav';
-import { NavLink } from './nav-link';
+import { Styled } from 'theme-ui';
 import { MENU_ITEMS } from './nav-config';
+import { NavLink } from './nav-link';
+import { UserNav } from './user-nav';
 
 const Navigation = ({ textColor = colours.darkGrey800, altColor = colours.navy900 }) => {
   return (
@@ -21,7 +21,7 @@ const Navigation = ({ textColor = colours.darkGrey800, altColor = colours.navy90
         </Link>
       </Flexbox>
       <Flexbox flexGrow={1}>
-        <SearchContainer>
+        <SearchContainer alignItems="center">
           <Input.Search placeholder="Search..." onSearch={value => console.log(value)} />
         </SearchContainer>
         {MENU_ITEMS.map(({ key, href, isNew }, index) => (
@@ -40,6 +40,12 @@ const Container = styled(Flexbox)`
 
   > * + * {
     margin-left: 28px;
+  }
+
+  @media screen and (max-width: ${breakpoints.sm}) {
+    > * + * {
+      margin-left: 12px;
+    }
   }
 `;
 
@@ -64,6 +70,12 @@ const LogoContainer = styled(Flexbox)`
     transition: all 0.2s ${easing.default};
   }
 
+  &:hover {
+    svg {
+      transform: scale(1.05);
+    }
+  }
+
   @media screen and (max-width: ${breakpoints.sm}) {
     svg {
       width: 40px;
@@ -73,12 +85,15 @@ const LogoContainer = styled(Flexbox)`
 `;
 
 const SearchContainer = styled(Flexbox)`
-  align-items: center;
   margin-right: 8px;
   width: 260px;
 
   @media (${breakpoints.lg}) {
     width: 300px;
+  }
+
+  @media screen and (max-width: ${breakpoints.sm}) {
+    display: none;
   }
 `;
 

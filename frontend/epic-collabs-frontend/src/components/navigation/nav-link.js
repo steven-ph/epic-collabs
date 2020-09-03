@@ -1,7 +1,7 @@
-import styled from 'styled-components';
+import { Box, Flexbox, Icon, Link } from 'components/common';
 import { useRouter } from 'next/router';
+import styled from 'styled-components';
 import { colours, easing } from 'styles';
-import { Flexbox, Box, Link, Icon } from 'components/common';
 import { NAV_CONFIGS } from './nav-config';
 
 const NavBottomBorder = () => (
@@ -22,8 +22,8 @@ const NavItem = ({ icon, label, isNew }) => (
     <Box
       sx={{
         position: 'relative',
-        width: 24,
-        height: 24
+        width: 28,
+        height: 28
       }}
     >
       <Icon name={icon} />
@@ -100,6 +100,10 @@ const InnerLink = styled(Flexbox)`
   flex-direction: column;
   align-items: center;
   margin: 0 8px;
+
+  &:hover {
+    transform: scale(1.05);
+  }
 `;
 
 const New = styled.div`
