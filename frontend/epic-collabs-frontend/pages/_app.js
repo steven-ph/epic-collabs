@@ -1,6 +1,6 @@
 import { ConfigProvider } from 'components/common';
 import { getConfig } from 'config';
-import { useGetUser, UserProvider } from 'context/user';
+import { useGetAuthUser, AuthProvider } from 'context/auth';
 import { withApollo } from 'hoc/with-apollo';
 import Router from 'next/router';
 import NProgress from 'nprogress';
@@ -16,14 +16,14 @@ Router.events.on('routeChangeError', () => NProgress.done());
 const { SSR_ENABLED } = getConfig();
 
 const EpicApp = ({ Component, pageProps }) => {
-  const { user, loading } = useGetUser();
+  const { user, loading } = useGetAuthUser();
 
   return (
-    <UserProvider value={{ user, loading }}>
+    <AuthProvider value={{ user, loading }}>
       <ConfigProvider theme={defaultTheme}>
         <Component {...pageProps} />
       </ConfigProvider>
-    </UserProvider>
+    </AuthProvider>
   );
 };
 

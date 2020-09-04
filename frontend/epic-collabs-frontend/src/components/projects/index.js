@@ -17,19 +17,19 @@ const Project = ({ project }) => {
         <ImageContainer isFluid src={project.image} alt={project.name} />
       </ImageBox>
       <Flexbox mt="8px" pl="4px" pr="4px" alignItems="center">
-        <Icon name="project" width={22} />
+        <Icon name="project" width="22px" />
         <Name>{project.name}</Name>
 
         {positionAvailable >= 1 && (
           <>
             <Tooltip title={`Available ${positionAvailable > 1 ? 'positions' : 'position'}`}>
-              <Icon name="opportunity" width={22} />
+              <Icon name="opportunity" width="22px" />
             </Tooltip>
             <Count>{positionAvailable}</Count>
           </>
         )}
         <Tooltip title="Followers">
-          <Icon name="heart" width={22} />
+          <Icon name="heart" width="22px" />
         </Tooltip>
         <Count>{followersCount}</Count>
       </Flexbox>

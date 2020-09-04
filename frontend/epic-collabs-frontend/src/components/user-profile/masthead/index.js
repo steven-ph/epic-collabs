@@ -1,15 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { values } from 'lodash';
+import { message } from 'antd';
 import styled from 'styled-components';
 import { breakpoints, colours, defaultTheme, easing } from 'styles';
 import { Box, Flexbox, CenteredContainer } from 'components/common';
 import { SocialButtonsList } from './SocialButtonsList';
+import { EditButton } from 'components/user-profile/common';
+import { SocialNetworkInfoForm } from 'components/user-profile/forms/SocialNetworkInfoForm';
 
 const AVATAR_SIZE = 150;
 const AVATAR_SMALL_SIZE = 100;
 const { fonts, lineHeights, fontSizes, fontWeights } = defaultTheme;
 
-const ProfileMasthead = ({ profile }) => {
-  const { name, picture, socialNetworkUrls } = profile;
+const ProfileMasthead = ({ profile, isOwnProfile }) => {
+  const [editing, setEditing] = useState(false);
+  const { _id, name, picture, socialNetworks } = profile;
+
+  const onUpdate = msg => {
+    setEditing(false);
+    message.success(msg);
+  };
+
+  const onError = msg => {
+    message.error(msg);
+  };
+
+  const onCancel = () => {
+    setEditing(false);
+  };
 
   return (
     <StyledProfileMasthead>
@@ -24,7 +42,18 @@ const ProfileMasthead = ({ profile }) => {
                 <StyledDisplayName>{name}</StyledDisplayName>
               </StyledDisplayNameBox>
             </Flexbox>
-            <SocialButtonsList socialNetworkUrls={socialNetworkUrls} />
+            <Flexbox>
+              <SocialButtonsList socialNetworks={values(socialNetworks)} />
+              {isOwnProfile && <EditButton onClick={() => setEditing(true)} />}
+              <SocialNetworkInfoForm
+                visible={editing}
+                userId={_id}
+                socialNetworks={socialNetworks}
+                onError={onError}
+                onUpdate={onUpdate}
+                onCancel={onCancel}
+              />
+            </Flexbox>
           </Box>
         </Flexbox>
       </StyledCenteredContainer>

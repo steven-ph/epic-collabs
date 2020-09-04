@@ -1,19 +1,21 @@
-import { UserProfile } from 'components/user-profile';
-import { withAuth } from 'hoc/with-auth';
-import { CommonLayout } from 'layouts';
 import Head from 'next/head';
+import { CommonLayout } from 'layouts';
+import { withAuth } from 'hoc/with-auth';
+import { UserProfile } from 'components/user-profile';
+import { useGetUserProfileById } from 'hooks/use-user-profile';
+import { Loading } from 'components/common';
 
-const MyProfilePage = props => {
+const ProfilePage = ({ user }) => {
+  const { loading, profile } = useGetUserProfileById({ id: user.sub });
+
   return (
     <>
       <Head>
-        <title>Epic Collabs | Your Profile</title>
+        <title>{`Epic Collabs | ${user.name}`}</title>
       </Head>
-      <CommonLayout>
-        <UserProfile {...props} />
-      </CommonLayout>
+      <CommonLayout>{loading ? <Loading /> : <UserProfile profile={profile} />}</CommonLayout>
     </>
   );
 };
 
-export default withAuth(MyProfilePage, { isProtected: true });
+export default withAuth(ProfilePage, { isProtected: true });

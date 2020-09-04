@@ -4,7 +4,7 @@ import { Avatar, Dropdown, Menu } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSortDown, faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { breakpoints, colours, easing } from 'styles';
-import { useUserContext } from 'context/user';
+import { useAuthContext } from 'context/auth';
 import { Flexbox, Link } from 'components/common';
 
 const getDropdownMenu = ({ name }) => (
@@ -36,7 +36,7 @@ const getDropdownMenu = ({ name }) => (
 );
 
 const UserNav = ({ downArrowColor = colours.navy }) => {
-  const { user, loading } = useUserContext();
+  const { user, loading } = useAuthContext();
 
   if (!user && !loading) {
     return (
@@ -51,6 +51,7 @@ const UserNav = ({ downArrowColor = colours.navy }) => {
 
   if (user) {
     const { picture, name } = user;
+
     return (
       <Dropdown trigger={['click']} overlay={getDropdownMenu({ name })} placement="bottomRight">
         <ProfileButton alignItems="center">

@@ -1,44 +1,37 @@
 import React from 'react';
 import { Tooltip } from 'antd';
 import styled from 'styled-components';
+import { find, map, lowerCase, startCase } from 'lodash';
 import { colours } from 'styles';
 import { Box, Flexbox, Icon } from 'components/common';
 
-const SOCIAL_NETWORK_ICONS = {
+const SOCIAL_NETWORKS = {
   github: 'github',
-  facebook: 'facebook',
   linkedin: 'linkedin',
+  facebook: 'facebook',
   twitter: 'twitter'
 };
 
-const socialLinks = () => {
-  return [
-    {
-      name: 'Github',
-      icon: SOCIAL_NETWORK_ICONS['github']
-    },
-    {
-      name: 'Facebook',
-      icon: SOCIAL_NETWORK_ICONS['facebook']
-    },
-    {
-      name: 'Linkedin',
-      icon: SOCIAL_NETWORK_ICONS['linkedin']
-    },
-    {
-      name: 'Twitter',
-      icon: SOCIAL_NETWORK_ICONS['twitter']
-    }
-  ];
-};
+const generateSocialLinks = (socialNetworks = []) =>
+  map(SOCIAL_NETWORKS, name => {
+    const found = find(socialNetworks, { name }) || {};
+
+    return {
+      name: startCase(name),
+      url: found.url || null,
+      icon: SOCIAL_NETWORKS[lowerCase(name)]
+    };
+  });
 
 const Links = ({ links }) => {
-  return links.map((link, index) => {
-    if (link.url) {
+  return links.map(({ name, url, icon }, index) => {
+    if (url) {
       return (
-        <a key={index} href={link.url} rel="noopener noreferrer" target="_blank">
-          <Icon name={link.icon} width="20px" fill={colours.navy700} />
-        </a>
+        <Box key={index}>
+          <a href={url} rel="noopener noreferrer" target="_blank">
+            <Icon name={icon} width="20px" fill={colours.navy700} />
+          </a>
+        </Box>
       );
     }
 
@@ -47,31 +40,27 @@ const Links = ({ links }) => {
         <Tooltip
           placement="bottom"
           title={
-            <p style={{ textAlign: 'center', marginBottom: 0 }}>
-              You haven&apos;t added your {link.name} profile link yet.
-            </p>
+            <p style={{ textAlign: 'center', marginBottom: 0 }}>You haven&apos;t added your {name} profile link yet.</p>
           }
         >
-          <Icon name={link.icon} fill={colours.navy700} width="20px" />
+          <Icon name={icon} fill={colours.navy700} width="20px" />
         </Tooltip>
       </Box>
     );
   });
 };
 
-const SocialButtonsList = ({ socialNetworkUrls }) => (
+const SocialButtonsList = ({ socialNetworks }) => (
   <Container>
-    <Links links={socialLinks(socialNetworkUrls)} />
+    <Links links={generateSocialLinks(socialNetworks)} />
   </Container>
 );
 
 const Container = styled(Flexbox)`
-  margin-top: 15px;
-  margin-left: 0px;
-  padding-left: 0px;
+  align-items: center;
 
   div {
-    padding-right: 20px;
+    margin-right: 8px;
   }
 `;
 
