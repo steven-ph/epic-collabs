@@ -20,14 +20,10 @@ const handler = async event => {
         picture: get(auth0User, 'picture') || generateAvatar(),
         username: get(auth0User, 'username') || get(auth0User, 'email'),
         name: get(auth0User, 'name'),
-        bio: '',
         firstName: get(auth0User, 'given_name'),
         lastName: get(auth0User, 'family_name'),
         createdAt: createdAt ? new Date(`${createdAt}`).getTime() : Date.now(),
-        emailVerified: !!get(auth0User, 'email_verified'),
-        createdProjects: [],
-        followingProjects: [],
-        contributingProjects: []
+        emailVerified: !!get(auth0User, 'email_verified')
       },
       isNil
     );

@@ -3,6 +3,11 @@ import { Document, Schema } from 'mongoose';
 import { generateAvatar } from '../utils/random-image';
 import { optionalEmptyString, optionalEmpty } from './common';
 
+interface ISocialNetworkModel {
+  name?: string;
+  url?: string;
+}
+
 interface IUserModel {
   _id?: string;
   email?: string;
@@ -13,7 +18,9 @@ interface IUserModel {
   lastName?: string;
   bio?: string;
   createdAt?: number;
+  updatedBy?: string;
   emailVerified?: boolean;
+  socialNetworks?: ISocialNetworkModel[];
   createdProjects?: string[];
   followingProjects?: string[];
   contributingProjects?: string[];
@@ -62,6 +69,18 @@ const UserSchema: Schema = new Schema(
     emailVerified: {
       type: Boolean
     },
+    socialNetworks: [
+      {
+        name: {
+          type: String,
+          trim: true
+        },
+        url: {
+          type: String,
+          trim: true
+        }
+      }
+    ],
     createdProjects: {
       type: [String],
       ref: 'Project',
@@ -85,6 +104,7 @@ const upsertUserValidationSchema = Joi.object()
   .keys({
     _id: Joi.string().required(),
     email: Joi.string().required(),
+    updatedBy: optionalEmptyString,
     username: optionalEmptyString,
     name: optionalEmptyString,
     firstName: optionalEmptyString,
@@ -93,6 +113,12 @@ const upsertUserValidationSchema = Joi.object()
     picture: optionalEmptyString,
     createdAt: optionalEmpty,
     emailVerified: Joi.boolean().optional(),
+    socialNetworks: Joi.array().items(
+      Joi.object().keys({
+        name: Joi.string().required(),
+        url: Joi.string().required()
+      })
+    ),
     createdProjects: Joi.array().items(Joi.string()),
     followingProjects: Joi.array().items(Joi.string()),
     contributingProjects: Joi.array().items(Joi.string())

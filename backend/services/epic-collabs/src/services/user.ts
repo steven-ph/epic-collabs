@@ -1,5 +1,5 @@
 import { logger } from '@sp-tools/kloud-logger';
-import { get, find, isEmpty, values, uniq } from 'lodash';
+import { get, find, isEmpty, omit, values, uniq } from 'lodash';
 import { IProjectService } from './project';
 import { IProjectModel } from '../repositories/project';
 import { newProjectValidationSchema, updateProjectValidationSchema } from '../models/project';
@@ -24,8 +24,13 @@ import {
   changeOwnershipValidationSchema
 } from '../models/user';
 
+interface IUpdateProfileInput extends IUserModel {
+  updatedBy: string;
+}
+
 interface IUserService {
   handleLogin: (input: IUserModel) => Promise<IUserModel>;
+  updateProfile: (input: IUpdateProfileInput) => Promise<IUserModel>;
   getUserById: (userId: string) => Promise<IUserModel>;
   getUsersByIds: (userIds: string[]) => Promise<IUserModel[]>;
   getUserByEmail: (email: string) => Promise<IUserModel>;
@@ -52,6 +57,36 @@ const makeUserService = ({ userRepo, projectService }: IUserServiceDI): IUserSer
   const getUsersByIds = (userIds: string[]) => userRepo.getUsersByIds(userIds);
   const getUserByEmail = (email: string) => userRepo.getUserByEmail(email);
   const getUsersByEmails = (emails: string[]) => userRepo.getUsersByEmails(emails);
+
+  const updateProfile = async (input: IUserModel) => {
+    const _id = get(input, '_id');
+    const updatedBy = get(input, 'updatedBy');
+
+    if (isEmpty(_id) || isEmpty(updatedBy)) {
+      const errMsg = 'updateProfile error: invalid userId';
+      logger.error(errMsg, null, { input });
+
+      throw new Error(errMsg);
+    }
+
+    if (_id !== updatedBy) {
+      const errMsg = 'updateProfile error: not allowed to update other users profile';
+      logger.error(errMsg, null, { input });
+
+      throw new Error(errMsg);
+    }
+
+    const user = await userRepo.getUserById(_id);
+
+    if (isEmpty(user)) {
+      const errMsg = 'updateProfile error: user not found';
+      logger.error(errMsg, null, { input });
+
+      throw new Error(errMsg);
+    }
+
+    return userRepo.upsertUser({ ...omit(input, ['updatedBy']), email: user.email });
+  };
 
   const joinProject = async (input: IJoinProjectInput) => {
     try {
@@ -472,6 +507,7 @@ const makeUserService = ({ userRepo, projectService }: IUserServiceDI): IUserSer
 
   return {
     handleLogin,
+    updateProfile,
     getUserById,
     getUsersByIds,
     getUserByEmail,

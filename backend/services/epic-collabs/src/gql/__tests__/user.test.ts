@@ -12,6 +12,7 @@ const userContext = {
   getUserByEmail: jest.fn(),
   getUsersByEmails: jest.fn(),
   joinProject: jest.fn(),
+  updateProfile: jest.fn(),
   followProject: jest.fn(),
   unfollowProject: jest.fn(),
   leaveProject: jest.fn(),
@@ -180,6 +181,29 @@ describe('User schema', () => {
       });
 
       expect(data.joinProject).toEqual({
+        _id: 'mock-userId',
+        success: true
+      });
+    });
+  });
+
+  describe('Mutation.updateProfile', () => {
+    const mutation = `
+      mutation updateProfile($input: UpdateProfileInput!) {
+        updateProfile(input: $input) {
+          _id
+          success
+        }
+      }
+    `;
+
+    it('should update user profile', async () => {
+      userContext.updateProfile.mockResolvedValue(true);
+      const { data } = await graphql(schema, mutation, null, context, {
+        input: { _id: 'mock-userId', bio: 'mock-bio' }
+      });
+
+      expect(data.updateProfile).toEqual({
         _id: 'mock-userId',
         success: true
       });

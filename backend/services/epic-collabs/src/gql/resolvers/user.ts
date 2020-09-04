@@ -10,6 +10,12 @@ export const resolvers = {
     usersByEmails: (_, { emails }, ctx: IContext) => ctx.User.getUsersByEmails(emails)
   },
   Mutation: {
+    updateProfile: async (_, { input }, ctx: IContext) => {
+      const userId = ctx.viewer.id;
+      const success = await ctx.User.updateProfile({ ...input, updatedBy: userId });
+
+      return { userId, success: !!success };
+    },
     joinProject: async (_, { input }, ctx: IContext) => {
       const userId = ctx.viewer.id;
       const success = await ctx.User.joinProject({ ...input, userId });
@@ -57,6 +63,11 @@ export const resolvers = {
     createdProjects: ({ _id }, _, ctx: IContext) => ctx.Project.getProjectsByUserId(_id),
     followingProjects: ({ followingProjects }, _, ctx: IContext) => ctx.Project.getProjectsByIds(followingProjects),
     contributingProjects: ({ contributingProjects }, _, ctx: IContext) => ctx.Project.getProjectsByIds(contributingProjects)
+  },
+  UpdateProfileResult: {
+    _id: property('userId'),
+    success: ({ success }) => !!success,
+    profile: ({ userId }, _, ctx: IContext) => ctx.User.getUserById(userId)
   },
   JoinProjectResult: {
     _id: property('userId'),

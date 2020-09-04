@@ -96,6 +96,42 @@ describe('UserService', () => {
     });
   });
 
+  describe('updateProfile', () => {
+    it('should not update the profile if the input is invalid', async () => {
+      // @ts-ignore
+      return expect(() => service.updateProfile({ foo: 'bar' })).rejects.toThrow('updateProfile error: invalid userId');
+    });
+
+    it('should not update the profile if viewerId and userId to update dont match', async () => {
+      // @ts-ignore
+      return expect(() => service.updateProfile({ _id: 'mock-id', updatedBy: 'mock-another-id', bio: 'mock-bio' })).rejects.toThrow(
+        'updateProfile error: not allowed to update other users profile'
+      );
+    });
+
+    it('should not update the profile if user does not exist', async () => {
+      mockRepo.getUserById.mockResolvedValue(null);
+      projectService.getProjectById.mockResolvedValue(mockProject);
+
+      return expect(() => service.updateProfile({ _id: 'mock-id', updatedBy: 'mock-id', bio: 'mock-bio' })).rejects.toThrow(
+        'updateProfile error: user not found'
+      );
+    });
+
+    it('should update user profile', async () => {
+      const input = { _id: 'mock-id', updatedBy: 'mock-id', bio: 'mock-bio' };
+      const expected = { _id: 'mock-id', bio: 'mock-bio' };
+
+      mockRepo.getUserById.mockResolvedValue({ ...expected, email: 'mock-email' });
+      mockRepo.upsertUser.mockResolvedValue({ ...expected });
+
+      const res = await service.updateProfile(input);
+
+      expect(res).toEqual(expected);
+      expect(mockRepo.upsertUser).toHaveBeenCalledWith({ _id: 'mock-id', bio: 'mock-bio', email: 'mock-email' });
+    });
+  });
+
   describe('#joinProject', () => {
     const input = { projectId: 'mock-projectId', userId: 'johndoe', positionId: 'mock-positionId' };
 

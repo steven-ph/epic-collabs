@@ -11,18 +11,34 @@ const typeDefs = gql`
     lastName: String
     bio: String
     createdAt: Float
+    socialNetworks: [SocialNetwork]
     emailVerified: Boolean
     createdProjects: [Project]
     followingProjects: [Project]
     contributingProjects: [Project]
   }
 
-  type Query {
-    me: User @auth(roles: [VIEWER], throwError: true)
-    userById(id: String!): User
-    usersByIds(ids: [String!]!): [User]
-    userByEmail(email: String!): User
-    usersByEmails(emails: [String!]!): [User]
+  input UpdateProfileInput {
+    _id: ID!
+    bio: String
+    socialNetworks: [SocialNetworkInput]
+  }
+
+  type UpdateProfileResult {
+    _id: ID
+    success: Boolean
+    profile: User
+  }
+
+  type SocialNetwork {
+    _id: ID
+    name: String
+    url: String
+  }
+
+  input SocialNetworkInput {
+    name: String
+    url: String
   }
 
   input JoinProjectInput {
@@ -100,7 +116,16 @@ const typeDefs = gql`
     project: Project
   }
 
+  type Query {
+    me: User @auth(roles: [VIEWER], throwError: true)
+    userById(id: String!): User
+    usersByIds(ids: [String!]!): [User]
+    userByEmail(email: String!): User
+    usersByEmails(emails: [String!]!): [User]
+  }
+
   type Mutation {
+    updateProfile(input: UpdateProfileInput!): UpdateProfileResult @auth(roles: [VIEWER], throwError: true)
     joinProject(input: JoinProjectInput!): JoinProjectResult @auth(roles: [VIEWER], throwError: true)
     followProject(input: FollowProjectInput!): FollowProjectResult @auth(roles: [VIEWER], throwError: true)
     unfollowProject(input: UnfollowProjectInput!): UnfollowProjectResult @auth(roles: [VIEWER], throwError: true)
