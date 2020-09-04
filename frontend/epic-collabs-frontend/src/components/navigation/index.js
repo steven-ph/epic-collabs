@@ -2,7 +2,7 @@ import { Input } from 'antd';
 import { Box, Flexbox, Icon, Link } from 'components/common';
 import React from 'react';
 import styled from 'styled-components';
-import { breakpoints, colours } from 'styles';
+import { breakpoints, colours, easing } from 'styles';
 import { Styled } from 'theme-ui';
 import { MENU_ITEMS } from './nav-config';
 import { NavLink } from './nav-link';
@@ -74,6 +74,7 @@ const LogoContainer = styled(Flexbox)`
   &:hover {
     svg {
       transform: scale(1.05);
+      transition: all 0.25s ${easing.default};
     }
   }
 `;

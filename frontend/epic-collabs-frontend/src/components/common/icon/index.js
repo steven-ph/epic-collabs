@@ -11,12 +11,13 @@ const Icon = ({ name, width, fill, hoverFill, ...props }) => (
 const IconContainer = styled(Box)`
   font-size: 0;
 
-  svg g {
+  svg {
     fill: ${({ fill }) => fill};
+    width: ${({ width }) => width};
     transition: 0.2s fill ease-in-out;
   }
 
-  &:hover svg g {
+  &:hover svg {
     fill: ${({ hoverFill }) => hoverFill};
   }
 `;

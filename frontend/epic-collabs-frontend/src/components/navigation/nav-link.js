@@ -49,14 +49,7 @@ const NavLink = ({ item, href, isNew, textColor = colours.navy, altColor = colou
   const { label, icon } = NAV_CONFIGS[item];
 
   return (
-    <OuterBox
-      textColor={textColor}
-      altColor={altColor}
-      isCurrentPath={pathname === href}
-      sx={{
-        alignSelf: 'flex-end'
-      }}
-    >
+    <OuterBox textColor={textColor} altColor={altColor} isCurrentPath={pathname === href}>
       <Link href={href}>
         <NavItem icon={icon} label={label} isNew={isNew} textColor={textColor} altColor={altColor} />
       </Link>
@@ -66,6 +59,8 @@ const NavLink = ({ item, href, isNew, textColor = colours.navy, altColor = colou
 
 // Handle :hover and :focus states
 const OuterBox = styled(Box)`
+  align-self: flex-end;
+
   a {
     color: ${({ isCurrentPath, textColor, altColor }) => (isCurrentPath ? altColor : textColor)};
     transition: color 0.1s ${easing.default};
@@ -103,6 +98,7 @@ const InnerLink = styled(Flexbox)`
 
   &:hover {
     transform: scale(1.05);
+    transition: all 0.1s ${easing.default};
   }
 `;
 

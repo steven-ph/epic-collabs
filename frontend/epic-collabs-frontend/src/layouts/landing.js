@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { withRouter } from 'next/router';
+import { rgba } from 'polished';
 import { colours } from 'styles';
 import { DefaultLayout } from './components/layout';
 import { Navigation } from 'components/navigation';
@@ -32,8 +33,7 @@ const Header = styled.header`
   height: 80px;
   width: 100%;
   padding-right: 32px;
-  border-radius: 0 0 12px 12px;
-  background-color: transparent;
+  background-image: linear-gradient(to top, transparent 0%, ${rgba(colours.navy900, 0.85)} 100%);
 `;
 
 export { LandingLayout };

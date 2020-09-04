@@ -1,11 +1,11 @@
-import { Tooltip } from 'antd';
-import { Box, Flexbox, Icon, ImageContainer } from 'components/common';
-import { useGetProjects } from 'hooks/use-project';
-import { get, shuffle, values } from 'lodash';
-import { rgba } from 'polished';
 import React from 'react';
+import { Tooltip } from 'antd';
+import { rgba } from 'polished';
 import styled from 'styled-components';
+import { get, shuffle, values } from 'lodash';
+import { useGetProjects } from 'hooks/use-project';
 import { breakpoints, colours, easing } from 'styles';
+import { Box, Flexbox, Icon, ImageContainer, Loading } from 'components/common';
 
 const Project = ({ project }) => {
   const followersCount = values(get(project, 'followers')).length;
@@ -42,7 +42,7 @@ const Project = ({ project }) => {
           </Tooltip>
           <Tooltip title="Join this project">
             <IconContainer>
-              <Icon name="join" width={44} ml="8px" sx={{ cursor: 'pointer' }} />
+              <Icon name="join" width={40} ml="8px" sx={{ cursor: 'pointer' }} />
             </IconContainer>
           </Tooltip>
         </Flexbox>
@@ -52,9 +52,13 @@ const Project = ({ project }) => {
 };
 
 const Projects = () => {
-  const { projects } = useGetProjects();
+  const { loading, projects } = useGetProjects();
   const data = shuffle(values(projects));
   const items = shuffle([...data, ...data, ...data]);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <Container>
@@ -84,8 +88,7 @@ const Item = styled(Flexbox)`
   max-width: 480px;
   margin: calc(24px / 2);
   overflow: hidden;
-
-  transition: all 0.3s ${easing.default};
+  transition: all 0.25s ${easing.default};
 
   :hover {
     transform: scale(1.05);
@@ -104,6 +107,7 @@ const Item = styled(Flexbox)`
 
         &:hover {
           transform: scale(1.05);
+          transition: all 0.25s ${easing.default};
         }
       }
     }
@@ -129,6 +133,7 @@ const Count = styled.span`
   margin-left: 4px;
   margin-right: 8px;
   color: ${colours.navy600};
+  user-select: none;
 `;
 
 const Overlay = styled(Flexbox)`
@@ -149,6 +154,7 @@ const ImageBox = styled(Box)`
   transition: box-shadow 0.3s;
   border: 5px solid ${colours.white};
   box-shadow: 0px 5px 5px -5px ${colours.shadeDark};
+  user-select: none;
 
   img {
     border-radius: 8px;

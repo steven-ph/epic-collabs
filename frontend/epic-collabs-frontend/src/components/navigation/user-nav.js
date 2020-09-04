@@ -101,6 +101,7 @@ const ProfileButton = styled(Flexbox)`
 const StyledAvatar = styled(Avatar)`
   height: 40px;
   width: 40px;
+  box-shadow: 0 0px 10px 0px ${colours.shade};
   transition: all 0.2s ${easing.default};
 
   @media screen and (max-width: ${breakpoints.sm}) {

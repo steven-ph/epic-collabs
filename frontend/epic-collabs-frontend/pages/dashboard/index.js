@@ -1,19 +1,19 @@
-import Head from 'next/head';
+import { Dashboard } from 'components/dashboard';
 import { withAuth } from 'hoc/with-auth';
 import { CommonLayout } from 'layouts';
-import { Loading } from 'components/common';
+import Head from 'next/head';
 
-const DashboardPage = () => {
+const DashboardPage = props => {
   return (
     <>
       <Head>
         <title>Epic Collabs | Dashboard</title>
       </Head>
       <CommonLayout>
-        <Loading />
+        <Dashboard {...props} />
       </CommonLayout>
     </>
   );
 };
 
-export default withAuth(DashboardPage, { isProtected: false });
+export default withAuth(DashboardPage, { isProtected: true });
