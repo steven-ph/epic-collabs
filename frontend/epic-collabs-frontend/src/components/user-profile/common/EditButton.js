@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { breakpoints, colours, defaultTheme } from 'styles';
+import { breakpoints, colors, defaultTheme } from 'styles';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from 'components/common';
@@ -10,7 +10,7 @@ const { fontSizes, fontWeights } = defaultTheme;
 const StyledEditButton = styled(Button)`
   font-size: ${fontSizes.sm};
   font-weight: ${fontWeights.medium};
-  color: ${colours.blue700};
+  color: ${colors.blue700};
   min-width: 70px;
 
   @media only screen and (min-width: 0px) and (max-width: ${breakpoints.md}) and (orientation: portrait) {
@@ -26,7 +26,7 @@ const StyledEditButton = styled(Button)`
 
 const PenIcon = styled(FontAwesomeIcon)`
   font-size: ${fontSizes.sm};
-  color: ${colours.blue700};
+  color: ${colors.blue700};
 
   @media (min-width: 0px) and (max-width: ${breakpoints.md}) and (orientation: portrait) {
     font-size: ${fontSizes.l};

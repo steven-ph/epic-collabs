@@ -1,7 +1,7 @@
 import { withRouter } from 'next/router';
 import React from 'react';
 import styled from 'styled-components';
-import { colours } from 'styles';
+import { colors } from 'styles';
 import { Body } from './components/body';
 import { Footer } from './components/footer';
 import { Header } from './components/header';
@@ -18,7 +18,7 @@ const CommonLayout = withRouter(({ children }) => {
 });
 
 const PageLayout = styled(DefaultLayout)`
-  background-color: ${colours.lightGrey300};
+  background-color: ${colors.lightGrey300};
 `;
 
 export { CommonLayout };

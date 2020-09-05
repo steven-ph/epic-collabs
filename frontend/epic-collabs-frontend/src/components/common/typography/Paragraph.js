@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import { Styled } from 'theme-ui';
-import { colours } from 'styles';
+import { colors } from 'styles';
 
 const Paragraph = styled(Styled.p)`
   font-size: 16px;
-  color: ${colours.darkGrey700};
+  color: ${colors.darkGrey700};
 `;
 
 export { Paragraph };

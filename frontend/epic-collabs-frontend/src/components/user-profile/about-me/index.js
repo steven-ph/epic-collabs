@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { message } from 'antd';
 import styled from 'styled-components';
 import ReactMarkdown from 'react-markdown';
-import { colours, defaultTheme } from 'styles';
+import { colors, defaultTheme } from 'styles';
 import { Box, Flexbox } from 'components/common';
 import { EditButton } from 'components/user-profile/common';
 import { SectionLayout } from 'components/user-profile/layout';
@@ -65,14 +65,14 @@ const AboutMe = ({ profile, isOwnProfile }) => {
 const Bio = styled.span`
   font-weight: ${fontWeights.regular};
   font-size: ${fontSizes.sm};
-  color: ${colours.darkGrey800};
+  color: ${colors.darkGrey800};
 `;
 
 const EmptyBio = styled.span`
   font-weight: ${fontWeights.regular};
   font-size: ${fontSizes.sm};
   font-style: italic;
-  color: ${colours.darkGrey100};
+  color: ${colors.darkGrey100};
 `;
 
 export { AboutMe };

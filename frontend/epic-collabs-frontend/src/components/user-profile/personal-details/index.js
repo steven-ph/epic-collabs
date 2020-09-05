@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { colours, defaultTheme } from 'styles';
+import { colors, defaultTheme } from 'styles';
 import { Box, Flexbox } from 'components/common';
 import { SectionLayout } from 'components/user-profile/layout';
 
@@ -31,7 +31,7 @@ const PersonalDetails = ({ profile }) => {
 
 const StyledLabel = styled.label`
   font-size: ${fontSizes.sm};
-  color: ${colours.navy700};
+  color: ${colors.navy700};
   font-weight: ${fontWeights.semiBold};
   line-height: 17px;
 `;
@@ -39,7 +39,7 @@ const StyledLabel = styled.label`
 const StyledParagraph = styled.p`
   font-weight: ${fontWeights.regular};
   font-size: ${fontSizes.sm};
-  color: ${colours.darkGrey800};
+  color: ${colors.darkGrey800};
 `;
 
 export { PersonalDetails };

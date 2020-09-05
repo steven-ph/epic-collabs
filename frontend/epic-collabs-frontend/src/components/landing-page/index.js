@@ -2,14 +2,14 @@ import { Flexbox, ImageContainer } from 'components/common';
 import React from 'react';
 import { Parallax, ParallaxLayer } from 'react-spring/renderprops-addons';
 import styled from 'styled-components';
-import { breakpoints, colours } from 'styles';
+import { breakpoints, colors } from 'styles';
 
 const url = (name, wrap = false) => `${wrap ? 'url(' : ''}/images/svg/${name}.svg${wrap ? ')' : ''}`;
 
 const LandingPage = () => {
   return (
     <Parallax pages={3}>
-      <ParallaxLayer offset={2} speed={1} sx={{ backgroundColor: colours.blue400 }} />
+      <ParallaxLayer offset={2} speed={1} sx={{ backgroundColor: colors.blue400 }} />
 
       <ParallaxLayer
         offset={0}
@@ -145,7 +145,7 @@ const LandingPage = () => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundImage: `linear-gradient(to bottom, ${colours.navy900} 0%, ${colours.blue400} 100%)`
+          backgroundImage: `linear-gradient(to bottom, ${colors.navy900} 0%, ${colors.blue400} 100%)`
         }}
       >
         <img src={url('clients-main')} sx={{ width: '25%' }} />
@@ -157,7 +157,7 @@ const LandingPage = () => {
 const Headline = styled.span`
   font-size: 24px;
   text-align: center;
-  color: ${colours.lightGrey400};
+  color: ${colors.lightGrey400};
 
   @media screen and (min-width: ${breakpoints.md}) {
     font-size: 32px;

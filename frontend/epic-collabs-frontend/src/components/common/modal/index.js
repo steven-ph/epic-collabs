@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal as _Modal } from 'antd';
 import styled from 'styled-components';
-import { colours, defaultTheme } from 'styles';
+import { colors, defaultTheme } from 'styles';
 
 const { fonts, fontSizes, fontWeights, lineHeights } = defaultTheme;
 
@@ -57,7 +57,7 @@ const ModalTitle = styled.h2`
   font-family: ${fonts.brand};
   font-weight: ${fontWeights.bold};
   font-size: ${fontSizes['2xl']};
-  color: ${colours.navy600};
+  color: ${colors.navy600};
   margin: 4px 0 2px 0;
 `;
 
@@ -65,7 +65,7 @@ const ModalSubtitle = styled.h2`
   font-family: 'inherit';
   font-size: ${fontSizes.sm};
   font-weight: ${fontWeights.regular};
-  color: ${colours.darkGrey700};
+  color: ${colors.darkGrey700};
   line-height: ${lineHeights.rg};
   margin: 0;
 `;

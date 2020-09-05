@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { colours } from 'styles';
+import { colors } from 'styles';
 import { Flexbox, SmallText } from 'components/common';
 
 const Footer = () => (
@@ -16,7 +16,7 @@ const StyledFooter = styled.footer`
   padding: 10px 10px;
   flex-shrink: 0;
   border-radius: 12px 12px 0 0;
-  background-color: ${colours.lightGrey200};
+  background-color: ${colors.lightGrey200};
 `;
 
 const Container = styled(Flexbox)`

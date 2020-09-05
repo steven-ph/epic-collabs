@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { colours } from 'styles';
+import { colors } from 'styles';
 
 const STATUS = {
   PENDING: 'pending',
@@ -70,7 +70,7 @@ const ProgressiveImage = ({ src, srcSet, onLoad, onError, preload = () => {}, fa
         (fallback
           ? fallback()
           : React.cloneElement(children, {
-              style: { background: `${colours.navy}` },
+              style: { background: `${colors.navy}` },
               srcSet
             }))}
       {(status === STATUS.LOADING || status === STATUS.PENDING) && preload()}

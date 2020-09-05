@@ -1,7 +1,7 @@
 module.exports = {
-  ...require('./colours'),
+  ...require('./colors'),
   ...require('./breakpoints'),
-  ...require('./defaultTheme'),
+  ...require('./default-theme'),
   ...require('./easing'),
   ...require('./grid'),
   ...require('./typography')

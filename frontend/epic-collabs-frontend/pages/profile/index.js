@@ -18,4 +18,4 @@ const ProfilePage = ({ user }) => {
   );
 };
 
-export default withAuth(ProfilePage, { isProtected: true });
+export default withAuth(ProfilePage);

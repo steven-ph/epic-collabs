@@ -2,14 +2,14 @@ import React, { memo } from 'react';
 import { rgba } from 'polished';
 import { ReactSVG } from 'react-svg';
 import styled, { css } from 'styled-components';
-import { colours } from 'styles';
+import { colors } from 'styles';
 import { Box } from 'components/common';
 import { ProgressiveImage } from './ProgressiveImage';
 import { makeBuildOptimizedSrc } from './ImageOptimizer';
 
 const ImageComponent = props => {
   const { alt, src, width, height, bgColorMode, roundedMode, isFluid } = props;
-  const backgroundColor = rgba(colours.navy300, 0.25);
+  const backgroundColor = rgba(colors.navy300, 0.25);
 
   if (!src) {
     return null;

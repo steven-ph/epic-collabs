@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Switch as _Switch } from 'antd';
-import { colours } from 'styles';
+import { colors } from 'styles';
 
 const Check = ({ colour, size }) => (
   <svg width={size} viewBox="0 0 15 12" version="1.1">
@@ -19,7 +19,7 @@ const Check = ({ colour, size }) => (
 const Switch = props => {
   return (
     <StyledSwitch
-      checkedChildren={<Check colour={props.disabled ? colours.lightGrey900 : colours.white} size="15px" />}
+      checkedChildren={<Check colour={props.disabled ? colors.lightGrey900 : colors.white} size="15px" />}
       {...props}
     />
   );
@@ -31,8 +31,8 @@ const StyledSwitch = styled(_Switch)`
     width: 55px;
     height: 28px;
     line-height: 28px;
-    background-color: ${colours.lightGrey900};
-    border: 1px solid ${colours.lightGrey900};
+    background-color: ${colors.lightGrey900};
+    border: 1px solid ${colors.lightGrey900};
 
     &::after {
       margin: 1px;
@@ -43,8 +43,8 @@ const StyledSwitch = styled(_Switch)`
   }
 
   &.ant-switch-checked {
-    background-color: ${colours.blue};
-    border: 1px solid ${colours.blue};
+    background-color: ${colors.blue};
+    border: 1px solid ${colors.blue};
 
     &::after {
       margin-left: -2px;
@@ -63,11 +63,11 @@ const StyledSwitch = styled(_Switch)`
 
   &.ant-switch-disabled {
     opacity: 1;
-    background-color: ${colours.lightGrey300};
-    border: 1px solid ${colours.lightGrey900};
+    background-color: ${colors.lightGrey300};
+    border: 1px solid ${colors.lightGrey900};
 
     &::after {
-      background-color: ${colours.lightGrey900};
+      background-color: ${colors.lightGrey900};
     }
   }
 `;

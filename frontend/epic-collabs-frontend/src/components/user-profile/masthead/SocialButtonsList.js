@@ -2,7 +2,7 @@ import React from 'react';
 import { Tooltip } from 'antd';
 import styled from 'styled-components';
 import { find, map, lowerCase, startCase } from 'lodash';
-import { colours } from 'styles';
+import { colors } from 'styles';
 import { Box, Flexbox, Icon } from 'components/common';
 
 const SOCIAL_NETWORKS = {
@@ -29,7 +29,7 @@ const Links = ({ links }) => {
       return (
         <Box key={index}>
           <a href={url} rel="noopener noreferrer" target="_blank">
-            <Icon name={icon} width="20px" fill={colours.navy700} />
+            <Icon name={icon} width="20px" fill={colors.navy700} />
           </a>
         </Box>
       );
@@ -43,7 +43,7 @@ const Links = ({ links }) => {
             <p style={{ textAlign: 'center', marginBottom: 0 }}>You haven&apos;t added your {name} profile link yet.</p>
           }
         >
-          <Icon name={icon} fill={colours.navy700} width="20px" />
+          <Icon name={icon} fill={colors.navy700} width="20px" />
         </Tooltip>
       </Box>
     );

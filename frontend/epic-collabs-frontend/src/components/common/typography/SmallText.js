@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { colours } from 'styles';
+import { colors } from 'styles';
 
 const SmallText = styled.small`
-  color: ${colours.darkGrey700};
+  color: ${colors.darkGrey700};
 `;
 
 export { SmallText };

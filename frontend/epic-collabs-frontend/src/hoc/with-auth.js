@@ -5,7 +5,7 @@ import { getAuth0Client } from 'libs/auth0';
 import { createLoginUrl } from 'functions/create-login-url';
 import { RedirectToLogin } from 'components/login-redirect';
 
-const withAuth = (InnerComponent, { isProtected = false } = {}) => {
+const withAuth = InnerComponent => {
   const auth0 = getAuth0Client();
 
   return class Authenticated extends Component {
@@ -17,7 +17,7 @@ const withAuth = (InnerComponent, { isProtected = false } = {}) => {
       }
 
       const session = await auth0.getSession(ctx.req);
-      if ((!session || !session.user) && isProtected) {
+      if (!session || !session.user) {
         ctx.res.writeHead(302, {
           Location: createLoginUrl({ redirectTo: ctx.req.url })
         });
@@ -37,7 +37,7 @@ const withAuth = (InnerComponent, { isProtected = false } = {}) => {
     render() {
       const hasUser = !isEmpty(this.props.user);
 
-      if (isProtected && !hasUser) {
+      if (!hasUser) {
         return <RedirectToLogin />;
       }
 

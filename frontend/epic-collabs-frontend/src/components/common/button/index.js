@@ -17,7 +17,7 @@ import {
   order,
   typography
 } from 'styled-system';
-import { colours } from 'styles';
+import { colors } from 'styles';
 
 const getStyleForType = ({ type, theme }) => {
   const themeColor = theme.colors.button[type];
@@ -47,25 +47,25 @@ const StyledButton = styled(AntButton)`
   &&& {
     height: auto;
     font-size: ${({ theme }) => theme.fontSizes.sm};
-    line-height: 1.75;
-    padding: 5px 17px;
+    line-height: 1.375;
+    padding: 6px 18px;
 
     &:hover:not([disabled]) {
-      background-color: ${colours.lightGrey500};
-      border-color: ${colours.lightGrey500};
+      background-color: ${colors.lightGrey500};
+      border-color: ${colors.lightGrey500};
     };
     &[disabled],
     &.ant-btn-loading {
-      color: ${colours.shade};
+      color: ${colors.shade};
     };
 
     ${match('size', 'small')`
-      padding: 2px 11px;
+      padding: 3px 12px;
     `}
 
     ${match('size', 'large')`
       font-size: 16px;
-      padding: 11px 23px;
+      padding: 12px 24px;
     `}
 
     ${is('rounded')`

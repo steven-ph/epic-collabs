@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { colours } from 'styles';
+import { colors } from 'styles';
 import { Box } from 'components/common';
 import { Navigation } from 'components/navigation';
 
@@ -21,8 +21,8 @@ const StyledHeader = styled.header`
   width: 100%;
   padding-right: 32px;
   border-radius: 0 0 12px 12px;
-  background-color: ${colours.lightGrey200};
-  border-bottom: 1px solid ${colours.navy100};
+  background-color: ${colors.lightGrey200};
+  border-bottom: 1px solid ${colors.navy100};
 `;
 
 export { Header };

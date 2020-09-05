@@ -1,4 +1,4 @@
-const colours = {
+const colors = {
   // alphas
   white: 'rgba(255,255,255,1.0)',
   tint: 'rgba(255,255,255,0.5)',
@@ -130,21 +130,21 @@ const colours = {
   greyText: null
 };
 
-colours.red = colours.red700;
-colours.redDark = colours.red900;
-colours.orange = colours.orange700;
-colours.orangeDark = colours.orange900;
-colours.yellow = colours.yellow700;
-colours.yellowDark = colours.yellow900;
-colours.green = colours.green700;
-colours.greenDark = colours.green900;
-colours.blue = colours.blue700;
-colours.blueDark = colours.blue900;
-colours.purple = colours.purple700;
-colours.purpleDark = colours.purple900;
-colours.navy = colours.navy700;
-colours.navyDark = colours.navy900;
-colours.greyText = colours.darkGrey900;
-colours.indigo = colours.indigo700;
+colors.red = colors.red700;
+colors.redDark = colors.red900;
+colors.orange = colors.orange700;
+colors.orangeDark = colors.orange900;
+colors.yellow = colors.yellow700;
+colors.yellowDark = colors.yellow900;
+colors.green = colors.green700;
+colors.greenDark = colors.green900;
+colors.blue = colors.blue700;
+colors.blueDark = colors.blue900;
+colors.purple = colors.purple700;
+colors.purpleDark = colors.purple900;
+colors.navy = colors.navy700;
+colors.navyDark = colors.navy900;
+colors.greyText = colors.darkGrey900;
+colors.indigo = colors.indigo700;
 
-module.exports = { colours };
+module.exports = { colors };

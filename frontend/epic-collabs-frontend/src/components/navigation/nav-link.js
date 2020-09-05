@@ -1,7 +1,7 @@
 import { Box, Flexbox, Icon, Link } from 'components/common';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import { colours, easing } from 'styles';
+import { colors, easing } from 'styles';
 import { NAV_CONFIGS } from './nav-config';
 
 const NavBottomBorder = () => (
@@ -11,8 +11,8 @@ const NavBottomBorder = () => (
       height: '2px',
       width: '100%',
       maxWidth: 60,
-      background: colours.green900,
-      boxShadow: `0px 0px 4px ${colours.green900}`
+      background: colors.green900,
+      boxShadow: `0px 0px 4px ${colors.green900}`
     }}
   />
 );
@@ -44,7 +44,7 @@ const NavItem = ({ icon, label, isNew }) => (
   </InnerLink>
 );
 
-const NavLink = ({ item, href, isNew, textColor = colours.navy, altColor = colours.navy }) => {
+const NavLink = ({ item, href, isNew, textColor = colors.navy, altColor = colors.navy }) => {
   const { pathname = '' } = useRouter();
   const { label, icon } = NAV_CONFIGS[item];
 
@@ -106,7 +106,7 @@ const New = styled.div`
   position: absolute;
   font-size: 10px;
   font-weight: 600;
-  color: ${colours.green900};
+  color: ${colors.green900};
   text-shadow: 0 0 4px rgba(2, 225, 136, 0.7);
   text-transform: uppercase;
   top: -4px;

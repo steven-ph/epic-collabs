@@ -16,4 +16,4 @@ const DashboardPage = props => {
   );
 };
 
-export default withAuth(DashboardPage, { isProtected: true });
+export default withAuth(DashboardPage);

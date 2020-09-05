@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 import { Layout } from 'antd';
-import { colours, typography } from 'styles';
+import { colors, typography } from 'styles';
 
 const DefaultLayout = styled(Layout)`
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: ${colours.white};
+  background-color: ${colors.white};
   font-size: 16px;
   font-family: ${typography.bodyFont};
 

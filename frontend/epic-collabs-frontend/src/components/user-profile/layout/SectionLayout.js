@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import { colours, defaultTheme } from 'styles';
+import { colors, defaultTheme } from 'styles';
 import { Box, Flexbox } from 'components/common';
 
 const { breakpoints, fonts, fontSizes, fontWeights } = defaultTheme;
 
 const SectionLayout = ({ id, backgroundColor, className, heading, subheading, headingRightComponent, children }) => (
-  <StyledSectionLayout id={id} className={className} backgroundColor={backgroundColor || colours.white}>
-    <Flexbox flexDirection={{ _: 'column-reverse', sm: 'row' }}>
+  <StyledSectionLayout id={id} className={className} backgroundColor={backgroundColor || colors.white}>
+    <Flexbox flexDirection={{ _: 'column-reverse', sm: 'row' }} mb="5px">
       <Box width={'100%'}>
         <h2>{heading}</h2>
         <StyledParagraph>{subheading}</StyledParagraph>
@@ -28,7 +28,7 @@ const StyledSectionLayout = styled(Box)`
   margin-bottom: 24px;
 
   h2 {
-    color: ${colours.navy700};
+    color: ${colors.navy700};
     margin-bottom: 0;
     font-family: ${fonts.brand};
     font-weight: ${fontWeights.bold};
@@ -49,7 +49,7 @@ const StyledSectionLayout = styled(Box)`
 `;
 
 const StyledParagraph = styled.p`
-  color: ${colours.darkGrey100};
+  color: ${colors.darkGrey100};
   font-weight: ${fontWeights.regular};
 `;
 

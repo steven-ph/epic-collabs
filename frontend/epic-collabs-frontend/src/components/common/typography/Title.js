@@ -1,9 +1,9 @@
-import { colours } from 'styles';
+import { colors } from 'styles';
 import { Styled } from 'theme-ui';
 import styled from 'styled-components';
 
 const Title = styled(Styled.h1)`
-  color: ${colours.darkGrey900};
+  color: ${colors.darkGrey900};
   text-align: center;
 `;
 

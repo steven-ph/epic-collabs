@@ -3,7 +3,7 @@ import { assign, map, values } from 'lodash';
 import styled from 'styled-components';
 import { Form, Input, Tooltip } from 'antd';
 import { useMutation } from '@apollo/client';
-import { colours, defaultTheme } from 'styles';
+import { colors, defaultTheme } from 'styles';
 import { Flexbox, Button, Icon, Modal, ModalHeading } from 'components/common';
 import { USER_PROFILE_BY_ID_QUERY, UPDATE_USER_PROFILE_MUTATION } from 'gql/user';
 
@@ -192,14 +192,14 @@ const SocialNetworkInfoForm = ({ userId, socialNetworks, visible, onUpdate, onCa
 const StyledSocialLabel = styled.div`
   label {
     font-size: ${fontSizes.sm};
-    color: ${colours.navy600};
+    color: ${colors.navy600};
     font-weight: ${fontWeights.semiBold};
   }
 
   p {
     font-weight: ${fontWeights.rg};
     font-size: ${fontSizes.xs};
-    color: ${colours.navy400};
+    color: ${colors.navy400};
   }
 `;
 

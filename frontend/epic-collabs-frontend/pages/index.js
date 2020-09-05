@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import { withAuth } from 'hoc/with-auth';
 import { LandingLayout } from 'layouts';
 import { LandingPage } from 'components/landing-page';
 
@@ -17,4 +16,4 @@ const Index = props => {
   );
 };
 
-export default withAuth(Index, { isProtected: false });
+export default Index;

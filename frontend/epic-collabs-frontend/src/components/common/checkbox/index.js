@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Checkbox as _Checkbox } from 'antd';
 import PropTypes from 'prop-types';
-import { colours } from 'styles';
+import { colors } from 'styles';
 
 const Checkbox = props => <StyledCheckbox {...props} />;
 
@@ -21,28 +21,28 @@ const StyledCheckbox = styled(_Checkbox)`
   .ant-checkbox span.ant-checkbox-inner {
     width: 22px;
     height: 22px;
-    background-color: ${colours.white};
+    background-color: ${colors.white};
 
-    border: 1px solid ${colours.lightGrey900};
+    border: 1px solid ${colors.lightGrey900};
 
     &:hover {
-      border: 1px solid ${colours.darkGrey300};
+      border: 1px solid ${colors.darkGrey300};
     }
   }
 
   .ant-checkbox-checked span.ant-checkbox-inner {
     border-radius: ${({ theme }) => theme.radii.sm};
-    background-color: ${colours.blue};
-    border: 1px solid ${colours.blue};
+    background-color: ${colors.blue};
+    border: 1px solid ${colors.blue};
   }
 
   .ant-checkbox-checked::after {
-    border: 2px solid ${colours.blue900};
+    border: 2px solid ${colors.blue900};
   }
 
   .ant-checkbox-disabled span.ant-checkbox-inner {
-    background-color: ${colours.lightGrey300};
-    border: 1px solid ${colours.lightGrey900} !important;
+    background-color: ${colors.lightGrey300};
+    border: 1px solid ${colors.lightGrey900} !important;
   }
 `;
 

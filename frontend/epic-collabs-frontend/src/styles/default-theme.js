@@ -1,5 +1,5 @@
-const { colours } = require('./colours');
 const { breakpoints } = require('./breakpoints');
+const { colors } = require('./colors');
 const { grid } = require('./grid');
 
 const systemFont =
@@ -34,98 +34,98 @@ const defaultTheme = {
   },
 
   colors: {
-    primary: colours.blue,
+    primary: colors.blue,
 
-    info: colours.blue,
-    infoGrey: colours.darkGrey700,
-    danger: colours.red,
+    info: colors.blue,
+    infoGrey: colors.darkGrey700,
+    danger: colors.red,
 
-    success: colours.green,
-    warning: colours.orange,
+    success: colors.green,
+    warning: colors.orange,
 
-    skeleton: colours.lightGrey300,
+    skeleton: colors.lightGrey300,
 
-    icon: colours.darkGrey700,
+    icon: colors.darkGrey700,
 
     text: {
-      base: colours.greyText,
-      light: colours.darkGrey200,
-      inverse: colours.white,
-      heading: colours.navyDark
+      base: colors.greyText,
+      light: colors.darkGrey200,
+      inverse: colors.white,
+      heading: colors.navyDark
     },
 
     background: {
-      base: colours.darkGrey50,
-      body: colours.lightGrey300,
-      light: colours.lightGrey200,
+      base: colors.darkGrey50,
+      body: colors.lightGrey300,
+      light: colors.lightGrey200,
 
-      info: colours.blue50,
-      infoGrey: colours.lightGrey200,
-      danger: colours.red50,
-      success: colours.green50,
-      warning: colours.orange50,
+      info: colors.blue50,
+      infoGrey: colors.lightGrey200,
+      danger: colors.red50,
+      success: colors.green50,
+      warning: colors.orange50,
 
-      tooltip: colours.indigo
+      tooltip: colors.indigo
     },
 
     border: {
-      base: colours.darkGrey50
+      base: colors.darkGrey50
     },
 
     input: {
-      disabled: colours.lightGrey300
+      disabled: colors.lightGrey300
     },
 
     actionIcon: {
-      base: colours.darkGrey400,
-      hover: colours.darkGrey700,
-      active: colours.darkGrey900
+      base: colors.darkGrey400,
+      hover: colors.darkGrey700,
+      active: colors.darkGrey900
     },
 
     button: {
       default: {
-        background: colours.lightGrey300,
-        backgroundHover: colours.lightGrey500,
-        border: colours.lightGrey300,
-        borderHover: colours.lightGrey300,
-        color: colours.greyText,
-        colorHover: colours.greyText
+        background: colors.lightGrey300,
+        backgroundHover: colors.lightGrey500,
+        border: colors.lightGrey300,
+        borderHover: colors.lightGrey300,
+        color: colors.greyText,
+        colorHover: colors.greyText
       },
 
       outline: {
         background: 'transparent',
-        backgroundHover: colours.lightGrey100,
-        border: colours.darkGrey50,
-        borderHover: colours.darkGrey300,
-        color: colours.greyText,
-        colorHover: colours.greyText
+        backgroundHover: colors.lightGrey100,
+        border: colors.darkGrey50,
+        borderHover: colors.darkGrey300,
+        color: colors.greyText,
+        colorHover: colors.greyText
       },
 
       primary: {
-        background: colours.blue,
-        backgroundHover: colours.blue800,
-        border: colours.blue,
-        borderHover: colours.blue800,
-        color: colours.white,
-        colorHover: colours.white
+        background: colors.blue,
+        backgroundHover: colors.blue800,
+        border: colors.blue,
+        borderHover: colors.blue800,
+        color: colors.white,
+        colorHover: colors.white
       },
 
       danger: {
-        background: colours.red,
-        backgroundHover: colours.red800,
-        border: colours.red,
-        borderHover: colours.red800,
-        color: colours.white,
-        colorHover: colours.white
+        background: colors.red,
+        backgroundHover: colors.red800,
+        border: colors.red,
+        borderHover: colors.red800,
+        color: colors.white,
+        colorHover: colors.white
       },
 
       positive: {
-        background: colours.green,
-        backgroundHover: colours.green800,
-        border: colours.green,
-        borderHover: colours.green800,
-        color: colours.white,
-        colorHover: colours.white
+        background: colors.green,
+        backgroundHover: colors.green800,
+        border: colors.green,
+        borderHover: colors.green800,
+        color: colors.white,
+        colorHover: colors.white
       }
     }
   },

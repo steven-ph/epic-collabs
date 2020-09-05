@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { values } from 'lodash';
 import { message } from 'antd';
 import styled from 'styled-components';
-import { breakpoints, colours, defaultTheme, easing } from 'styles';
+import { breakpoints, colors, defaultTheme, easing } from 'styles';
 import { Box, Flexbox, CenteredContainer } from 'components/common';
 import { SocialButtonsList } from './SocialButtonsList';
 import { EditButton } from 'components/user-profile/common';
@@ -70,7 +70,7 @@ const StyledCenteredContainer = styled(CenteredContainer)`
 `;
 
 const StyledProfileMasthead = styled.div`
-  color: ${colours.white};
+  color: ${colors.white};
   max-height: 400px;
   height: auto;
 
@@ -87,7 +87,7 @@ const ProfilePicture = styled.img`
   border-radius: 50%;
   width: ${AVATAR_SIZE}px;
   height: ${AVATAR_SIZE}px;
-  box-shadow: 0 3px 10px 2px ${colours.shade};
+  box-shadow: 0 3px 10px 2px ${colors.shade};
   position: relative;
   left: 0px;
   top: 15px;
@@ -102,7 +102,7 @@ const ProfilePicture = styled.img`
 const StyledDisplayName = styled.div`
   font-family: ${fonts.brand};
   font-size: 40px;
-  color: ${colours.navy700};
+  color: ${colors.navy700};
   font-weight: ${fontWeights.semiBold};
   letter-spacing: -0.5px;
   line-height: ${lineHeights.rg};

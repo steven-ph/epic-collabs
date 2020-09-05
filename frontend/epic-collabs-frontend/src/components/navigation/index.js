@@ -2,13 +2,13 @@ import { Input } from 'antd';
 import { Box, Flexbox, Icon, Link } from 'components/common';
 import React from 'react';
 import styled from 'styled-components';
-import { breakpoints, colours, easing } from 'styles';
+import { breakpoints, colors, easing } from 'styles';
 import { Styled } from 'theme-ui';
 import { MENU_ITEMS } from './nav-config';
 import { NavLink } from './nav-link';
 import { UserNav } from './user-nav';
 
-const Navigation = ({ textColor = colours.darkGrey800, altColor = colours.navy900 }) => {
+const Navigation = ({ textColor = colors.darkGrey800, altColor = colors.navy900 }) => {
   return (
     <Container>
       <Flexbox>

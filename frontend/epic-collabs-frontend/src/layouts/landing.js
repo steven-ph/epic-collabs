@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { withRouter } from 'next/router';
 import { rgba } from 'polished';
-import { colours } from 'styles';
+import { colors } from 'styles';
 import { DefaultLayout } from './components/layout';
 import { Navigation } from 'components/navigation';
 
@@ -10,7 +10,7 @@ const LandingLayout = withRouter(({ children }) => {
   return (
     <PageLayout>
       <Header>
-        <Navigation textColor={colours.lightGrey900} altColor={colours.lightGrey200} />
+        <Navigation textColor={colors.lightGrey900} altColor={colors.lightGrey200} />
       </Header>
       <Body>{children}</Body>
     </PageLayout>
@@ -18,7 +18,7 @@ const LandingLayout = withRouter(({ children }) => {
 });
 
 const PageLayout = styled(DefaultLayout)`
-  background-color: ${colours.navy900};
+  background-color: ${colors.navy900};
 `;
 
 const Body = styled.main`
@@ -33,7 +33,7 @@ const Header = styled.header`
   height: 80px;
   width: 100%;
   padding-right: 32px;
-  background-image: linear-gradient(to top, transparent 0%, ${rgba(colours.navy900, 0.85)} 100%);
+  background-image: linear-gradient(to top, transparent 0%, ${rgba(colors.navy900, 0.85)} 100%);
 `;
 
 export { LandingLayout };

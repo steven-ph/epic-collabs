@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Avatar, Dropdown, Menu } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSortDown, faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
-import { breakpoints, colours, easing } from 'styles';
+import { breakpoints, colors, easing } from 'styles';
 import { useAuthContext } from 'context/auth';
 import { Flexbox, Link } from 'components/common';
 
@@ -35,7 +35,7 @@ const getDropdownMenu = ({ name }) => (
   </StyledMenu>
 );
 
-const UserNav = ({ downArrowColor = colours.navy }) => {
+const UserNav = ({ downArrowColor = colors.navy }) => {
   const { user, loading } = useAuthContext();
 
   if (!user && !loading) {
@@ -102,7 +102,7 @@ const ProfileButton = styled(Flexbox)`
 const StyledAvatar = styled(Avatar)`
   height: 40px;
   width: 40px;
-  box-shadow: 0 0px 10px 0px ${colours.shade};
+  box-shadow: 0 0px 10px 0px ${colors.shade};
   transition: all 0.2s ${easing.default};
 
   @media screen and (max-width: ${breakpoints.sm}) {
@@ -126,7 +126,7 @@ const ArrowDownIcon = styled(FontAwesomeIcon)`
 const DropdownLabelSmall = styled.small`
   display: block;
   width: 100%;
-  color: ${colours.navy};
+  color: ${colors.navy};
   font-weight: 300;
   font-size: 14px;
   line-height: 1.428;
@@ -136,7 +136,7 @@ const DropdownLabelSmall = styled.small`
 const DropdownLabel = styled.span`
   display: block;
   width: 100%;
-  color: ${({ color }) => color || colours.navy};
+  color: ${({ color }) => color || colors.navy};
   font-weight: 500;
   font-size: 14px;
   line-height: 1.428;

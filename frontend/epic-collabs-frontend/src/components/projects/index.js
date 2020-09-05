@@ -4,7 +4,7 @@ import { rgba } from 'polished';
 import styled from 'styled-components';
 import { get, shuffle, values } from 'lodash';
 import { useGetProjects } from 'hooks/use-project';
-import { breakpoints, colours, easing } from 'styles';
+import { breakpoints, colors, easing } from 'styles';
 import { Box, Flexbox, Icon, ImageContainer, Loading } from 'components/common';
 
 const Project = ({ project }) => {
@@ -100,7 +100,7 @@ const Item = styled(Flexbox)`
     }
 
     &:hover {
-      background-image: linear-gradient(to bottom, transparent 0%, ${rgba(colours.navy900, 0.25)} 100%);
+      background-image: linear-gradient(to bottom, transparent 0%, ${rgba(colors.navy900, 0.25)} 100%);
 
       svg {
         opacity: 1;
@@ -122,7 +122,7 @@ const Name = styled.span`
   text-overflow: ellipsis;
   white-space: nowrap;
   margin-left: 8px;
-  color: ${colours.navy900};
+  color: ${colors.navy900};
   flex: 1;
 `;
 
@@ -132,7 +132,7 @@ const Count = styled.span`
   line-height: 16px;
   margin-left: 4px;
   margin-right: 8px;
-  color: ${colours.navy600};
+  color: ${colors.navy600};
   user-select: none;
 `;
 
@@ -152,8 +152,8 @@ const ImageBox = styled(Box)`
   border-radius: 8px;
   will-change: transform;
   transition: box-shadow 0.3s;
-  border: 5px solid ${colours.white};
-  box-shadow: 0px 5px 5px -5px ${colours.shadeDark};
+  border: 5px solid ${colors.white};
+  box-shadow: 0px 5px 5px -5px ${colors.shadeDark};
   user-select: none;
 
   img {
@@ -165,7 +165,7 @@ const IconContainer = styled(Flexbox)`
   pointer-events: auto;
 
   svg {
-    filter: drop-shadow(3px 3px 2px ${colours.shadeDark});
+    filter: drop-shadow(3px 3px 2px ${colors.shadeDark});
   }
 `;
 

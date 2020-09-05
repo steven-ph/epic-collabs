@@ -3,7 +3,7 @@ import { Form, Input } from 'antd';
 import styled from 'styled-components';
 import { useMutation } from '@apollo/client';
 import { Button } from 'components/common';
-import { colours, defaultTheme } from 'styles';
+import { colors, defaultTheme } from 'styles';
 import { bioValidator } from 'functions/bio-validator';
 import { USER_PROFILE_BY_ID_QUERY, UPDATE_USER_PROFILE_MUTATION } from 'gql/user';
 
@@ -86,14 +86,14 @@ const StyledFormItem = styled(Form.Item)`
 `;
 
 const StyledTextArea = styled(Input.TextArea)`
-  background-color: ${colours.white};
-  border: 1px solid ${colours.lightGrey200};
+  background-color: ${colors.white};
+  border: 1px solid ${colors.lightGrey200};
   border-radius: 3px;
-  box-shadow: inset 0 1px 4px 0 ${colours.tint};
+  box-shadow: inset 0 1px 4px 0 ${colors.tint};
   margin-bottom: 10px;
   font-weight: ${fontWeights.regular};
   font-size: ${fontSizes.sm};
-  color: ${colours.darkGrey800};
+  color: ${colors.darkGrey800};
 `;
 
 export { AboutMeForm };

@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import { withAuth } from 'hoc/with-auth';
 import { CommonLayout } from 'layouts';
 import { Projects } from 'components/projects';
 
@@ -16,4 +15,4 @@ const BrowseProjectsPage = props => {
   );
 };
 
-export default withAuth(BrowseProjectsPage, { isProtected: false });
+export default BrowseProjectsPage;

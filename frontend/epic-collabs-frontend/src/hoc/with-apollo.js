@@ -3,8 +3,8 @@ import Head from 'next/head';
 import { ApolloProvider } from '@apollo/client';
 import { initOnContext, initApolloClient } from 'libs/apollo';
 
-const withApollo = (PageComponent, { ssr = false } = {}) => {
-  const WithApollo = ctx => {
+const withApollo = (PageComponent, { ssr = true }) => {
+  const WithApolloHoc = ctx => {
     const { apolloClient, apolloState, ...pageProps } = ctx;
     const client = apolloClient ? apolloClient : initApolloClient({ initialState: apolloState, ctx });
 
@@ -18,11 +18,11 @@ const withApollo = (PageComponent, { ssr = false } = {}) => {
   // Set the correct displayName in development
   if (process.env.NODE_ENV !== 'production') {
     const displayName = PageComponent.displayName || PageComponent.name || 'Component';
-    WithApollo.displayName = `withApollo(${displayName})`;
+    WithApolloHoc.displayName = `withApollo(${displayName})`;
   }
 
   if (ssr || PageComponent.getInitialProps) {
-    WithApollo.getInitialProps = async ctx => {
+    WithApolloHoc.getInitialProps = async ctx => {
       const inAppContext = Boolean(ctx.ctx);
       const { apolloClient } = initOnContext(ctx);
 
@@ -69,7 +69,7 @@ const withApollo = (PageComponent, { ssr = false } = {}) => {
     };
   }
 
-  return WithApollo;
+  return WithApolloHoc;
 };
 
 export { withApollo };
