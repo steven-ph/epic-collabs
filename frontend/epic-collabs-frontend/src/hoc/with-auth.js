@@ -25,9 +25,7 @@ const withAuth = InnerComponent => {
         return;
       }
 
-      const user = Object.assign({}, isEmpty(session) ? {} : { ...get(session, 'user', {}) });
-
-      return { user: isEmpty(user) ? null : user };
+      return { user: get(session, 'user') };
     }
 
     constructor(props) {
@@ -35,9 +33,7 @@ const withAuth = InnerComponent => {
     }
 
     render() {
-      const hasUser = !isEmpty(this.props.user);
-
-      if (!hasUser) {
+      if (isEmpty(this.props.user)) {
         return <RedirectToLogin />;
       }
 

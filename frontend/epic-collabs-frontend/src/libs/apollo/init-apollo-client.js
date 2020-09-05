@@ -39,14 +39,11 @@ const fetchToken = async () => {
 };
 
 const getAccessToken = async ctx => {
-  const inAppContext = Boolean(ctx.ctx);
+  const inAppContext = Boolean(ctx);
 
   if (inAppContext) {
     try {
-      const req = get(ctx, 'ctx.req');
-      const res = get(ctx, 'ctx.res');
-
-      const tokenCache = auth0.tokenCache(req, res);
+      const tokenCache = auth0.tokenCache(ctx.req, ctx.res);
       const data = await tokenCache.getAccessToken({ refresh: true });
 
       return get(data, 'accessToken') || '';
@@ -101,7 +98,7 @@ const createApolloClient = ({ initialState, ctx }) => {
   accessToken = '';
 
   return new ApolloClient({
-    ssrMode: typeof window === 'undefined',
+    ssrMode: Boolean(ctx),
     link: ApolloLink.from([errorLink, makeAuthLink(ctx), httpLink]),
     cache: new InMemoryCache().restore(initialState)
   });

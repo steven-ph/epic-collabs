@@ -6,7 +6,7 @@ import { initOnContext, initApolloClient } from 'libs/apollo';
 const withApollo = ({ ssr = true } = {}) => PageComponent => {
   const WithApollo = ctx => {
     const { apolloClient, apolloState, ...pageProps } = ctx;
-    const client = apolloClient ? apolloClient : initApolloClient({ initialState: apolloState, ctx });
+    const client = apolloClient ? apolloClient : initApolloClient({ initialState: apolloState, ctx: {} });
 
     return (
       <ApolloProvider client={client}>
