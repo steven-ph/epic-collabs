@@ -1,9 +1,9 @@
 import { get, values } from 'lodash';
 import { useQuery } from '@apollo/client';
-import { GET_PROJECTS_QUERY } from 'gql/project';
+import { PROJECTS_QUERY, PROJECT_BY_SLUG_QUERY } from 'gql/project';
 
 const useGetProjects = () => {
-  const { loading, data, error } = useQuery(GET_PROJECTS_QUERY);
+  const { loading, data, error } = useQuery(PROJECTS_QUERY);
 
   return {
     loading,
@@ -12,4 +12,16 @@ const useGetProjects = () => {
   };
 };
 
-export { useGetProjects };
+const useGetProjectBySlug = ({ slug }) => {
+  const { loading, data, error } = useQuery(PROJECT_BY_SLUG_QUERY, {
+    variables: { slug }
+  });
+
+  return {
+    loading,
+    error,
+    project: get(data, 'projectBySlug')
+  };
+};
+
+export { useGetProjects, useGetProjectBySlug };

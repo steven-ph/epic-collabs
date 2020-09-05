@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { get, values } from 'lodash';
 import { useGetProjects } from 'hooks/use-project';
 import { breakpoints, colors, easing } from 'styles';
-import { Box, Flexbox, Icon, ImageContainer, Loading } from 'components/common';
+import { Box, Flexbox, Icon, ImageContainer, Link, Loading } from 'components/common';
 
 const Project = ({ project }) => {
   const followersCount = values(get(project, 'followers')).length;
@@ -18,8 +18,11 @@ const Project = ({ project }) => {
       </ImageBox>
       <Flexbox mt="8px" pl="4px" pr="4px" alignItems="center">
         <Icon name="project" width="22px" />
-        <Name>{project.name}</Name>
-
+        <Name>
+          <Link href={`/project/[slug]?slug=${project.slug}`} as={`/project/${project.slug}`}>
+            {project.name}
+          </Link>
+        </Name>
         {positionAvailable >= 1 && (
           <>
             <Tooltip title={`Available ${positionAvailable > 1 ? 'positions' : 'position'}`}>
@@ -120,8 +123,19 @@ const Name = styled.span`
   text-overflow: ellipsis;
   white-space: nowrap;
   margin-left: 8px;
-  color: ${colors.navy900};
+
   flex: 1;
+
+  a {
+    color: ${colors.navy900};
+
+    &:hover,
+    &:focus {
+      cursor: pointer;
+      text-decoration: none;
+      color: ${colors.navy500};
+    }
+  }
 `;
 
 const Count = styled.span`
