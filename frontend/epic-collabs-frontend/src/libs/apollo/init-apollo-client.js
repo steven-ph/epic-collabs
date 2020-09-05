@@ -99,11 +99,9 @@ const errorLink = onError(({ networkError }) => {
 
 const createApolloClient = ({ initialState, ctx }) => {
   accessToken = '';
-  const ssrMode = Boolean(ctx);
-  console.log({ ssrMode });
+
   return new ApolloClient({
-    connectToDevTools: typeof window !== 'undefined' && process.env.NODE_ENV !== 'production',
-    ssrMode,
+    ssrMode: typeof window === 'undefined',
     link: ApolloLink.from([errorLink, makeAuthLink(ctx), httpLink]),
     cache: new InMemoryCache().restore(initialState)
   });

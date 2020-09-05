@@ -1,7 +1,7 @@
 import { Loading } from 'components/common';
 
 const Dashboard = () => {
-  return <Loading icon="flying-rocket" />;
+  return <Loading />;
 };
 
 export { Dashboard };

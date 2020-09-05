@@ -27,4 +27,4 @@ const EpicApp = ({ Component, pageProps }) => {
   );
 };
 
-export default withApollo(EpicApp, { ssr: SSR_ENABLED });
+export default withApollo({ ssr: SSR_ENABLED })(EpicApp);

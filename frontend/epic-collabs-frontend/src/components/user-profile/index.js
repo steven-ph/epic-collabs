@@ -1,15 +1,21 @@
 import styled from 'styled-components';
+import { get, isEmpty } from 'lodash';
 import { breakpoints } from 'styles';
-import { useAuthContext } from 'context/auth';
 import { AboutMe } from './about-me';
 import { ProfileMasthead } from './masthead';
 import { PersonalDetails } from './personal-details';
-import { Box, CenteredContainer } from 'components/common';
+import { Box, CenteredContainer, Loading } from 'components/common';
+import { useGetUserProfileById } from 'hooks/use-user-profile';
 
-const UserProfile = ({ profile }) => {
-  const { user } = useAuthContext();
+const UserProfile = ({ userId }) => {
+  const { loading, profile } = useGetUserProfileById({ id: userId });
 
-  const isOwnProfile = user && profile && user.sub && profile._id && user.sub === profile._id;
+  const profileId = get(profile, '_id');
+  const isOwnProfile = !isEmpty(userId) && !isEmpty(profileId) && userId === profileId;
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <>

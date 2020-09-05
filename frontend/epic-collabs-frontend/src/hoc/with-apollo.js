@@ -3,9 +3,8 @@ import Head from 'next/head';
 import { ApolloProvider } from '@apollo/client';
 import { initOnContext, initApolloClient } from 'libs/apollo';
 
-const withApollo = (PageComponent, { ssr = true }) => {
-  console.log({ ssr });
-  const WithApolloHoc = ctx => {
+const withApollo = ({ ssr = true } = {}) => PageComponent => {
+  const WithApollo = ctx => {
     const { apolloClient, apolloState, ...pageProps } = ctx;
     const client = apolloClient ? apolloClient : initApolloClient({ initialState: apolloState, ctx });
 
@@ -19,11 +18,11 @@ const withApollo = (PageComponent, { ssr = true }) => {
   // Set the correct displayName in development
   if (process.env.NODE_ENV !== 'production') {
     const displayName = PageComponent.displayName || PageComponent.name || 'Component';
-    WithApolloHoc.displayName = `withApollo(${displayName})`;
+    WithApollo.displayName = `withApollo(${displayName})`;
   }
 
   if (ssr || PageComponent.getInitialProps) {
-    WithApolloHoc.getInitialProps = async ctx => {
+    WithApollo.getInitialProps = async ctx => {
       const inAppContext = Boolean(ctx.ctx);
       const { apolloClient } = initOnContext(ctx);
 
@@ -46,7 +45,6 @@ const withApollo = (PageComponent, { ssr = true }) => {
             const { getDataFromTree } = await import('@apollo/client/react/ssr');
 
             let props;
-
             if (inAppContext) {
               props = { ...pageProps, apolloClient };
             } else {
@@ -70,7 +68,7 @@ const withApollo = (PageComponent, { ssr = true }) => {
     };
   }
 
-  return WithApolloHoc;
+  return WithApollo;
 };
 
 export { withApollo };

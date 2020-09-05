@@ -6,13 +6,14 @@ const initOnContext = ctx => {
   if (process.env.NODE_ENV === 'development') {
     if (inAppContext) {
       console.warn(
-        'Warning: You have opted-out of Automatic Static Optimization.\n' +
+        'Warning: You have opted-out of Automatic Static Optimization due to `withApollo` in `pages/_app`.\n' +
           'Read more: https://err.sh/next.js/opt-out-auto-static-optimization\n'
       );
     }
   }
 
-  const apolloClient = ctx.apolloClient || initApolloClient({ initialState: ctx.apolloState || {}, ctx });
+  const apolloClient =
+    ctx.apolloClient || initApolloClient({ initialState: ctx.apolloState || {}, ctx: inAppContext ? ctx.ctx : ctx });
 
   apolloClient.toJSON = () => null;
 
