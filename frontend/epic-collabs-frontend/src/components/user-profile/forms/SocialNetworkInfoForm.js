@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { assign, map, values } from 'lodash';
 import styled from 'styled-components';
-import { Form, Input, Tooltip } from 'antd';
+import { Form, Tooltip } from 'antd';
 import { useMutation } from '@apollo/client';
 import { colors, defaultTheme } from 'styles';
-import { Flexbox, Button, Icon, Modal, ModalHeading } from 'components/common';
+import { Flexbox, Button, Icon, Modal, ModalHeading, FormItemInput, Input } from 'components/common';
 import { USER_PROFILE_BY_ID_QUERY, UPDATE_USER_PROFILE_MUTATION } from 'gql/user';
 
 const { fontSizes, fontWeights } = defaultTheme;
@@ -98,7 +98,7 @@ const SocialNetworkInfoForm = ({ userId, socialNetworks, visible, onUpdate, onCa
         </StyledSocialLabel>
         <Form form={form} name="edit-social-network-urls">
           <Flexbox flexDirection="column" flexGrow={1} pr={{ _: '0px', md: '20px' }}>
-            <Form.Item
+            <FormItemInput
               colon={false}
               hasFeedback
               name="github"
@@ -116,8 +116,8 @@ const SocialNetworkInfoForm = ({ userId, socialNetworks, visible, onUpdate, onCa
               ]}
             >
               <Input width={'100%'} data-testid={'github-input'} placeholder="https://www.github.com/yourusername" />
-            </Form.Item>
-            <Form.Item
+            </FormItemInput>
+            <FormItemInput
               colon={false}
               hasFeedback
               name="linkedin"
@@ -139,8 +139,8 @@ const SocialNetworkInfoForm = ({ userId, socialNetworks, visible, onUpdate, onCa
                 data-testid={'linkedin-input'}
                 placeholder="https://www.linkedin.com/in/yourusername"
               />
-            </Form.Item>
-            <Form.Item
+            </FormItemInput>
+            <FormItemInput
               colon={false}
               hasFeedback
               name="facebook"
@@ -162,8 +162,8 @@ const SocialNetworkInfoForm = ({ userId, socialNetworks, visible, onUpdate, onCa
                 data-testid={'facebook-input'}
                 placeholder="https://www.facebook.com/yourusername"
               />
-            </Form.Item>
-            <Form.Item
+            </FormItemInput>
+            <FormItemInput
               colon={false}
               hasFeedback
               name="twitter"
@@ -181,7 +181,7 @@ const SocialNetworkInfoForm = ({ userId, socialNetworks, visible, onUpdate, onCa
               ]}
             >
               <Input width={'100%'} data-testid={'twitter-input'} placeholder="https://www.twitter.com/yourusername" />
-            </Form.Item>
+            </FormItemInput>
           </Flexbox>
         </Form>
       </Modal>

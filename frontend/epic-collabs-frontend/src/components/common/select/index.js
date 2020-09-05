@@ -3,44 +3,44 @@ import styled from 'styled-components';
 import { Form, Select as _Select, Icon } from 'antd';
 
 const Select = ({
-  form,
   name,
   label = '',
   placeholder = 'Select an option',
-  required = true,
   preserve = true,
-  message = 'Please enter a value',
   options,
   disabled,
   onChange,
   initialValue,
+  rules,
   ...props
 }) => (
-  <FormItem label={label} required={false} {...props}>
-    {form.getFieldDecorator(name, {
-      preserve,
-      initialValue,
-      rules: required ? [{ required, message }] : []
-    })(
-      <StyledSelect
-        required
-        onChange={onChange}
-        disabled={form.disabled || disabled}
-        optionFilterProp="children"
-        filterOption={(i, { props: { children } }) => children.toLowerCase().indexOf(i.toLowerCase()) >= 0}
-        placeholder={placeholder}
-        autoFocus={props.autoFocus}
-        suffixIcon={<Icon type="caret-down" />}
-        dropdownStyle={{ maxWidth: '400px' }}
-        showAction={['focus', 'click']}
-      >
-        {options.map((opt, index) => (
-          <Select.Option key={index} value={opt}>
-            {opt}
-          </Select.Option>
-        ))}
-      </StyledSelect>
-    )}
+  <FormItem
+    name={name}
+    label={label}
+    preserve={preserve}
+    required={false}
+    initialValue={initialValue}
+    rules={rules}
+    {...props}
+  >
+    <StyledSelect
+      required
+      onChange={onChange}
+      disabled={disabled}
+      optionFilterProp="children"
+      filterOption={(i, { props: { children } }) => children.toLowerCase().indexOf(i.toLowerCase()) >= 0}
+      placeholder={placeholder}
+      autoFocus={props.autoFocus}
+      suffixIcon={<Icon type="caret-down" />}
+      dropdownStyle={{ maxWidth: '400px' }}
+      showAction={['focus', 'click']}
+    >
+      {options.map((opt, index) => (
+        <Select.Option key={index} value={opt}>
+          {opt}
+        </Select.Option>
+      ))}
+    </StyledSelect>
   </FormItem>
 );
 

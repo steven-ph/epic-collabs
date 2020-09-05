@@ -3,33 +3,32 @@ import styled from 'styled-components';
 import { Radio as _Radio, Form } from 'antd';
 
 const Radio = ({
-  form,
   name,
   required = false,
   preserve = true,
-  message,
   initialValue,
   options,
   label = '',
+  rules = [],
   ...props
 }) => (
-  <>
-    <FormItem label={label} required={false} {...props}>
-      {form.getFieldDecorator(name, {
-        preserve,
-        initialValue,
-        rules: required ? [{ required, message }] : []
-      })(
-        <_Radio.Group {...props}>
-          {Object.entries(options).map(([key, val]) => (
-            <StyledRadio key={key} value={key}>
-              {val}
-            </StyledRadio>
-          ))}
-        </_Radio.Group>
-      )}
-    </FormItem>
-  </>
+  <FormItem
+    name={name}
+    label={label}
+    preserve={preserve}
+    required={required}
+    initialValue={initialValue}
+    rules={rules}
+    {...props}
+  >
+    <_Radio.Group {...props}>
+      {Object.entries(options).map(([key, val]) => (
+        <StyledRadio key={key} value={key}>
+          {val}
+        </StyledRadio>
+      ))}
+    </_Radio.Group>
+  </FormItem>
 );
 
 const FormItem = styled(Form.Item)`

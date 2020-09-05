@@ -1,36 +1,7 @@
-import React from 'react';
 import styled from 'styled-components';
 import { Input as _Input, Form } from 'antd';
 
-const Input = ({
-  form,
-  label,
-  placeholder,
-  required = false,
-  message = 'Please enter a value',
-  name,
-  prefix,
-  preserve = true,
-  ...props
-}) => (
-  <>
-    <FormItem label={label} required={required} {...props}>
-      {form.getFieldDecorator(name, {
-        preserve,
-        rules: required ? [{ required, message }] : []
-      })(
-        <StyledInput
-          addonBefore={prefix}
-          placeholder={placeholder}
-          disabled={props.disabled || false}
-          autoFocus={true}
-        />
-      )}
-    </FormItem>
-  </>
-);
-
-const FormItem = styled(Form.Item)`
+const FormItemInput = styled(Form.Item)`
   &&& {
     font-size: 14px;
     font-weight: 400;
@@ -65,10 +36,10 @@ const FormItem = styled(Form.Item)`
   }
 `;
 
-const StyledInput = styled(_Input)`
+const Input = styled(_Input)`
   &.ant-input {
     height: 36px;
-    width: 400px;
+    width: 100%;
     background-color: #ffffff;
     border: 1px solid #bdcae1;
     box-shadow: inset 0 2px 1px 0 rgba(3, 2, 22, 0.05);
@@ -94,4 +65,4 @@ Input.propTypes = {
   ..._Input.propTypes
 };
 
-export { Input };
+export { FormItemInput, Input };

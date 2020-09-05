@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input } from 'antd';
+import { Form } from 'antd';
 import styled from 'styled-components';
 import { useMutation } from '@apollo/client';
-import { Button } from 'components/common';
+import { Button, FormItemInput, Input } from 'components/common';
 import { colors, defaultTheme } from 'styles';
 import { bioValidator } from 'functions/bio-validator';
 import { USER_PROFILE_BY_ID_QUERY, UPDATE_USER_PROFILE_MUTATION } from 'gql/user';
@@ -47,7 +47,7 @@ const AboutMeForm = ({ userId, bio, onUpdate, onError, onCancel }) => {
 
   return (
     <Form form={form} name="edit-about-me">
-      <StyledFormItem
+      <FormItemInput
         rules={[
           {
             max: 3500,
@@ -72,18 +72,10 @@ const AboutMeForm = ({ userId, bio, onUpdate, onError, onCancel }) => {
         <Button onClick={onCancelClick} style={{ minWidth: '80px', marginLeft: '10px' }}>
           Cancel
         </Button>
-      </StyledFormItem>
+      </FormItemInput>
     </Form>
   );
 };
-
-const StyledFormItem = styled(Form.Item)`
-  margin-bottom: 0;
-
-  .ant-form-explain {
-    margin-top: 10px;
-  }
-`;
 
 const StyledTextArea = styled(Input.TextArea)`
   background-color: ${colors.white};

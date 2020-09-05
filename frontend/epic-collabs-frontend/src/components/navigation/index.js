@@ -1,9 +1,8 @@
-import { Input } from 'antd';
-import { Box, Flexbox, Icon, Link } from 'components/common';
 import React from 'react';
+import { Styled } from 'theme-ui';
 import styled from 'styled-components';
 import { breakpoints, colors, easing } from 'styles';
-import { Styled } from 'theme-ui';
+import { Box, Flexbox, Icon, Link, Input } from 'components/common';
 import { MENU_ITEMS } from './nav-config';
 import { NavLink } from './nav-link';
 import { UserNav } from './user-nav';
