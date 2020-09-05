@@ -2,10 +2,10 @@ import { ConfigProvider } from 'components/common';
 import { getConfig } from 'config';
 import { useGetAuthUser, AuthProvider } from 'context/auth';
 import { withApollo } from 'hoc/with-apollo';
+import 'styles/index.less';
 import Router from 'next/router';
 import NProgress from 'nprogress';
 import { defaultTheme } from 'styles';
-import 'styles/index.less';
 
 Router.events.on('routeChangeStart', () => NProgress.start());
 

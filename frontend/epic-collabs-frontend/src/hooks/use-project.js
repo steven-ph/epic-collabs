@@ -1,4 +1,4 @@
-import { get } from 'lodash';
+import { get, values } from 'lodash';
 import { useQuery } from '@apollo/client';
 import { GET_PROJECTS_QUERY } from 'gql/project';
 
@@ -8,7 +8,7 @@ const useGetProjects = () => {
   return {
     loading,
     error,
-    projects: get(data, 'projects')
+    projects: values(get(data, 'projects'))
   };
 };
 

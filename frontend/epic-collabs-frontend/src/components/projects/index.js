@@ -2,7 +2,7 @@ import React from 'react';
 import { Tooltip } from 'antd';
 import { rgba } from 'polished';
 import styled from 'styled-components';
-import { get, shuffle, values } from 'lodash';
+import { get, values } from 'lodash';
 import { useGetProjects } from 'hooks/use-project';
 import { breakpoints, colors, easing } from 'styles';
 import { Box, Flexbox, Icon, ImageContainer, Loading } from 'components/common';
@@ -53,8 +53,6 @@ const Project = ({ project }) => {
 
 const Projects = () => {
   const { loading, projects } = useGetProjects();
-  const data = shuffle(values(projects));
-  const items = shuffle([...data, ...data, ...data]);
 
   if (loading) {
     return <Loading />;
@@ -62,7 +60,7 @@ const Projects = () => {
 
   return (
     <Container>
-      {items.map((project, index) => (
+      {projects.map((project, index) => (
         <Project key={index} project={project} />
       ))}
     </Container>
@@ -140,10 +138,10 @@ const Overlay = styled(Flexbox)`
   position: absolute;
   align-items: flex-end;
   justify-content: center;
-  top: 5px;
-  left: 5px;
-  right: 5px;
-  bottom: 35px;
+  top: 3px;
+  left: 3px;
+  right: 3px;
+  bottom: 33px;
   border-radius: 8px;
   padding-bottom: 20px;
 `;
@@ -152,7 +150,7 @@ const ImageBox = styled(Box)`
   border-radius: 8px;
   will-change: transform;
   transition: box-shadow 0.3s;
-  border: 5px solid ${colors.white};
+  border: 3px solid ${colors.white};
   box-shadow: 0px 5px 5px -5px ${colors.shadeDark};
   user-select: none;
 
