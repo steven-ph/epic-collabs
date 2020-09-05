@@ -13,7 +13,7 @@ const UserProfile = ({ userId }) => {
   const profileId = get(profile, '_id');
   const isOwnProfile = !isEmpty(userId) && !isEmpty(profileId) && userId === profileId;
 
-  if (loading) {
+  if (loading || isEmpty(profile)) {
     return <Loading />;
   }
 

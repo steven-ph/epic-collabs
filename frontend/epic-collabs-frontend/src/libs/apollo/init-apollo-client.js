@@ -3,16 +3,16 @@ import { getConfig } from 'config';
 import jwtDecode from 'jwt-decode';
 import { isAfter } from 'date-fns';
 import { get, isEmpty } from 'lodash';
-import { getAuth0Client } from 'libs/auth0';
 import { onError } from '@apollo/client/link/error';
 import { setContext } from '@apollo/client/link/context';
 import { ApolloClient, ApolloLink, HttpLink, InMemoryCache } from '@apollo/client';
 import { fetcher } from 'functions/fetcher';
+import { getAccessToken } from 'functions/get-access-token';
 
 let accessToken = '';
 let cachedClient = null;
-const auth0 = getAuth0Client();
-const { GRAPHQL_ENDPOINT } = getConfig();
+
+const { BASE_URL, GRAPHQL_ENDPOINT } = getConfig();
 
 const isTokenValid = token => {
   if (!token) {
@@ -31,52 +31,42 @@ const isTokenValid = token => {
 
 const fetchToken = async () => {
   try {
-    const res = await fetcher('/api/session');
-    return get(res, 'accessToken') || '';
+    const data = await fetcher(`${BASE_URL}/api/session`);
+
+    return get(data, 'accessToken') || '';
   } catch (error) {
     return '';
   }
 };
 
-const getAccessToken = async ctx => {
-  const inAppContext = Boolean(ctx);
-
-  if (inAppContext) {
+const getToken = async ctx => {
+  if (!isEmpty(ctx)) {
     try {
-      const tokenCache = auth0.tokenCache(ctx.req, ctx.res);
-      const data = await tokenCache.getAccessToken({ refresh: true });
-
+      const data = await getAccessToken({ req: ctx.req, res: ctx.res });
       return get(data, 'accessToken') || '';
     } catch (error) {
       return '';
     }
   }
 
-  if (!isEmpty(accessToken)) {
-    const isValid = isTokenValid(accessToken);
-
-    if (isValid) {
-      return accessToken;
-    }
+  if (!isEmpty(accessToken) && isTokenValid(accessToken)) {
+    return accessToken;
   }
 
   accessToken = await fetchToken();
-
   return accessToken;
 };
 
 // return the headers to the context so httpLink can read them
-const attachAuth = ctx => async () => {
-  const accessToken = await getAccessToken(ctx);
-
-  return {
+const attachAuth = async ctx => {
+  return getToken(ctx).then(accessToken => ({
     headers: {
-      authorization: `Bearer ${accessToken ?? ''}`
+      authorization: `Bearer ${accessToken || ''}`
     }
-  };
+  }));
 };
 
-const makeAuthLink = ctx => setContext(attachAuth(ctx));
+const makeAuthLink = ctx => setContext(() => attachAuth(ctx).then(res => res));
 
 const httpLink = new HttpLink({
   credentials: 'same-origin',
@@ -98,7 +88,8 @@ const createApolloClient = ({ initialState, ctx }) => {
   accessToken = '';
 
   return new ApolloClient({
-    ssrMode: Boolean(ctx),
+    connectToDevTools: typeof window !== 'undefined' && process.env.NODE_ENV !== 'production',
+    ssrMode: typeof window === 'undefined',
     link: ApolloLink.from([errorLink, makeAuthLink(ctx), httpLink]),
     cache: new InMemoryCache().restore(initialState)
   });

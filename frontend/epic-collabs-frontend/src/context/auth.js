@@ -1,9 +1,12 @@
 import { isNil } from 'lodash';
 import { createContext, useContext, useEffect, useState } from 'react';
+import { getConfig } from 'config';
 import { fetcher } from 'functions/fetcher';
 
 // Use a global to save the user, so we don't have to fetch it again after page navigations
 let authState;
+
+const { BASE_URL } = getConfig();
 
 const AuthContext = createContext({ user: null, loading: false });
 
@@ -22,13 +25,13 @@ const AuthProvider = ({ value, children }) => {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-const getAuthUser = async () => {
+const getAuthUserData = async () => {
   if (!isNil(authState)) {
     return authState;
   }
 
   try {
-    authState = await fetcher('/api/me');
+    authState = await fetcher(`${BASE_URL}/api/me`);
   } catch (error) {
     authState = null;
   }
@@ -36,8 +39,8 @@ const getAuthUser = async () => {
   return authState;
 };
 
-const useGetAuthUser = () => {
-  const [user, setUser] = useState({
+const useGetAuthState = () => {
+  const [data, setData] = useState({
     user: authState || null,
     loading: isNil(authState)
   });
@@ -49,9 +52,9 @@ const useGetAuthUser = () => {
 
     let isMounted = true;
 
-    getAuthUser().then(user => {
+    getAuthUserData().then(user => {
       if (isMounted) {
-        setUser({ user, loading: false });
+        setData({ user, loading: false });
       }
     });
 
@@ -60,7 +63,7 @@ const useGetAuthUser = () => {
     };
   }, []);
 
-  return user;
+  return data;
 };
 
-export { AuthProvider, useAuthContext, useGetAuthUser, getAuthUser };
+export { AuthProvider, useAuthContext, useGetAuthState, getAuthUserData };

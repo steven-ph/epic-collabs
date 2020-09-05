@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { get, isEmpty } from 'lodash';
-import { getAuthUser } from 'context/auth';
+import { getAuthUserData } from 'context/auth';
 import { getAuth0Client } from 'libs/auth0';
 import { createLoginUrl } from 'functions/create-login-url';
 import { RedirectToLogin } from 'components/login-redirect';
@@ -11,7 +11,7 @@ const withAuth = InnerComponent => {
   return class Authenticated extends Component {
     static async getInitialProps(ctx) {
       if (!ctx.req) {
-        const user = await getAuthUser();
+        const user = await getAuthUserData();
 
         return { user };
       }

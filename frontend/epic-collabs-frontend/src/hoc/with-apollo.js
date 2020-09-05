@@ -1,12 +1,13 @@
 import App from 'next/app';
 import Head from 'next/head';
+import { get } from 'lodash';
 import { ApolloProvider } from '@apollo/client';
 import { initOnContext, initApolloClient } from 'libs/apollo';
 
 const withApollo = ({ ssr = true } = {}) => PageComponent => {
   const WithApollo = ctx => {
     const { apolloClient, apolloState, ...pageProps } = ctx;
-    const client = apolloClient ? apolloClient : initApolloClient({ initialState: apolloState, ctx: {} });
+    const client = apolloClient ? apolloClient : initApolloClient({ initialState: apolloState });
 
     return (
       <ApolloProvider client={client}>
@@ -23,7 +24,7 @@ const withApollo = ({ ssr = true } = {}) => PageComponent => {
 
   if (ssr || PageComponent.getInitialProps) {
     WithApollo.getInitialProps = async ctx => {
-      const inAppContext = Boolean(ctx.ctx);
+      const inAppContext = !!get(ctx, 'ctx');
       const { apolloClient } = initOnContext(ctx);
 
       let pageProps = {};

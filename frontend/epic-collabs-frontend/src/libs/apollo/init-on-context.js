@@ -1,7 +1,8 @@
+import { get } from 'lodash';
 import { initApolloClient } from './init-apollo-client';
 
 const initOnContext = ctx => {
-  const inAppContext = Boolean(ctx.ctx);
+  const inAppContext = !!get(ctx, 'ctx');
 
   if (process.env.NODE_ENV === 'development') {
     if (inAppContext) {
