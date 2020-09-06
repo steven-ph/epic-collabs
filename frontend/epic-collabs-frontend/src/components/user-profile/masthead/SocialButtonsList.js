@@ -28,9 +28,11 @@ const Links = ({ links }) => {
     if (url) {
       return (
         <Box key={index}>
-          <a href={url} rel="noopener noreferrer" target="_blank">
-            <Icon name={icon} width="20px" fill={colors.navy700} />
-          </a>
+          <Tooltip placement="bottom" title={<p style={{ textAlign: 'center', marginBottom: 0 }}>{name}</p>}>
+            <a href={url} rel="noopener noreferrer" target="_blank">
+              <Icon name={icon} width="20px" fill={colors.navy700} />
+            </a>
+          </Tooltip>
         </Box>
       );
     }

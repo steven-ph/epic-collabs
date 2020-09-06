@@ -3,11 +3,13 @@ import { Tooltip } from 'antd';
 import { rgba } from 'polished';
 import styled from 'styled-components';
 import { get, values } from 'lodash';
+import { useAuthContext } from 'context/auth';
 import { useGetProjects } from 'hooks/use-project';
 import { breakpoints, colors, easing } from 'styles';
+import { createLoginUrl } from 'functions/create-login-url';
 import { Box, Flexbox, Icon, ImageContainer, Link, Loading } from 'components/common';
 
-const Project = ({ project }) => {
+const Project = ({ project, isLoggedIn }) => {
   const followersCount = values(get(project, 'followers')).length;
   const positionAvailable = values(get(project, 'collaborators')).filter(c => !get(c, 'user._id')).length;
 
@@ -40,12 +42,28 @@ const Project = ({ project }) => {
         <Flexbox>
           <Tooltip title="Follow this project">
             <IconContainer>
-              <Icon name="follow" width={52} mr="8px" sx={{ cursor: 'pointer' }} />
+              {isLoggedIn ? (
+                <Link href={`/project/[slug]?slug=${project.slug}`} as={`/project/${project.slug}`}>
+                  <Icon name="follow" width={52} mr="8px" sx={{ cursor: 'pointer' }} />
+                </Link>
+              ) : (
+                <a href={createLoginUrl({ redirectTo: `/project/${project.slug}` })}>
+                  <Icon name="follow" width={52} mr="8px" sx={{ cursor: 'pointer' }} />
+                </a>
+              )}
             </IconContainer>
           </Tooltip>
           <Tooltip title="Join this project">
             <IconContainer>
-              <Icon name="join" width={40} ml="8px" sx={{ cursor: 'pointer' }} />
+              {isLoggedIn ? (
+                <Link href={`/project/[slug]?slug=${project.slug}`} as={`/project/${project.slug}`}>
+                  <Icon name="join" width={40} ml="8px" sx={{ cursor: 'pointer' }} />
+                </Link>
+              ) : (
+                <a href={createLoginUrl({ redirectTo: `/project/${project.slug}` })}>
+                  <Icon name="join" width={40} ml="8px" sx={{ cursor: 'pointer' }} />
+                </a>
+              )}
             </IconContainer>
           </Tooltip>
         </Flexbox>
@@ -55,6 +73,7 @@ const Project = ({ project }) => {
 };
 
 const Projects = () => {
+  const { user } = useAuthContext();
   const { loading, projects } = useGetProjects();
 
   if (loading) {
@@ -64,7 +83,7 @@ const Projects = () => {
   return (
     <Container>
       {projects.map((project, index) => (
-        <Project key={index} project={project} />
+        <Project key={index} project={project} isLoggedIn={!!user} />
       ))}
     </Container>
   );

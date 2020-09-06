@@ -2,12 +2,27 @@ import React from 'react';
 import { Styled } from 'theme-ui';
 import styled from 'styled-components';
 import { breakpoints, colors, easing } from 'styles';
+import { useAuthContext } from 'context/auth';
 import { Box, Flexbox, Icon, Link, Input } from 'components/common';
 import { MENU_ITEMS } from './nav-config';
 import { NavLink } from './nav-link';
 import { UserNav } from './user-nav';
 
+const MenuItems = ({ isLoggedIn, textColor, altColor }) => {
+  return MENU_ITEMS.reduce((accum, item, index) => {
+    if (!item.isProtected) {
+      accum.push(<NavLink key={index} item={item.key} href={item.href} textColor={textColor} altColor={altColor} />);
+    } else if (isLoggedIn) {
+      accum.push(<NavLink key={index} item={item.key} href={item.href} textColor={textColor} altColor={altColor} />);
+    }
+
+    return accum;
+  }, []);
+};
+
 const Navigation = ({ textColor = colors.darkGrey800, altColor = colors.navy900 }) => {
+  const { user } = useAuthContext();
+
   return (
     <Container>
       <Flexbox>
@@ -31,9 +46,7 @@ const Navigation = ({ textColor = colors.darkGrey800, altColor = colors.navy900 
         <SearchContainer alignItems="center">
           <Input.Search placeholder="Search..." onSearch={value => console.log(value)} />
         </SearchContainer>
-        {MENU_ITEMS.map(({ key, href, isNew }, index) => (
-          <NavLink key={index} item={key} href={href} isNew={!!isNew} textColor={textColor} altColor={altColor} />
-        ))}
+        <MenuItems isLoggedIn={!!user} textColor={textColor} altColor={altColor} />
       </Flexbox>
       <Flexbox alignItems="center">
         <UserNav downArrowColor={textColor} />

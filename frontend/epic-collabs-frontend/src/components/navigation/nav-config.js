@@ -3,24 +3,27 @@ const MENU_ITEMS = [
     key: 'browse',
     text: 'Browse',
     href: '/projects',
-    isNew: true
+    isProtected: false
   },
   {
     key: 'dashboard',
     text: 'Dashboard',
-    href: '/dashboard'
+    href: '/dashboard',
+    isProtected: true
   },
   {
     key: 'profile',
     text: 'Profile',
-    href: '/profile'
+    href: '/profile',
+    isProtected: true
   }
 ];
 
 const NAV_CONFIGS = {
   browse: {
     label: 'Browse',
-    icon: 'projects'
+    icon: 'projects',
+    isNew: true
   },
   dashboard: {
     label: 'Dashboard',

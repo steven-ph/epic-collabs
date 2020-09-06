@@ -44,14 +44,14 @@ const NavItem = ({ icon, label, isNew }) => (
   </InnerLink>
 );
 
-const NavLink = ({ item, href, isNew, textColor = colors.navy, altColor = colors.navy }) => {
+const NavLink = ({ item, href, textColor = colors.navy, altColor = colors.navy }) => {
   const { pathname = '' } = useRouter();
-  const { label, icon } = NAV_CONFIGS[item];
+  const navProps = NAV_CONFIGS[item];
 
   return (
     <OuterBox textColor={textColor} altColor={altColor} isCurrentPath={pathname === href}>
       <Link href={href}>
-        <NavItem icon={icon} label={label} isNew={isNew} textColor={textColor} altColor={altColor} />
+        <NavItem {...navProps} textColor={textColor} altColor={altColor} />
       </Link>
     </OuterBox>
   );
@@ -104,13 +104,12 @@ const InnerLink = styled(Flexbox)`
 
 const New = styled.div`
   position: absolute;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   color: ${colors.green900};
-  text-shadow: 0 0 4px rgba(2, 225, 136, 0.7);
   text-transform: uppercase;
-  top: -4px;
-  right: -28px;
+  top: -5px;
+  right: -30px;
 `;
 
 export { NavLink };
